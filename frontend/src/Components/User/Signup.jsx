@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import {userSignup} from '../../Services/UserApi'
@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {
+    const navigate = useNavigate()
     const [showpassword, setShowPassword] = useState(false)
     const [confirmpassword, setConfirmPassword] = useState(false)
     const [Passwordvalue, setPasswordvalue] = useState("")
@@ -30,8 +31,9 @@ function Signup() {
     const onSubmit = async(values) => {
         try {
             const {data} = await userSignup(values)
-            console.log(data);
-            if(!data.status){
+            if(data.status){
+                navigate('/otp')
+            }else{
                 toast(data.message)
             }
         } catch (error) {
@@ -107,7 +109,6 @@ function Signup() {
 
                 </div>
             </div>
-            <ToastContainer />
         </div>
     )
 }

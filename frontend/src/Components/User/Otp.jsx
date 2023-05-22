@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Formik, useFormik } from 'formik'
+import { getOtp, verifyOtp } from '../../Services/UserApi'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const validate = (values)=>{
   const errors = {}
@@ -11,13 +14,24 @@ const validate = (values)=>{
 
 
 function Otp() {
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
-      otp: Array.from({ length: 4 }).fill("")
+      otp: Array.from({ length: 6 }).fill("")
     },
     validate,
-    onSubmit: (values) => {
-      console.log(values.otp.join(""));
+    onSubmit: async(values) => {
+      const otp = parseInt(values.otp.join(""));
+      const {data}= await verifyOtp(otp)
+      console.log(data);
+     if(!data.status){
+      toast(data.message)
+     }
+    else{
+      toast(data.message)
+      navigate('/')
+     }
+     
     }
   });
 
@@ -25,6 +39,7 @@ function Otp() {
 
 
   useEffect(() => {
+
     inputRef.current[0].focus();
 
   }, [])
@@ -44,7 +59,7 @@ function Otp() {
 
 
 
-    if (value && index < 3) {
+    if (value && index < 5) {
       inputRef.current[index + 1].focus();
     }
   };
@@ -62,7 +77,7 @@ function Otp() {
       <input
         key={index}
         ref={(element) => (inputRef.current[index] = element)}
-        type="text" name={index} className='border border-black w-8 h-8 md:w-16 md:h-12 m-[0.5rem] md:m-3 rounded-md text-center text-sm md:text-xl ' onChange={(event) => handleChange(event, index)}
+        type="text" name={index} className='border border-black w-8 h-8 md:w-12 md:h-12 m-[0.3rem] md:m-3 rounded-md text-center text-sm md:text-xl ' onChange={(event) => handleChange(event, index)}
         onKeyUp={(event) => handleBackspace(event, index)}
         value={value}
       />
@@ -72,9 +87,9 @@ function Otp() {
 
   return (
     <div className='flex flex-col justify-center items-center bg-[#358E88] h-screen '>
-      <div className='flex justify-center items-center bg-white p-0 md:p-16 rounded-lg'>
+      <div className='flex justify-center items-center bg-white p-0 md:p-8 rounded-lg'>
         <form action="" >
-          <div className='flex flex-col justify-center items-center  sm:p-[0.5rem] p-10'>
+          <div className='flex flex-col justify-center items-center  md:p-10 p-[0.5rem]'>
             <h1 className='my-4 text-sm md:text-xl '>Enter Your OTP</h1>
             <Formik >
               <div>{renderInput()}</div>

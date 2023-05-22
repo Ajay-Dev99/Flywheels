@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 const app = express();
 const cookieParser = require("cookie-parser")
 const userRoutes = require("../backend/Routes/UserRoutes")
+const cookieSession = require("cookie-session")
 
 app.listen(process.env.PORT,()=>{
     console.log("Server Started on PORT ",process.env.PORT);
@@ -25,6 +26,13 @@ app.use(cors({
     methods:["GET","POST"],
     credentials:true
 }));
+
+app.use(cookieSession({
+    name: 'session',
+    keys: process.env.SESSION_SECRET_KEY,
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }))
 
 app.use(cookieParser())
 app.use(express.json());
