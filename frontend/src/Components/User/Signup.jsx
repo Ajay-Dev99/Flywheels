@@ -14,13 +14,7 @@ function Signup() {
     const [confirmpassword, setConfirmPassword] = useState(false)
     const [Passwordvalue, setPasswordvalue] = useState("")
     const [confirmPasswordvalue, setconfirmPasswordvalue] = useState("")
-    const [values, setValues] = useState({
-        name: "",
-        phone_number: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
-    })
+
     const initialValues = {
         name: "",
         phone_number: "",
@@ -37,7 +31,7 @@ function Signup() {
                 toast(data.message)
             }
         } catch (error) {
-            alert(error.message)
+            toast(error.message)
         }
     }
 

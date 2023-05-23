@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    verified:{
+        type:Boolean,
+        default:false
     }
 })
 
@@ -28,5 +32,4 @@ userSchema.pre('save',async function (next){
     this.password = await bcrypt.hash(this.password,salt)
     next()
 })
-
 module.exports = new mongoose.model("user",userSchema)

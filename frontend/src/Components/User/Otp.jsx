@@ -28,6 +28,7 @@ function Otp() {
       toast(data.message)
      }
     else{
+      localStorage.setItem("jwt",data.token)
       toast(data.message)
       navigate('/')
      }

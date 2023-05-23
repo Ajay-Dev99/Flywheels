@@ -1,10 +1,18 @@
-import axiosInstance from "../axios/axiosInstance";
+import {userInstance} from "../axios/axiosInstance";
 
 export const userSignup = (values)=>{
-    return axiosInstance().post("/register",{...values})
+    return userInstance.post("/register",{...values})
 }
 
 export const verifyOtp = (otp)=>{
-    console.log(otp,"otp to pass");
-    return axiosInstance().post("/verifyotp",{"otp":otp})
+    return userInstance.post("/verifyotp",{"otp":otp})
+}
+
+export const login =(values)=>{
+    console.log("called");
+    return userInstance.post("/login",{...values})
+}
+
+export const Home = ()=>{
+    return userInstance.get("/")
 }

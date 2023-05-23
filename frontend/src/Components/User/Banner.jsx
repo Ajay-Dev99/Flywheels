@@ -9,18 +9,18 @@ function Banner() {
             <div className='md:flex flex-col justify-center md:items-center md:flex-row mt-8'>
 
                 <div className='mx-4 my-3 text-center '>
-                    <a href="#" class="block p-2 md:p-10 bg-[#368E88]  shadow  ">
-                        <h3 class="mb-2 text-sm  font-bold tracking-tight text-gray-900 dark:text-white">24/7 CAR SUPPORT</h3>
+                    <a href="#" className="block p-2 md:p-10 bg-[#368E88]  shadow  ">
+                        <h3 className="mb-2 text-sm  font-bold tracking-tight text-white">24/7 CAR SUPPORT</h3>
                     </a>
                 </div>
                 <div className='mx-4 my-3 text-center '>
-                    <a href="#" class="block p-2 md:p-10 bg-[#368E88]  shadow  ">
-                        <h3 class="mb-2 text-sm  font-bold tracking-tight text-gray-900 dark:text-white">RESERVATION ANYTIME</h3>
+                    <a href="#" className="block p-2 md:p-10 bg-[#368E88]  shadow  ">
+                        <h3 className="mb-2 text-sm  font-bold tracking-tight text-white">RESERVATION ANYTIME</h3>
                     </a>
                 </div>
                 <div className='mx-4 my-3 text-center '>
-                    <a href="#" class="block p-2 md:p-10 bg-[#368E88]  shadow  ">
-                        <h3 class="mb-2 text-sm  font-bold tracking-tight text-gray-900 dark:text-white">LOTS OF LOCATIONS</h3>
+                    <a href="#" className="block p-2 md:p-10 bg-[#368E88]  shadow  ">
+                        <h3 className="mb-2 text-sm  font-bold tracking-tight text-white">LOTS OF LOCATIONS</h3>
                     </a>
                 </div>
    

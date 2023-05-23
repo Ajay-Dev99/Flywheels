@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 const app = express();
 const cookieParser = require("cookie-parser")
 const userRoutes = require("../backend/Routes/UserRoutes")
+const AdminRoutes = require("../backend/Routes/AdminRoutes")
 const cookieSession = require("cookie-session")
 
 app.listen(process.env.PORT,()=>{
@@ -36,4 +37,5 @@ app.use(cookieSession({
 
 app.use(cookieParser())
 app.use(express.json());
-app.use("/",userRoutes)
+app.use("/",userRoutes);
+app.use("/admin",AdminRoutes);
