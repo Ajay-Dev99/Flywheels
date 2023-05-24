@@ -28,10 +28,14 @@ function Signup() {
             if(data.status){
                 navigate('/otp')
             }else{
-                toast(data.message)
+                toast.error(data.message,{
+                    position:'top-center'
+                })
             }
         } catch (error) {
-            toast(error.message)
+            toast.error(error.message,{
+                position:'top-center'
+            })
         }
     }
 

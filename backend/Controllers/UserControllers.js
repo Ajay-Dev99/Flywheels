@@ -45,11 +45,16 @@ module.exports.register = async (req, res, next) => {
     if (existTrue) {
       res.json({ message: "This Phone Number is already exist", status: false })
     } else {
-      newUser = req.body;
-      client.verify.v2.services(serviceID)
-        .verifications.create({ to: `+91${phone_number}`, channel: "sms" })
-      res.json({ status: true })
-
+      const emailExist = await user.findOne({email:email})
+      if(emailExist){
+      res.json({ message: "This email is already exist", status: false })
+      }else{
+        newUser = req.body;
+        client.verify.v2.services(serviceID)
+          .verifications.create({ to: `+91${phone_number}`, channel: "sms" })
+        res.json({ status: true })  
+      }
+      
     }
   } catch (error) {
 
@@ -91,12 +96,8 @@ module.exports.login = async (req, res, next) => {
       const auth = await bcrypt.compare(password, customer.password);
       if (auth) {
         const token = createToken(customer._id)
-        // res.cookie("jwt",token,{
-        //   withCredentials:true,
-        //   httpOnly:false,
-        //   maxAge: maxAge * 1000,
-        // });
-        res.status(200).json({ user: customer._id, created: true,token })
+   
+        res.status(200).json({ user: customer, created: true,token })
       } else {
         throw Error("Incorrect password")
       }
@@ -110,5 +111,6 @@ module.exports.login = async (req, res, next) => {
 }
 
 module.exports.home = (req,res,next)=>{
- console.log("jwt validated");
+  const userdetails = req.user
+ res.json({status:true,user:userdetails})
 }

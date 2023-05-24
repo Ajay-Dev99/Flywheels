@@ -5,37 +5,37 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { login } from '../../Services/UserApi'
-import {toast} from 'react-toastify'
- 
+import { toast } from 'react-toastify'
+import { setUserDetails } from '../../features/setUser'
+import { useDispatch } from 'react-redux'
+
+
 
 function Login() {
-  // const [cookies,setCookie,removeCookie] = useCookies([]);
-
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [showpassword, setshowPassword] = useState(false)
-  const generateError=(err)=>{
-    toast.error(err,{
-        position:"top-center"
+  const generateError = (err) => {
+    toast.error(err, {
+      position: "top-center"
     })
-}
+  }
   const initialValues = {
     email: "",
     password: ""
   }
   const onSubmit = async (values) => {
     try {
-      console.log(values);
       const { data } = await login(values)
-      console.log(data);
       if (data) {
         if (data.errors) {
           const { email, password } = data.errors;
           if (email) generateError(email);
           else if (password) generateError(password);
-        }else{
-          localStorage.setItem("jwt",data.token)
+        } else {
+          localStorage.setItem("jwt", data.token)
+          dispatch(setUserDetails(data.user))
           navigate('/')
-         
         }
       }
 

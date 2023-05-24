@@ -9,7 +9,6 @@ export const verifyOtp = (otp)=>{
 }
 
 export const login =(values)=>{
-    console.log("called");
     return userInstance.post("/login",{...values})
 }
 
