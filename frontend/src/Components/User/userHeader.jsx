@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import { Home } from '../../Services/UserApi';
+import { userHeader } from '../../Services/UserApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setUserDetails } from '../../features/setUser';
@@ -36,9 +36,13 @@ function Header() {
       }
     };
 
-    Home().then((response) => {
+      userHeader().then((response) => {
       if (response.data.status) {
         dispatch(setUserDetails(response.data.user))
+      }
+      
+      if(response.data.loginfail){
+        localStorage.removeItem("jwt")
       }
 
     }).catch((error) => {

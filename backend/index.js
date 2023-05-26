@@ -39,3 +39,22 @@ app.use(cookieParser())
 app.use(express.json());
 app.use("/",userRoutes);
 app.use("/admin",AdminRoutes);
+
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading
+      if (err.code === 'LIMIT_FILE_TYPE') {
+        console.log(err.message);
+        res.status(400).json({ message: err.message });
+      } else {
+        console.log(err.message);
+        res.status(500).json({ message: err.message });
+      }
+    } else {
+      // An unknown error occurred
+      res.status(500).json({ message: 'Unknown error occurred' });
+      console.log("err.message");
+
+    }
+  });
+  

@@ -7,4 +7,5 @@ router.post("/register",register)
 router.post("/verifyotp",verifyOtp)
 router.post("/login",login)
 
+
 module.exports = router;

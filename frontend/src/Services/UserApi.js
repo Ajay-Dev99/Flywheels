@@ -12,6 +12,6 @@ export const login =(values)=>{
     return userInstance.post("/login",{...values})
 }
 
-export const Home = ()=>{
+export const userHeader = ()=>{
     return userInstance.get("/")
 }

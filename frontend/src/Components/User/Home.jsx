@@ -11,16 +11,16 @@ import { setUserDetails } from '../../features/setUser'
 function UserHome() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  useEffect(()=>{
-    Home().then((response)=>{
+  // useEffect(()=>{
+  //   Home().then((response)=>{
      
-        if(response.data.loginfail){
-          localStorage.removeItem("jwt")
-        }
-      }).catch((error)=>{
-        toast(error.message)
-      })
-  },[])
+  //       if(response.data.loginfail){
+  //         localStorage.removeItem("jwt")
+  //       }
+  //     }).catch((error)=>{
+  //       toast(error.message)
+  //     })
+  // },[])
 
   const user = useSelector((state)=>state.user.value)
 

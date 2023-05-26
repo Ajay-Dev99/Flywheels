@@ -1,9 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaCarSide, FaListAlt, FaCommentAlt } from 'react-icons/fa'
+import { adminAuthetication } from "../../Services/AdminApi"
+
+
+import { toast } from 'react-toastify'
 
 function AdminSidebar() {
     const navigate = useNavigate()
+
+
+    useEffect(() => {
+        try {
+            adminAuthetication().then((response) => {
+                
+                if (response.data.loginfail) {
+                    adminLogout()
+                }
+            })
+        } catch (error) {
+            toast.error(error.message, {
+                position: 'top-center'
+            })
+        }
+
+    }, [])
+
+    const adminLogout = () => {
+        localStorage.removeItem("adminJwt")
+        navigate("/admin/login")
+    }
+
     return (
         <div>
 
@@ -20,32 +47,32 @@ function AdminSidebar() {
                     <div className='text-center font-semibold my-7 bg-[#F3F4F6] p-2' > Pages</div>
                     <ul className="space-y-2 font-medium flex-grow">
                         <li>
-                            <div onClick={() => navigate("/admin/users")} className="flex items-center p-2 text-gray-900  border hover:bg-gray-100 ">
+                            <div onClick={() =>navigate("/admin/")} className="flex items-center p-2 text-gray-900  border hover:bg-gray-100 ">
                                 <svg aria-hidden="true" className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
                                 <span className="ml-3">Dashboard</span>
                             </div>
                         </li>
 
                         <li>
-                            <div className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
+                            <div onClick={() => navigate("/admin/users")} className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
                                 <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
                                 <span className="flex-1 ml-3 whitespace-nowrap">Users</span>
                             </div>
                         </li>
                         <li>
-                            <div className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
+                            <div onClick={() => navigate("/admin/viewcars")} className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
                                 <FaCarSide className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Cars</span>
                             </div>
                         </li>
                         <li>
-                            <div className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
+                            <div onClick={() => navigate("/admin/bookings")} className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
                                 <FaListAlt className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Bookings</span>
                             </div>
                         </li>
                         <li>
-                            <div className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
+                            <div onClick={() => navigate("/admin/feedback")} className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
                                 <FaCommentAlt className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Feedback</span>
                             </div>
@@ -54,14 +81,9 @@ function AdminSidebar() {
                     </ul>
                 </div>
                 <div className='flex justify-center bg-gray-50'>
-                    <button type='button' className=' px-4 py-2 mb-5  bg-[#368E88] text-white'>Log out</button>
+                    <button type='button' onClick={adminLogout} className=' px-4 py-2    w-full bg-black text-white'>Logout</button>
                 </div>
             </aside>
-
-            {/* <div className="p-4 sm:ml-64">
-
-            </div> */}
-
         </div>
     )
 }

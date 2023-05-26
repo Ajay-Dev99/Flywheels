@@ -5,6 +5,7 @@ const userModel = require('../Models/userModel')
 module.exports = async(req,res,next)=>{
     try {
         const authHeader =req.headers.authorization
+       
         const authToken = authHeader && authHeader.split(" ")[1];
         // if there is no tocken
         if(!authToken) return res.json({ loginfail: true, status: false, message: "no auth token" });

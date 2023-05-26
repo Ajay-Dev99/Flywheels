@@ -4,7 +4,8 @@ function Banner() {
     return (
         <div>
             <div className='px-0 md:px-2 relative w-full mt-5 flex items-center justify-center'>
-                <img src="/images/Banner.jpg" alt="Banner Image" className=" h-auto object-contain max-w-full overflow-hidden  md:w-auto w-full" />
+                <img src="/images/Banner.jpg" alt="Banner Image" className=" h-auto hidden md:block  object-contain max-w-full overflow-hidden  md:w-auto w-full" />
+                <img src="/images/Banners.jpg" alt="Banner Image" className=" h-auto block md:hidden  object-contain max-w-full overflow-hidden  md:w-auto w-full" />
             </div>
             <div className='md:flex flex-col justify-center md:items-center md:flex-row mt-8'> 
 

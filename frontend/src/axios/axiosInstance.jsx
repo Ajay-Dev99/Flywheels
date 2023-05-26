@@ -17,4 +17,10 @@ const adminInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/admin`
 })
 
+adminInstance.interceptors.request.use((request)=>{
+    const token = localStorage.getItem("adminJwt")
+    request.headers.Authorization =  `Bearer ${token}`
+    return request;
+})
+
 export { userInstance, adminInstance };

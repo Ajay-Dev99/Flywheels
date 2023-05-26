@@ -4,11 +4,14 @@ import { useFormik } from "formik"
 import * as Yup from 'yup'
 import { adminLogin } from "../../Services/AdminApi"
 import {toast} from 'react-toastify'
+import {useNavigate} from 'react-router-dom'
 
 
 function AdminLogin() {
+    const navigate = useNavigate()
     const [showPassword,setShowPassword] = useState(false)
     const[password,setpassword] = useState("")
+    
 
     const initialValues={
         email:"",
@@ -21,7 +24,9 @@ function AdminLogin() {
         const {data} = await adminLogin(values)
         if(data){
             if(data.status){
-                toast(data.message)
+                localStorage.setItem("adminJwt",data.token)
+                navigate("/admin/")
+                // toast(data.message)
             }else{
                 toast.error (data.message,{
                     position:"top-center"
@@ -46,7 +51,7 @@ function AdminLogin() {
 
     return (
         <div>
-            <div className='flex flex-col justify-center items-center bg-[#358E88] h-screen '>
+            <div className='flex flex-col justify-center items-center bg-[#358E88] h-screen p-4 md:px-0'>
                 <div className='border flex flex-col bg-white justify-center items-center p-5 md:p-9 rounded-lg'>
                  <img src="/images/Admin.jpg" className=' w-60 xl:w-96   md:w-80 h-auto ' alt="" /> 
                     <h1 className="text-sm md:text-xl font-bold my-2 md:my-4">ADMIN LOGIN</h1>
