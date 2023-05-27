@@ -12,6 +12,9 @@ return adminInstance.post("/",{...values})
 }
 
 export const adminAddCar = (values)=>{
-    console.log(values,"inapi");
     return adminInstance.post("/addcar",{...values},{ headers: { "Content-Type": "multipart/form-data" }})
+}
+
+export const adminsideUserList = ()=>{
+    return adminInstance.get("/listUsers")
 }

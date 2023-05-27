@@ -4,9 +4,11 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { adminAddCar } from '../../Services/AdminApi'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 function AdminAddCar() {
-    
+
+const navigate = useNavigate()
 
 const initialValues = {
     modelname:"",
@@ -23,8 +25,16 @@ const initialValues = {
 
 }
 const onSubmit = async (values)=>{
-    // console.log(values);
-    adminAddCar(values)
+    adminAddCar(values).then((response)=>{
+        if(response.data.status){
+            toast(response.data.message)
+            navigate("/admin/viewcars")
+        }else{
+            toast.error(response.data.message,{
+                position:"top-center"
+            })
+        }
+    })
 }
 
 const validationSchema = Yup.object().shape({
@@ -44,7 +54,10 @@ const validationSchema = Yup.object().shape({
     rentupto10days:Yup.number()
     .typeError('Please enter a valid number')
     .required('This field is required'),
-    vehiclenumber:Yup.string().required(),
+    vehiclenumber: Yup.string()
+    .strict(true)
+    .trim('Name must not contain white space')
+    .test('no-whitespace', 'Name must not contain white space', (value) => !/\s/.test(value)),
     category:Yup.string().required(),
     image:Yup.string().required("This field is required")
 })
@@ -54,18 +67,6 @@ const formik = useFormik({
     onSubmit,
     validationSchema
 })
-
-// function upload(e) {
-//     let file = e.target.files[0]
-//     if (file.type !== "image/jpeg" && file.type !== "image/png") {
-//       toast("Please upload a JPEG or PNG image file.",{
-//         position:"top-center"
-//     });
-//     } else{
-//         formik.handleChange(e)
-//     }
-
-// }
 
     return (
         <div>
@@ -102,7 +103,6 @@ const formik = useFormik({
                                     <option value="">Select a transmission type</option>
                                     <option value="automatic">Automatic</option>
                                     <option value="manual">Manual</option>
-                                    <option value="cvT">CVT</option>
                                 </select>
                     {formik.touched.transmissionType && formik.errors.transmissionType ? <p className="text-sm text-red-600">{formik.errors.transmissionType}</p> : null}
 

@@ -23,7 +23,6 @@ function Otp() {
     onSubmit: async(values) => {
       const otp = parseInt(values.otp.join(""));
       const {data}= await verifyOtp(otp)
-      console.log(data);
      if(!data.status){
       toast(data.message)
      }

@@ -5,7 +5,8 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceID = process.env.TWILIO_VERIFY_SID;
 const client = require('twilio')(accountSid, authToken);
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const vehicleModel = require('../Models/vehicleModel');
 let newUser;
 
 const createToken = (id) => {
@@ -113,4 +114,17 @@ module.exports.login = async (req, res, next) => {
 module.exports.home = (req,res,next)=>{
   const userdetails = req.user
  res.json({status:true,user:userdetails})
+}
+
+module.exports.Listvehicles = async(req,res,next) =>{
+  try {
+    const vehicles = await vehicleModel.find({})
+    if(vehicles){
+      res.json({status:true,vehicles})
+    }else{
+      res.josn({status:false,message:"No vehicle found"})
+    }
+  } catch (error) {
+    res.json({status:false,message:error.message})
+  }
 }

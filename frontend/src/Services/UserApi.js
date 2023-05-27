@@ -15,3 +15,8 @@ export const login =(values)=>{
 export const userHeader = ()=>{
     return userInstance.get("/")
 }
+
+export const listVehicle = ()=>{
+    return userInstance.get("/listvehicles")
+}
+

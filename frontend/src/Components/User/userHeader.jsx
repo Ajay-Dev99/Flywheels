@@ -114,22 +114,22 @@ function Header() {
 
           <div className=" z-50 items-center rounded-lg  bg-white md:bg-transparent justify-between hidden  md:flex md:w-auto md:order-1  md:relative md:top-0 absolute top-10 right-3.5 w-[47%]  " id="mobile-menu-2">
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4   md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent   ">
-              <li>
-                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 dark:text-gray-200 dark:hover:text-black" aria-current="page">Home</span>
+              <li onClick={()=>navigate("/")}>
+                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer" aria-current="page">Home</span>
 
               </li>
-              <li>
-                <span className={`block ${scrolled ? 'md:text-black' : 'text-white'} text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 dark:text-gray-200 dark:hover:text-white`} aria-current="page">About Us</span>
+              <li onClick={()=>navigate("/aboutus")}>
+                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer" aria-current="page">About Us</span>
 
               </li>
-              <li>
-                <span className={`block ${scrolled ? 'md:text-black' : 'text-white'} text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 dark:text-gray-200 dark:hover:text-white`} aria-current="page">Car For Rent</span>
+              <li onClick={()=>navigate("/viewvehicles")}>
+                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer" aria-current="page">Car For Rent</span>
               </li>
               <li>
-                <span className={`block ${scrolled ? 'md:text-black' : 'text-white'} text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 dark:text-gray-200 dark:hover:text-white`} aria-current="page">Model Category</span>
+                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer"  aria-current="page">Model Category</span>
               </li>
               <li>
-                <span className={`block ${scrolled ? 'md:text-black' : 'text-white'} text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 dark:text-gray-200 dark:hover:text-white`} aria-current="page">Contact Us</span>
+                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer"  aria-current="page">Contact Us</span>
               </li>
             </ul>
           </div>
