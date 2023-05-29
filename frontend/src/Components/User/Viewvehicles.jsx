@@ -39,7 +39,7 @@ const[vehicles,setvehicles] = useState()
     <div className='border border-black'>
     <div className='flex justify-center'>   <img className="rounded-t-lg sm:h-40 md:h-52" src={`${process.env.REACT_APP_BASE_URL}/${vehicle.image_url}`} alt="" /> </div>
           <div className='flex flex-col'>
-            <div className='flex justify-center'> <p>{vehicle.modelname}</p> </div>
+            <div className='flex justify-center'> <p className='font-bold uppercase'>{vehicle.modelname}</p> </div>
             <div className='flex justify-center'><p>{vehicle.fueltype}</p></div>
           </div>
           <div className='flex justify-center '>

@@ -37,6 +37,8 @@ app.use(cookieSession({
   }))
 
 
+// Middleware to parse form data
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/",userRoutes);
 app.use("/admin",AdminRoutes);

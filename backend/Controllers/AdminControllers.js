@@ -1,6 +1,7 @@
 const AdminModel = require('../Models/AdminModel')
 const userModel = require('../Models/userModel')
 const vehicleModel = require('../Models/vehicleModel')
+const categoryModel = require('../Models/CategoryModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const maxAge = 3*24*60*60;
@@ -91,3 +92,47 @@ module.exports.listUsers = async(req,res,next)=>{
         res.json({status:false,message:error.message})
     }
 }
+
+module.exports.addCategory = async (req,res,next)=>{
+    const imagePath = req.files.image[0].path
+    const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
+    console.log(req.body,"req.body")
+    try {
+        const exist = await categoryModel.findOne({categoryName:req.body.categoryName})
+        if(exist){
+            fs.unlink(imagePath, (error) => {
+                if (error) {
+                  console.error('Error deleting image:', error);
+                } else {
+                  console.log('Image deleted successfully');
+                }
+              });
+            res.json({status:false,message:"Category Name already exist"})
+        }else{
+            const newCategory = new categoryModel({
+                categoryName:req.body.categoryName,
+                imageUrl: modifiedImagePath
+            })
+          const category = await newCategory.save()
+                
+            res.json({status:true,message:"Category added successfully",category})
+        
+        }
+
+    } catch (error) {
+     res.json({status:false,message:error.message})   
+    }
+}
+
+module.exports.ListCategories = async (req,res,next) =>{
+    try {
+        const categories = await categoryModel.find({})
+        if(categories){
+            res.json({status:true,categories})
+        }else{
+            res.json({status:false,message:"NOTHING FOUND"})
+        }
+        } catch (error) {
+        res.json({status:false,message:error.message})
+    }
+} 

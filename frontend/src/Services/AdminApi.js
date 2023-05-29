@@ -18,3 +18,11 @@ export const adminAddCar = (values)=>{
 export const adminsideUserList = ()=>{
     return adminInstance.get("/listUsers")
 }
+
+export const adminAddCategory = (values)=>{
+    console.log(values,"in api");
+    return adminInstance.post("/addCategory",{...values},{headers:{"Content-Type":"multipart/form-data"}})
+}
+export const adminGetCategoryList = ()=>{
+    return adminInstance.get("/getCategories")
+}
