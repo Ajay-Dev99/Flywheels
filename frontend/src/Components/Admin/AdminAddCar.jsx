@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 function AdminAddCar() {
     const [categories, setCategories] = useState()
+    const [images, setImages] = useState()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -35,14 +36,23 @@ function AdminAddCar() {
         rentupto10days: "",
         vehiclenumber: "",
         category: "",
-        image: ""
 
     }
     const onSubmit = async (values) => {
-        // console.log(values);
-        adminAddCar(values).then((response) => {
+        const formdata = new FormData()
+
+        Object.keys(values).forEach((key) => {
+            formdata.append(key, values[key]);
+        });
+
+        Array.from(images).forEach(image => {
+            formdata.append("vehicle", image);
+        });
+
+        adminAddCar(formdata).then((response) => {
             if (response.data.status) {
                 toast(response.data.message)
+                setImages(null)
                 navigate("/admin/viewcars")
             } else {
                 toast.error(response.data.message, {
@@ -50,6 +60,7 @@ function AdminAddCar() {
                 })
             }
         })
+        
     }
 
     const validationSchema = Yup.object().shape({
@@ -74,7 +85,6 @@ function AdminAddCar() {
             .trim('Name must not contain white space')
             .test('no-whitespace', 'Name must not contain white space', (value) => !/\s/.test(value)),
         category: Yup.string().required(),
-        image: Yup.string().required("This field is required")
     })
 
     const formik = useFormik({
@@ -164,7 +174,7 @@ function AdminAddCar() {
                                     <option value="">Select a category</option>
                                     {categories.map((category) => (
 
-                                        <option value="option1">{category.categoryName}</option>
+                                        <option key={category._id} value="option1">{category.categoryName}</option>
                                     ))}
 
                                 </select>
@@ -174,12 +184,11 @@ function AdminAddCar() {
                         </div>
                         <div className="mb-6">
                             <label htmlFor="">Image</label>
-                            <input type="file" onChange={(e) => {
-                                const file = e.currentTarget.files[0];
-                                formik.setFieldValue('image', file);
+                            <input type="file" multiple onChange={(e) => {
+                                const files = e.currentTarget.files;
+                                setImages(files);
                             }}
-                                onBlur={formik.handleBlur} name='image' className="block  px-0 w-full text-sm text-gray-900 bg-transparent border border-black" required />
-                            {formik.touched.image && formik.errors.image ? <p className="text-sm text-red-600">{formik.errors.image}</p> : null}
+                                name='image' className="block  px-0 w-full text-sm text-gray-900 bg-transparent border border-black" required />
 
                         </div>
                         <div className='flex justify-end'>

@@ -15,8 +15,7 @@ function UserRouter() {
         <Route path='/login' element={<UserloginPage/>}/>
         <Route path='/signup' element={<UserSignuppage/>}/>
         <Route path='/otp' element={<UserOtpPage/>}/>
-        <Route path='/viewvehicles' element={<UserVehicleviewPage/>}/>
-       
+        <Route path='/viewvehicles' element={<UserVehicleviewPage/>}/>   
     </Routes>
   )
 }

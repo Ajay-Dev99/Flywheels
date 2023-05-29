@@ -42,12 +42,17 @@ module.exports.adminHome = (req,res,next)=>{
 }
 
 module.exports.addcar =async (req,res,next)=>{
+    console.log(req.files,"files");
+    console.log(req.body,"body");
     try {
         const imagePath = req.files.image[0].path
         const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
         const exist = await vehicleModel.findOne({vehiclenumber:req.body.vehiclenumber})
         if(exist){
             //delete the image
+         for (let i = 0; i < req.files.length; i++) {
+            const imagePath = req.files.image[i];
+               
             fs.unlink(imagePath, (error) => {
                 if (error) {
                   console.error('Error deleting image:', error);
@@ -55,6 +60,8 @@ module.exports.addcar =async (req,res,next)=>{
                   console.log('Image deleted successfully');
                 }
               });
+            
+         }
             res.json({status:false ,message:"The vehicle number already exist"})
         }else{
             const newVehicle = new vehicleModel({

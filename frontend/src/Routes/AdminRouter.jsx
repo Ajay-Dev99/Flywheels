@@ -18,9 +18,7 @@ function AdminRouter() {
         <Route path='/viewcars' element = {<AdminCarsPage/>}/>
         <Route path='/addcars' element = {<AdminAddCarPage/>}/>
         <Route path='/feedback' element = {<AdminFeedbackPage/>}/>
-        <Route path='/categories' element = { <AdminCategoryPage/>}/>
-
-        
+        <Route path='/categories' element = { <AdminCategoryPage/>}/>  
     </Routes>
   )
 }
