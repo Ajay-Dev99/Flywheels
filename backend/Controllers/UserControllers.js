@@ -118,11 +118,25 @@ module.exports.home = (req,res,next)=>{
 
 module.exports.Listvehicles = async(req,res,next) =>{
   try {
-    const vehicles = await vehicleModel.find({})
+    const vehicles = await vehicleModel.find({}).populate('categoryId');
     if(vehicles){
       res.json({status:true,vehicles})
     }else{
       res.josn({status:false,message:"No vehicle found"})
+    }
+  } catch (error) {
+    res.json({status:false,message:error.message})
+  }
+}
+
+module.exports.viewVehicle = async(req,res,next)=>{
+  try {
+    const vehicleId = req.params.id
+    const vehicle = await vehicleModel.findOne({_id:vehicleId}).populate("categoryId")
+    if(vehicle){
+      res.json({status:true,vehicle})
+    }else{
+      res.json({status:false,message:"Something went wrong"})
     }
   } catch (error) {
     res.json({status:false,message:error.message})

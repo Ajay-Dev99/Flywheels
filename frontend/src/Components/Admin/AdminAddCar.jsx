@@ -174,7 +174,7 @@ function AdminAddCar() {
                                     <option value="">Select a category</option>
                                     {categories.map((category) => (
 
-                                        <option key={category._id} value="option1">{category.categoryName}</option>
+                                        <option key={category._id} value={category._id}>{category.categoryName}</option>
                                     ))}
 
                                 </select>

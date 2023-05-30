@@ -6,6 +6,11 @@ import { useNavigate } from 'react-router-dom'
 
 function Viewvehicles() {
   const navigate = useNavigate()
+
+  function viewCar(vehicleId){
+    navigate(`/singlepage/${vehicleId}`)
+  }
+
 const[vehicles,setvehicles] = useState()
   useEffect(()=>{
      listVehicle().then((response)=>{
@@ -28,16 +33,16 @@ const[vehicles,setvehicles] = useState()
     <div>
       <Header />
       <div className='mt-8'>
-        <div className='p-2 bg-[#D9D9D9] flex justify-center '><p className='text-black font-normal'>AVAILABLE CARS</p></div>
+        <div className='p-2 bg-[#358E88] flex justify-center'><p className='text-white font-bold text-lg uppercase'>AVAILABLE CARS</p></div>
       </div>
 
    {  vehicles &&  <div className='p-5 flex flex-wrap justify-center'>
      {     vehicles.map((vehicle)=>(
 
 
-   <div  key={vehicle._id} className="max-w-sm w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-2/5 mb-4  border border-[#ffff]">
+   <div  key={vehicle._id} onClick={()=>viewCar(vehicle._id)} className="max-w-sm w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-2/5 mb-4  border border-[#ffff]">
     <div className='border border-black'>
-    <div className='flex justify-center'>   <img className="rounded-t-lg sm:h-40 md:h-52" src={`${process.env.REACT_APP_BASE_URL}/${vehicle.image_url}`} alt="" /> </div>
+    <div className='flex justify-center'>   <img className="rounded-t-lg sm:h-40 md:h-52" src={`${process.env.REACT_APP_BASE_URL}/${vehicle.image_url[0]}`} alt="" /> </div>
           <div className='flex flex-col'>
             <div className='flex justify-center'> <p className='font-bold uppercase'>{vehicle.modelname}</p> </div>
             <div className='flex justify-center'><p>{vehicle.fueltype}</p></div>

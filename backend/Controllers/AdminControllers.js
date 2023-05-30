@@ -42,28 +42,43 @@ module.exports.adminHome = (req,res,next)=>{
 }
 
 module.exports.addcar =async (req,res,next)=>{
-    console.log(req.files,"files");
-    console.log(req.body,"body");
     try {
-        const imagePath = req.files.image[0].path
-        const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
+       console.log(req.files,"request files");
         const exist = await vehicleModel.findOne({vehiclenumber:req.body.vehiclenumber})
         if(exist){
             //delete the image
-         for (let i = 0; i < req.files.length; i++) {
-            const imagePath = req.files.image[i];
-               
-            fs.unlink(imagePath, (error) => {
-                if (error) {
-                  console.error('Error deleting image:', error);
-                } else {
-                  console.log('Image deleted successfully');
-                }
-              });
+        //  for (let i = 0; i < req.files.length; i++) {
+        //     const imagePath = req.files.image[i];
+        //        console.log(imagePath,"image to delete");
+        //     fs.unlink(imagePath, (error) => {
+        //         if (error) {
+        //           console.error('Error deleting image:', error);
+        //         } else {
+        //           console.log('Image deleted successfully');
+        //         }
+        //       });
             
-         }
+        //  }
+
+        req.files.map((image)=>{
+            const imagePath = image.path;
+            // const modifiedPath = imagePath.replace(/^public[\\/]+/, '');
+            fs.unlink(imagePath, (error) => {
+                        if (error) {
+                          console.error('Error deleting image:', error);
+                        } else {
+                          console.log('Image deleted successfully');
+                        }
+                      });
+        })
             res.json({status:false ,message:"The vehicle number already exist"})
         }else{
+            const images = req.files
+            const imageURLs= images.map((image)=>{
+                let imagePath = image.path;
+                let modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
+                return modifiedImagePath;
+            })
             const newVehicle = new vehicleModel({
                 vehiclenumber:req.body.vehiclenumber,
                 modelname:req.body.modelname,
@@ -74,8 +89,8 @@ module.exports.addcar =async (req,res,next)=>{
                 rentfor30days:req.body.rent30daysormore,
                 rentfor10_20days:req.body.rent10to20days,
                 rentupto10days:req.body.rentupto10days,
-                category:req.body.category,
-                image_url:modifiedImagePath,
+                categoryId:req.body.category,
+                image_url:imageURLs,
               
             })
             newVehicle.save().then(()=>{
@@ -103,7 +118,6 @@ module.exports.listUsers = async(req,res,next)=>{
 module.exports.addCategory = async (req,res,next)=>{
     const imagePath = req.files.image[0].path
     const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
-    console.log(req.body,"req.body")
     try {
         const exist = await categoryModel.findOne({categoryName:req.body.categoryName})
         if(exist){

@@ -31,7 +31,6 @@ function AdminCategories() {
   const onSubmit = async(values)=>{
     adminAddCategory(values)
     .then((response)=>{
-        console.log(response.data);
         if(response.data.status){
             const newCategories = [...categories,response.data.category]
             setCategories(newCategories)
@@ -42,7 +41,6 @@ function AdminCategories() {
             })
         }
     })
-    console.log(values);
   }
 
   const validationSchema = Yup.object({

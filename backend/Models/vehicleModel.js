@@ -39,13 +39,14 @@ const vehicleSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    category:{
-        type:String,
+    categoryId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Category",
         required:true
     },
     image_url:{
-        type:String,
-        // required:true
+        type:[Object],
+        required:true
     },
     status:{
         type:Boolean,

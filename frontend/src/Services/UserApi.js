@@ -20,3 +20,7 @@ export const listVehicle = ()=>{
     return userInstance.get("/listvehicles")
 }
 
+export const viewVehicle = (id)=>{
+    console.log(id,"vehicle id");
+    return userInstance.get(`/viewvehicle/${id}`)
+}
