@@ -61,9 +61,9 @@ function Header() {
         }`}>
 
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4">
-          <a href="" className="flex items-center">
+          <div onClick={()=>navigate("/")} className="flex items-center">
             <img src="/images/Logo.png" className="md:h-12 max-sm:h-10  max-xl:h-12 mr-3" alt="" />
-          </a>
+          </div>
 
           <div className="flex items-center md:order-2">
             
@@ -126,7 +126,7 @@ function Header() {
                 <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer" aria-current="page">Car For Rent</span>
               </li>
               <li>
-                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer"  aria-current="page">Model Category</span>
+                <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer"  aria-current="page">Our hubs</span>
               </li>
               <li>
                 <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer"  aria-current="page">Contact Us</span>

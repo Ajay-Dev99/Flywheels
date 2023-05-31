@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
 import { useNavigate } from 'react-router-dom'
 import { listVehicle } from '../../Services/UserApi'
-
+import {FaTrash} from 'react-icons/fa'
+import { adminDeleteVehicle } from '../../Services/AdminApi'
 
 function Cars() {
   const navigate = useNavigate()
   const [Vehicles,setVehicles] = useState()
+
   useEffect(()=>{
       listVehicle().then((response)=>{
         if(response.data.status){
@@ -15,6 +17,16 @@ function Cars() {
         }
       })
   },[])
+
+  const deleteCar = (id)=>{
+    console.log(id,"car id");
+    adminDeleteVehicle(id)
+  }
+
+  const viewAndEdit = (id)=>{
+    navigate(`/admin/editvehicle/${id}`)
+  }
+
   return (
     <div>
       <AdminSidebar />
@@ -42,19 +54,22 @@ function Cars() {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
            
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 ">
                   image
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 text-center">
                   Vehicle 
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 text-center">
                  Vehicle Number
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 text-center">
                  Fuel ype
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 text-center">
+                  Details
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
                   Action
                 </th>
               </tr>
@@ -63,27 +78,30 @@ function Cars() {
             { Vehicles.map((car)=>(
 
             
-              <tr key={car._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-             <td>
+              <tr key={car._id} className="bg-white border-b  hover:bg-gray-50">
+             <td >
              <img className=" h-16 rounded-full" src={`${process.env.REACT_APP_BASE_URL}/${car.image_url[1]}`} alt="Jese image" />
 
              </td>
-                <td >
+                <td className='text-center'>
                   <div className="pl-3">
                     <div className="text-base font-semibold">{car.modelname}</div>
                     <div className="font-normal text-gray-500">{car.brand}</div>
                   </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 text-center">
                   {car.vehiclenumber}
                 </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
+                <td className="px-6 py-4 text-center">
                   {car.fueltype}
-                  </div>
+                 
                 </td>
-                <td className="px-6 py-4">
-                  <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">View & Edit</a>
+                <td  className="px-6 py-4 cursor-pointer text-center" onClick={()=>viewAndEdit(car._id)}>
+                  <span type="button"  className="font-medium text-blue-600 ">View & Edit</span>
+                </td>
+                <td className='text-center cursor-pointer'>
+               <span type="button" onClick={()=>deleteCar(car._id)} className="font-medium text-red-600 "><FaTrash/></span>
+
                 </td>
               </tr>
             ))  }

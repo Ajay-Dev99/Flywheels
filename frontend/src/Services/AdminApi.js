@@ -12,8 +12,12 @@ return adminInstance.post("/",{...values})
 }
 
 export const adminAddCar = (values)=>{
-    console.log(values,"apidsjfhadsjkfahs");
     return adminInstance.post("/addcar",values,{ headers: { "Content-Type": "multipart/form-data" }})
+}
+
+export const adminEditCar = (values,id)=>{
+    console.log(values,"edit car");
+    return adminInstance.post(`/editcar/${id}`,values,{headers: { "Content-Type": "multipart/form-data"}})
 }
 
 export const adminsideUserList = ()=>{
@@ -26,4 +30,12 @@ export const adminAddCategory = (values)=>{
 }
 export const adminGetCategoryList = ()=>{
     return adminInstance.get("/getCategories")
+}
+
+export const adminviewVehicleDetails = (vehicleId)=>{
+        return adminInstance.get(`/viewvehicledetails/${vehicleId}`)
+}
+
+export const adminDeleteVehicle = (vehicleId)=>{
+    return adminInstance.post(`/deletecar/${vehicleId}`)
 }
