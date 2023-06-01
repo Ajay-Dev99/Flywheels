@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {register,verifyOtp, login, home, Listvehicles, viewVehicle} = require("../Controllers/UserControllers")
+const {register,verifyOtp, login, home, Listvehicles, viewVehicle, search} = require("../Controllers/UserControllers")
 const userAuth = require("../Middlewares/userAuth")
 
 router.get("/",userAuth,home)

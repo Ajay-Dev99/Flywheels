@@ -118,14 +118,36 @@ module.exports.home = (req,res,next)=>{
 
 module.exports.Listvehicles = async(req,res,next) =>{
   try {
-    const vehicles = await vehicleModel.find({}).populate('categoryId');
-    if(vehicles){
-      res.json({status:true,vehicles})
-    }else{
-      res.josn({status:false,message:"No vehicle found"})
+    console.log(req.query,"qureys");
+    if(req.query.key){
+    const { key  } = req.query;
+    const searchData = key
+      ? {
+          $or: [
+            { modelname: { $regex: key, $options: "i" } }, 
+            { brand: { $regex: key, $options: "i" } },
+          ],
+        }
+      : {}; 
+    const vehicle = await vehicleModel.find(searchData).populate("categoryId");
+    
+    
+    res.json({ status: true, vehicle });
+    }else {
+      const skip = (req.query.page-1)*req.query.limit
+      const limit = parseInt(req.query.limit)
+      const totalCount = await vehicleModel.countDocuments({});
+      const totalPages = Math.ceil(totalCount / limit);
+      console.log(totalCount,"totoal count");
+      const vehicle = await vehicleModel.find({}).skip(skip).limit(limit);
+      res.json({status:true, vehicle, totalCount, totalPages });
+   
     }
+
+   
   } catch (error) {
     res.json({status:false,message:error.message})
+    console.log(error);
   }
 }
 
@@ -142,3 +164,7 @@ module.exports.viewVehicle = async(req,res,next)=>{
     res.json({status:false,message:error.message})
   }
 }
+
+
+
+

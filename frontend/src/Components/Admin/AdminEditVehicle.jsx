@@ -230,9 +230,9 @@ function AdminEditVehicle() {
 
                             {vehicleImage.map((image, index) => (
 
-                                <div key={index}>
+                                <div key={index} className='w-full'>
                                     <div className='border border-black'>
-                                        {imagePreviews[index] ? <img src={imagePreviews[index]} alt="Preview" /> : <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" />}
+                                        {imagePreviews[index] ? <img src={imagePreviews[index]} alt="" className='max-h-60 w-full object-contain' /> : <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" className='max-h-60 w-full object-contain' />}
                                     </div>
                                     <input type="file" name={`image[${index}]`} className="block my-1 px-0 w-full text-sm text-gray-900 bg-transparent border border-black" onChange={(event) => handleImagePreview(event, index)}  />
                             

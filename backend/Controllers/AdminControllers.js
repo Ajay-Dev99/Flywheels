@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const maxAge = 3 * 24 * 60 * 60;
 const fs = require('fs')
-const { log } = require('console')
-const { default: mongoose } = require('mongoose')
 
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRETE_KEY, {
@@ -206,10 +204,32 @@ module.exports.editCar = async (req, res, next) => {
 
     } catch (error) {
         res.json({status:false,message:error.message})
-        console.log(error);
     }
 }
 
 module.exports.deleteVehicle = async(req,res,next)=>{
-    console.log(req.params.id,"id");
+    try {
+        const vehicleId = req.params.id
+        const vehicle = await vehicleModel.findOne({_id:vehicleId})
+    
+        if(vehicle){
+            const images = vehicle.image_url
+            images.map((image)=>{
+                let imagePath = `public/${image}`
+                fs.unlink(imagePath, (error) => {
+                    if (error) {
+                        console.error('Error deleting image:', error);
+                    } else {
+                        console.log('Image deleted successfully');
+                    }
+                });
+            })
+            await vehicleModel.findOneAndDelete({ _id: vehicleId });
+            res.json({status:true,message:"Vehicle deleted"})
+        }else{
+            res.json({status:false,message:"Something went wrong"})
+        }
+    } catch (error) {
+            res.json({status:false,message:error.message})        
+    }
 }

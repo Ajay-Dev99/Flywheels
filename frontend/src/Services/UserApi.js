@@ -16,11 +16,16 @@ export const userHeader = ()=>{
     return userInstance.get("/")
 }
 
-export const listVehicle = ()=>{
-    return userInstance.get("/listvehicles")
+export const listVehicle = (key,page,limit)=>{
+    return userInstance.get("/listvehicles",{params:{
+        key,
+        limit,
+        page
+    }})
 }
 
 export const viewVehicle = (id)=>{
     console.log(id,"vehicle id");
     return userInstance.get(`/viewvehicle/${id}`)
 }
+
