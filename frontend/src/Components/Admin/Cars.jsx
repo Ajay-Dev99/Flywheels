@@ -28,7 +28,7 @@ function Cars() {
         setShowModal(false)
         const updatedVehicles = Vehicles.filter((vehicle)=>vehicle._id !== id)
         setVehicles(updatedVehicles)
-        toast(response.data.message);
+        toast.success(response.data.message);
 
       } else {
         toast.error(response.data.message, {

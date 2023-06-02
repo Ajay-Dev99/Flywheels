@@ -233,3 +233,8 @@ module.exports.deleteVehicle = async(req,res,next)=>{
             res.json({status:false,message:error.message})        
     }
 }
+
+module.exports.addHub = async (req,res,next)=>{
+    console.log(req.body,"data to insert in hub");
+    console.log(req.files,"files");
+} 

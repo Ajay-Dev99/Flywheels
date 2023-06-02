@@ -9,6 +9,8 @@ import AdminFeedbackPage from '../Pages/Admin/AdminFeedbackPage'
 import AdminAddCarPage from '../Pages/Admin/AdminAddCarPage'
 import AdminCategoryPage from '../Pages/Admin/AdminCategoryPage'
 import AdminVehicleEditpage from '../Pages/Admin/AdminVehicleEditpage'
+import AdminHubsPage from '../Pages/Admin/AdminHubsPage'
+import AdminAddHubPage from '../Pages/Admin/AdminAddHubPage'
 function AdminRouter() {
   return (
     <Routes>
@@ -21,6 +23,8 @@ function AdminRouter() {
         <Route path='/feedback' element = {<AdminFeedbackPage/>}/>
         <Route path='/categories' element = { <AdminCategoryPage/>}/> 
         <Route path='/editvehicle/:id' element={<AdminVehicleEditpage/>}/> 
+        <Route path='/hubs' element={<AdminHubsPage/>}/>
+        <Route path='/addhubs' element={<AdminAddHubPage/>}/>
     </Routes>
   )
 }

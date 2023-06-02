@@ -25,7 +25,6 @@ export const adminsideUserList = ()=>{
 }
 
 export const adminAddCategory = (values)=>{
-    console.log(values,"in api");
     return adminInstance.post("/addCategory",{...values},{headers:{"Content-Type":"multipart/form-data"}})
 }
 export const adminGetCategoryList = ()=>{
@@ -38,4 +37,9 @@ export const adminviewVehicleDetails = (vehicleId)=>{
 
 export const adminDeleteVehicle = (vehicleId)=>{
     return adminInstance.post(`/deletecar/${vehicleId}`)
+}
+
+export const adminAddHubapi = (values,image)=>{
+    console.log(values,"form data from values");
+    return adminInstance.post('/addhub',{...values},{headers:{"Content-Type":"multipart/form-data"}})
 }

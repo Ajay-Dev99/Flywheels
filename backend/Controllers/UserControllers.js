@@ -118,7 +118,6 @@ module.exports.home = (req,res,next)=>{
 
 module.exports.Listvehicles = async(req,res,next) =>{
   try {
-    console.log(req.query,"qureys");
     if(req.query.key){
     const { key  } = req.query;
     const searchData = key
@@ -130,15 +129,13 @@ module.exports.Listvehicles = async(req,res,next) =>{
         }
       : {}; 
     const vehicle = await vehicleModel.find(searchData).populate("categoryId");
-    
-    
+
     res.json({ status: true, vehicle });
     }else {
       const skip = (req.query.page-1)*req.query.limit
       const limit = parseInt(req.query.limit)
       const totalCount = await vehicleModel.countDocuments({});
       const totalPages = Math.ceil(totalCount / limit);
-      console.log(totalCount,"totoal count");
       const vehicle = await vehicleModel.find({}).skip(skip).limit(limit);
       res.json({status:true, vehicle, totalCount, totalPages });
    

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FaCarSide, FaListAlt, FaCommentAlt ,FaBookmark} from 'react-icons/fa'
+import { FaCarSide, FaListAlt, FaCommentAlt ,FaBookmark ,FaCompass} from 'react-icons/fa'
 import { adminAuthetication } from "../../Services/AdminApi"
 
 
@@ -73,6 +73,12 @@ function AdminSidebar() {
                             <div onClick={() => navigate("/admin/categories")} className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
                                 <FaBookmark className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Categories</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div onClick={() => navigate("/admin/hubs")} className="flex items-center p-2 text-gray-900   hover:bg-gray-100 border">
+                                <FaCompass className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " />
+                                <span className="flex-1 ml-3 whitespace-nowrap">Hubs</span>
                             </div>
                         </li>
                         <li>

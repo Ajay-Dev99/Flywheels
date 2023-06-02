@@ -51,7 +51,7 @@ function AdminAddCar() {
 
         adminAddCar(formdata).then((response) => {
             if (response.data.status) {
-                toast(response.data.message)
+                toast.success(response.data.message)
                 setImages(null)
                 navigate("/admin/viewcars")
             } else {
