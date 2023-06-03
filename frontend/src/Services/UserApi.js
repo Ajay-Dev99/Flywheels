@@ -25,7 +25,10 @@ export const listVehicle = (key,page,limit)=>{
 }
 
 export const viewVehicle = (id)=>{
-    console.log(id,"vehicle id");
     return userInstance.get(`/viewvehicle/${id}`)
 }
 
+export const bookaCarAPi = (values,id)=>{
+    console.log(values,id);
+    return userInstance.post(`/bookacar/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"}})
+}

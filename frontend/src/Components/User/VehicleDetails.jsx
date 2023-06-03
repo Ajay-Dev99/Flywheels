@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from './userHeader'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { viewVehicle } from '../../Services/UserApi';
 import { toast } from 'react-toastify';
 
@@ -8,6 +8,7 @@ function VehicleDetails() {
     const { id } = useParams();
     const [vehicle, setVehicle] = useState()
     const [activeImg, setActiveImage] = useState()
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -23,9 +24,9 @@ function VehicleDetails() {
             }
         })
 
-    }, [])
+    }, [id])
 
-    const [amount, setAmount] = useState(1);
+    // const [amount, setAmount] = useState(1);
     return (
      <div>
         
@@ -81,7 +82,7 @@ function VehicleDetails() {
             </p>
         </div>
             <div className='flex flex-row items-center gap-12 '>
-               <button className='bg-[#358E88] text-white font-semibold py-3 px-[7rem] h-full '>Book Now</button>
+               <button onClick={()=>navigate(`/bookacar/${vehicle._id}`)} className='bg-[#358E88] text-white font-semibold py-3 px-[7rem] h-full '>Book Now</button>
             </div>
         </div>
       }

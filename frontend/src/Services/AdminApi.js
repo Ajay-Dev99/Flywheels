@@ -43,3 +43,4 @@ export const adminAddHubapi = (values,image)=>{
     console.log(values,"form data from values");
     return adminInstance.post('/addhub',{...values},{headers:{"Content-Type":"multipart/form-data"}})
 }
+

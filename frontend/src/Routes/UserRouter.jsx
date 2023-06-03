@@ -7,6 +7,7 @@ import UserHomePage from '../Pages/User/UserHomePage'
 import UserVehicleviewPage from '../Pages/User/UserVehicleviewPage'
 import AboutPage from '../Pages/User/AboutPage'
 import VehicleDetailsPage from '../Pages/User/VehicleDetailsPage'
+import BookingPage from '../Pages/User/BookingPage'
 
 function UserRouter() {
   return (
@@ -18,6 +19,7 @@ function UserRouter() {
         <Route path='/otp' element={<UserOtpPage/>}/>
         <Route path='/viewvehicles' element={<UserVehicleviewPage/>}/>   
         <Route path='/singlepage/:id' element={<VehicleDetailsPage/>} />
+        <Route path='/bookacar/:id' element={<BookingPage/>}/>
         
     </Routes>
   )

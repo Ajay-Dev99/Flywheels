@@ -162,6 +162,22 @@ module.exports.viewVehicle = async(req,res,next)=>{
   }
 }
 
+module.exports.bookACar = (req,res,next)=>{
+  const date = new Date();
+
+  const vehicleId = req.params.id
+  const {username,phonenumber,address,district,hometown,pincode,deliverytype,fromDate,toDate,deliveryTIme,hub} = req.body
+
+    
+  if(date<fromDate){
+    console.log("check");
+    res.json({status:false,message:"Invaild From Date"})
+  }
+  
+
+  // console.log(req.body,"user details");
+  // console.log(req.user,"user");
+}
 
 
 

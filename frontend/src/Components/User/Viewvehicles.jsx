@@ -8,7 +8,7 @@ function Viewvehicles() {
   const [key, setKey] = useState("")
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 1;
+  const limit = 3;
   function viewCar(vehicleId) {
     navigate(`/singlepage/${vehicleId}`)
   }
@@ -179,7 +179,7 @@ function Viewvehicles() {
         ))}
       </div> : <div className='flex justify-center items-center p-5 bg-[antiquewhite] mt-9 font-bold '>
         NOTHING FOUND</div>}
-{ totalPages &&
+{ totalPages && totalPages>1 &&
         <div className="flex justify-center mb-10">
         <button
           className="border border-black mx-4 px-4 font-bold"
