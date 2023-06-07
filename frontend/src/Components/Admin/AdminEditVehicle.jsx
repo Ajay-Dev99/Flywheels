@@ -13,6 +13,7 @@ function AdminEditVehicle() {
     const [vehicleImage, setVehicleImage] = useState()
     const [imagePreviews, setImagePreviews] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
+    const [vehicleActiveStatus,setVehicleActiveStatus] = useState(false)
     const initialValues = {
         modelname: "",
         brand: "",
@@ -29,7 +30,6 @@ function AdminEditVehicle() {
     useEffect(() => {
 
         adminviewVehicleDetails(id).then((response) => {
-            console.log(response.data, "vehicle details");
             if (response.data.status) {
                 const car = response.data.vehicle
                 formik.setValues({
@@ -45,6 +45,9 @@ function AdminEditVehicle() {
                     category: car.categoryId._id,
                 })
                 setVehicleImage(car.image_url)
+                if(car.activeStatus){
+                    setVehicleActiveStatus(true)
+                }
             }
         }
 
@@ -100,11 +103,7 @@ function AdminEditVehicle() {
 
 
     const onSubmit = async (values) => {
-        console.log(values,"old values");
-        console.log(selectedImages,"imageprevew");
-        console.log(id);
         // values.category=values.category._id
-        console.log(values,"new values");
         const formData = new FormData()
         Object.keys(values).forEach((key) => {
             formData.append(key, values[key]);
@@ -120,7 +119,6 @@ function AdminEditVehicle() {
                     toast(response.data.message)
                     navigate("/admin/viewcars")
                 }else{
-                    console.log(response.data.message);
                     toast.error(response.data.message,{
                         position:'top-center'
                     })
@@ -231,19 +229,19 @@ function AdminEditVehicle() {
                             {vehicleImage.map((image, index) => (
 
                                 <div key={index} className='w-full'>
-                                    <div className='border border-black'>
+                                    <div className='border border-black my-1'>
                                         {imagePreviews[index] ? <img src={imagePreviews[index]} alt="" className='max-h-60 w-full object-contain' /> : <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" className='max-h-60 w-full object-contain' />}
                                     </div>
-                                    <input type="file" name={`image[${index}]`} className="block my-1 px-0 w-full text-sm text-gray-900 bg-transparent border border-black" onChange={(event) => handleImagePreview(event, index)}  />
+                                  { vehicleActiveStatus && <input type="file" name={`image[${index}]`} className="block my-1 px-0 w-full text-sm text-gray-900 bg-transparent border border-black" onChange={(event) => handleImagePreview(event, index)}  /> }
                             
                                 </div>))
                             }
 
                         </div>
                         }
-                        <div className='flex justify-end'>
+                      {  vehicleActiveStatus && <div className='flex justify-end'>
                             <button type='submit' className='bg-[#368E88] text-white p-2 rounded-md'>Submit</button>
-                        </div>
+                        </div>}
                     </form>
                 </div>}
             </div>

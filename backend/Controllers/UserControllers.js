@@ -162,22 +162,42 @@ module.exports.viewVehicle = async(req,res,next)=>{
   }
 }
 
-module.exports.bookACar = (req,res,next)=>{
-  const date = new Date();
 
-  const vehicleId = req.params.id
-  const {username,phonenumber,address,district,hometown,pincode,deliverytype,fromDate,toDate,deliveryTIme,hub} = req.body
+module.exports.filterCar = async(req,res,next)=>{
+try {
+  const key = req.query.key
+  if(key){
+    const skip = (req.query.page-1)*req.query.limit
+    const limit = parseInt(req.query.limit)
+    const vehicles = await vehicleModel.find({transmissiontype:key}).skip(skip).limit(limit)
+    const totalCount = await vehicleModel.find({transmissiontype:key}).countDocuments({});
+    const totalPage = Math.ceil(totalCount/limit)
+    res.json({status:true, vehicles, totalCount, totalPage})
+  }else{
+    res.json({status:false})
+  }
+} catch (error) {
+  console.log(error);
+  res.status({status:false})
+}
+}
+
+// module.exports.bookACar = (req,res,next)=>{
+//   const date = new Date();
+
+//   const vehicleId = req.params.id
+//   const {username,phonenumber,address,district,hometown,pincode,deliverytype,fromDate,toDate,deliveryTIme,hub} = req.body
 
     
-  if(date<fromDate){
-    console.log("check");
-    res.json({status:false,message:"Invaild From Date"})
-  }
+//   if(date<fromDate){
+//     console.log("check");
+//     res.json({status:false,message:"Invaild From Date"})
+//   }
   
 
-  // console.log(req.body,"user details");
-  // console.log(req.user,"user");
-}
+//   // console.log(req.body,"user details");
+//   // console.log(req.user,"user");
+// }
 
 
 

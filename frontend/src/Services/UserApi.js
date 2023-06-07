@@ -1,3 +1,4 @@
+
 import {userInstance} from "../axios/axiosInstance";
 
 export const userSignup = (values)=>{
@@ -32,3 +33,12 @@ export const bookaCarAPi = (values,id)=>{
     console.log(values,id);
     return userInstance.post(`/bookacar/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"}})
 }
+
+export const Transmissionfilterapi = (key,page,limit)=>{
+    return userInstance.get("/filtercar",{params:{
+        key,
+        limit,
+        page
+    }})
+}
+

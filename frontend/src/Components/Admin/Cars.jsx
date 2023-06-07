@@ -22,11 +22,15 @@ function Cars() {
   }, []);
 
   const deleteCar = (id) => {
-    console.log(id, "car id");
     adminDeleteVehicle(id).then((response) => {
       if (response.data.status) {
         setShowModal(false)
-        const updatedVehicles = Vehicles.filter((vehicle)=>vehicle._id !== id)
+        const updatedVehicles = Vehicles.map((vehicle)=>{
+          if(vehicle._id === id){
+            vehicle = response.data.vehicle
+          }
+          return vehicle;
+        })
         setVehicles(updatedVehicles)
         toast.success(response.data.message);
 
@@ -106,9 +110,9 @@ function Cars() {
             {Vehicles && (
               <tbody>
                 {Vehicles.map((car) => (
-                  <tr key={car._id} className="bg-white border-b hover:bg-gray-50">
+                  <tr key={car._id}  className={car.activeStatus ? "bg-white  border-b" : "bg-[#ffdada] border-b "}>
                     <td>
-                      <img className="h-16 rounded-full" src={`${process.env.REACT_APP_BASE_URL}/${car.image_url[0]}`} alt="Jese image" />
+                      <img className="h-16" src={`${process.env.REACT_APP_BASE_URL}/${car.image_url[0]}`} alt="Jese " />
                     </td>
                     <td className='text-center'>
                       <div className="pl-3">
@@ -123,14 +127,14 @@ function Cars() {
                       {car.fueltype}
                     </td>
                     <td className="px-6 py-4 cursor-pointer text-center" onClick={() => viewAndEdit(car._id)}>
-                      <span type="button" className="font-medium text-blue-600">View & Edit</span>
+                      <span type="button" className="font-medium text-blue-600">{car.activeStatus ? "View & Edit" : "View"}</span>
                     </td>
                     <td className='flex justify-center cursor-pointer'>
                      
 
-                      <button onClick={() => toggleModal(car._id)} data-modal-target="popup-modal" data-modal-toggle="popup-modal" className="block text-red-600 bg-white hover:bg-red-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3" type="button">
+                  {  car.activeStatus &&  <button onClick={() => toggleModal(car._id)} data-modal-target="popup-modal" data-modal-toggle="popup-modal" className="block text-red-600 bg-white hover:bg-red-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3" type="button">
                       <span type="button" className="font-medium"><FaTrash /></span>
-                      </button>
+                      </button>}
 
                       {showModal && vehicleId === car._id && (
                         <div id="popup-modal" className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

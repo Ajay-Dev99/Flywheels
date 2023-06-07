@@ -11,6 +11,7 @@ import AdminCategoryPage from '../Pages/Admin/AdminCategoryPage'
 import AdminVehicleEditpage from '../Pages/Admin/AdminVehicleEditpage'
 import AdminHubsPage from '../Pages/Admin/AdminHubsPage'
 import AdminAddHubPage from '../Pages/Admin/AdminAddHubPage'
+import AdminViewandEditHubpage from '../Pages/Admin/AdminViewandEditHubpage'
 function AdminRouter() {
   return (
     <Routes>
@@ -25,6 +26,7 @@ function AdminRouter() {
         <Route path='/editvehicle/:id' element={<AdminVehicleEditpage/>}/> 
         <Route path='/hubs' element={<AdminHubsPage/>}/>
         <Route path='/addhubs' element={<AdminAddHubPage/>}/>
+        <Route path='/editandviewhub/:id' element={<AdminViewandEditHubpage/>}/>
     </Routes>
   )
 }

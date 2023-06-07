@@ -4,12 +4,10 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { bookaCarAPi } from '../../Services/UserApi'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 function Bookacar() {
-    const {id} = useParams()
-  const user = useSelector((state) => state.user.value)
-  
+    const { id } = useParams()
+
     const initialValues = {
         username: "",
         phonenumber: "",
@@ -25,9 +23,7 @@ function Bookacar() {
 
     }
     const onSubmit = async (values) => {
-        console.log('Form Values:', values);
-        console.log(user,"user");
-        bookaCarAPi(values,id)
+        bookaCarAPi(values, id)
     };
 
     const validationSchema = Yup.object({
@@ -195,7 +191,7 @@ function Bookacar() {
                         </div>
                         {formik.touched.deliverytype && formik.errors.deliverytype ? <p className="text-sm text-red-600">{formik.errors.deliverytype}</p> : null}
 
-                        {!formik.values.deliverytype == "" && (
+                        {!formik.values.deliverytype === "" && (
                             <div className='my-4 px-5 py-4 border rounded-md border-gray-500'>
                                 {formik.values.deliverytype === 'pickup' && (
                                     <div className="mb-6">
@@ -300,7 +296,7 @@ function Bookacar() {
 
                 </div>
             </div>
-
+            
         </div>
     )
 }

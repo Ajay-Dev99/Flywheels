@@ -16,7 +16,6 @@ function Viewvehicles() {
   const [vehicles, setvehicles] = useState()
   useEffect(() => {
     listVehicle(key, currentPage, limit).then((response) => {
-      console.log(response.data);
       if (response.data.status) {
         const vehicle = response.data.vehicle
         setvehicles(vehicle)
@@ -126,12 +125,12 @@ function Viewvehicles() {
 
 
       {vehicles && vehicles.length > 0 ? <div className='p-5 flex flex-wrap justify-center'>
-        {vehicles.map((vehicle) => (
+        {vehicles.filter((vehicle) => vehicle.activeStatus).map((vehicle) => (
 
 
           <div key={vehicle._id} onClick={() => viewCar(vehicle._id)} className="max-w-sm w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-2/5 mb-4  border border-[#ffff]">
             <div className='border border-black'>
-              <div className='flex justify-center'>   <img className="rounded-t-lg sm:h-40 md:h-52" src={`${process.env.REACT_APP_BASE_URL}/${vehicle.image_url[0]}`} alt="" /> </div>
+              <div className='flex justify-center mt-1'>   <img className=" sm:h-40 md:h-52" src={`${process.env.REACT_APP_BASE_URL}/${vehicle.image_url[0]}`} alt="" /> </div>
               <div className='flex flex-col'>
                 <div className='flex justify-center'> <p className='font-bold uppercase'>{vehicle.modelname}</p> </div>
                 <div className='flex justify-center'><p>{vehicle.fueltype}</p></div>
@@ -179,34 +178,37 @@ function Viewvehicles() {
         ))}
       </div> : <div className='flex justify-center items-center p-5 bg-[antiquewhite] mt-9 font-bold '>
         NOTHING FOUND</div>}
-{ totalPages && totalPages>1 &&
-        <div className="flex justify-center mb-10">
-        <button
-          className="border border-black mx-4 px-4 font-bold"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
 
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+
+      {totalPages && totalPages > 1 &&
+        <div className="flex justify-center mb-10 overflow-x-auto">
           <button
-            className={`border border-black mx-1 md:mx-4 md:px-4 px-1 font-bold ${pageNumber === currentPage ? 'bg-gray-500 text-white' : ''}`}
-            key={pageNumber}
-            onClick={() => handlePageChange(pageNumber)}
+            className="border border-black mx-4 px-4 font-bold"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
           >
-            {pageNumber}
+            Previous
           </button>
-        ))}
 
-        <button
-          className="border border-black mx-4 px-4 font-bold"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>}
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+            <button
+              className={`border border-black mx-1 md:mx-4 md:px-4 px-1 font-bold ${pageNumber === currentPage ? 'bg-gray-500 text-white' : ''}`}
+              key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          ))}
+
+          <button
+            className="border border-black mx-4 px-4 font-bold"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      }
 
     </div>
 

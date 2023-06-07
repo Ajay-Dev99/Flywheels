@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../../Components/User/userHeader'
 import Aboutus from '../../Components/User/Aboutus'
+import Userfooter from '../../Components/User/Userfooter'
 
 function AboutPage() {
   return (
@@ -10,6 +11,7 @@ function AboutPage() {
       </div>
       <div className='md:mt-24 '>
         <Aboutus/>
+        <Userfooter/>
       </div>
     </div>
   )

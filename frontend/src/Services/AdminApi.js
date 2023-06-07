@@ -39,8 +39,24 @@ export const adminDeleteVehicle = (vehicleId)=>{
     return adminInstance.post(`/deletecar/${vehicleId}`)
 }
 
-export const adminAddHubapi = (values,image)=>{
+export const adminAddHubapi = (values)=>{
     console.log(values,"form data from values");
     return adminInstance.post('/addhub',{...values},{headers:{"Content-Type":"multipart/form-data"}})
 }
 
+export const apiUserBlock = (userId)=>{
+    return adminInstance.post(`/user/block/${userId}`)
+}
+
+export const adminHubListingApi = () =>{
+    return adminInstance.get("/gethubs")
+}
+
+export const getHubDetails = (id)=>{
+    return adminInstance.get(`viewhub/${id}`)
+}
+
+export const editHub = (values,id)=>{
+    console.log(values,"values on apoi");
+    return adminInstance.post(`EditHub/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"}})
+}

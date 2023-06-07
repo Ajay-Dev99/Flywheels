@@ -2,6 +2,7 @@ const AdminModel = require('../Models/AdminModel')
 const userModel = require('../Models/userModel')
 const vehicleModel = require('../Models/vehicleModel')
 const categoryModel = require('../Models/CategoryModel')
+const hubModel = require('../Models/HubModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const maxAge = 3 * 24 * 60 * 60;
@@ -184,57 +185,171 @@ module.exports.editCar = async (req, res, next) => {
             })
         }
         await vehicleModel.findOneAndUpdate(
-            {_id:vehicleId},
-            {$set:{
-                vehiclenumber: req.body.vehiclenumber,
-                modelname: req.body.modelname,
-                brand: req.body.brand,
-                fueltype: req.body.fueltype,
-                drivenKM: req.body.TotalKm,
-                transmissiontype: req.body.transmissionType,
-                rentfor30days: req.body.rent30daysormore,
-                rentfor10_20days: req.body.rent10to20days,
-                rentupto10days: req.body.rentupto10days,
-                categoryId: req.body.category,
-            }},
+            { _id: vehicleId },
+            {
+                $set: {
+                    vehiclenumber: req.body.vehiclenumber,
+                    modelname: req.body.modelname,
+                    brand: req.body.brand,
+                    fueltype: req.body.fueltype,
+                    drivenKM: req.body.TotalKm,
+                    transmissiontype: req.body.transmissionType,
+                    rentfor30days: req.body.rent30daysormore,
+                    rentfor10_20days: req.body.rent10to20days,
+                    rentupto10days: req.body.rentupto10days,
+                    categoryId: req.body.category,
+                }
+            },
             { new: true }
-            )
+        )
 
-            res.json({status:true,message:"Vehicle Details updated Succesfully"})
+        res.json({ status: true, message: "Vehicle Details updated Succesfully" })
 
     } catch (error) {
-        res.json({status:false,message:error.message})
+        res.json({ status: false, message: error.message })
     }
 }
 
-module.exports.deleteVehicle = async(req,res,next)=>{
+module.exports.deleteVehicle = async (req, res, next) => {
     try {
         const vehicleId = req.params.id
-        const vehicle = await vehicleModel.findOne({_id:vehicleId})
-    
-        if(vehicle){
-            const images = vehicle.image_url
-            images.map((image)=>{
-                let imagePath = `public/${image}`
-                fs.unlink(imagePath, (error) => {
-                    if (error) {
-                        console.error('Error deleting image:', error);
-                    } else {
-                        console.log('Image deleted successfully');
-                    }
-                });
-            })
-            await vehicleModel.findOneAndDelete({ _id: vehicleId });
-            res.json({status:true,message:"Vehicle deleted"})
-        }else{
-            res.json({status:false,message:"Something went wrong"})
+        const vehicle = await vehicleModel.findOne({ _id: vehicleId })
+        if (vehicle) {
+            vehicle.activeStatus = !vehicle.activeStatus
+            await vehicle.save()
+            res.json({ status: true, message: "vehicle disabled", vehicle })
+        } else {
+            res.json({ status: false, message: "vehicle not found" })
         }
+        // if (vehicle) {
+        //     const images = vehicle.image_url
+        //     images.map((image) => {
+        //         let imagePath = `public/${image}`
+        //         fs.unlink(imagePath, (error) => {
+        //             if (error) {
+        //                 console.error('Error deleting image:', error);
+        //             } else {
+        //                 console.log('Image deleted successfully');
+        //             }
+        //         });
+        //     })
+        //     await vehicleModel.findOneAndDelete({ _id: vehicleId });
+        //     res.json({ status: true, message: "Vehicle deleted" })
+        // } else {
+        //     res.json({ status: false, message: "Something went wrong" })
+        // }
     } catch (error) {
-            res.json({status:false,message:error.message})        
+        res.json({ status: false, message: error.message })
     }
 }
 
-module.exports.addHub = async (req,res,next)=>{
-    console.log(req.body,"data to insert in hub");
-    console.log(req.files,"files");
-} 
+module.exports.addHub = async (req, res, next) => {
+    const imagePath = req.files.image[0].path
+    const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
+    try {
+        const newHub = new hubModel({
+            hubName: req.body.hubname,
+            buildingName: req.body.buildingname,
+            district: req.body.district,
+            street: req.body.street,
+            pincode: req.body.pincode,
+            imageURL: modifiedImagePath
+        })
+        newHub.save().then(() => {
+            res.json({ status: true, message: "Hub added successfully" })
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports.blockUser = async (req, res, next) => {
+    try {
+        const userId = req.params.id
+        console.log(userId, "userId in block status");
+        const user = await userModel.findOne({ _id: userId })
+        if (!user) {
+            res.json({ status: false, message: "User Not Found" })
+        } else {
+            user.blockStatus = !user.blockStatus
+            await user.save()
+            res.json({ status: true, message: "User block status updated", user })
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.getHubs = async (req, res, next) => {
+    try {
+        const hubs = await hubModel.find({})
+        if (hubs) {
+            res.json({ status: true, hubs })
+        } else {
+            res.json({ status: false, message: "No Hubs found" })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.ViewHub = async (req, res, next) => {
+    try {
+        const hubId = req.params.id
+        const hub = await hubModel.findOne({ _id: hubId })
+        if (hub) {
+            res.json({ status: true, hub })
+        } else {
+            res.json({ status: false, message: "Hub not found" })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.EditHub = async (req, res, next) => {
+    try {
+        const hubId = req.params.id
+        console.log(hubId,"id");
+        console.log(req.body, "req.body");
+        console.log(req.files,"req.files");
+        const hub = await hubModel.findOne({_id:hubId})
+        console.log(hub,"hub");
+        await hubModel.findOneAndUpdate(
+            { _id: hubId },
+            {
+                $set: {
+                    hubName: req.body.hubname,
+                    buildingName: req.body.buildingname,
+                    district: req.body.district,
+                    street: req.body.street,
+                    pincode: req.body.pincode
+                }
+            }
+        )
+        if (req.files.image) {
+            console.log("Got it");
+            const imagePath = req.files.image[0].path
+            const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
+            console.log(modifiedImagePath,'aghghfjkdhfjkdsh');
+            const hub = await hubModel.findOne({ _id: hubId })
+            console.log(hub.imageURL,"image yrl");
+            const deleteImagePath = `public/${hub.imageURL}`
+            console.log(deleteImagePath,"deleter");
+            fs.unlink(deleteImagePath, (error) => {
+                if (error) {
+                    console.error('Error deleting image:', error);
+                } else {
+                    console.log('Image deleted successfully');
+                }
+            });
+            
+            await hubModel.findOneAndUpdate(
+                { _id: hubId },
+                { $set: { imageURL: modifiedImagePath } })
+        }
+        res.json({status:true,message:"Hub edited successfully"})
+    } catch (error) {
+        console.log(error);
+    }
+}

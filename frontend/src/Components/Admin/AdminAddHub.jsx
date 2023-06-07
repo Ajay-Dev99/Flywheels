@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import AdminSidebar from './AdminSidebar'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { adminAddHubapi } from '../../Services/AdminApi'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 function AdminAddHub() {
 
-
+const navigate = useNavigate()
 
   const initialValues = {
     hubname: "",
@@ -17,8 +19,12 @@ function AdminAddHub() {
 
   }
   const onSubmit = async (values) => {
-    console.log('Form Values:', values);
-    adminAddHubapi(values);
+    adminAddHubapi(values,).then((response)=>{
+      if(response.data.status){
+        toast.success(response.data.message)
+        navigate("/admin/hubs")
+      }
+    })
   };
 
   const validationSchema = Yup.object({

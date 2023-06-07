@@ -125,7 +125,7 @@ function Header() {
               <li onClick={()=>navigate("/viewvehicles")}>
                 <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer" aria-current="page">Car For Rent</span>
               </li>
-              <li>
+              <li onClick={()=>navigate("/ourhubs")}>
                 <span className= "text-sm py-2 pl-3 pr-4 text-gray-600 rounded md:bg-transparent md:text-black  md:p-0 hover:cursor-pointer"  aria-current="page">Our hubs</span>
               </li>
               <li>
