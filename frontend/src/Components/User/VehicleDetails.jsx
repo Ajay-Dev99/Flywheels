@@ -15,6 +15,7 @@ function VehicleDetails() {
 
         viewVehicle(id).then((response) => {
             if (response.data.status) {
+                console.log(response.data);
                 setVehicle(response.data.vehicle)
                 setActiveImage(response.data.vehicle.image_url[0])
             } else {
@@ -36,7 +37,11 @@ function VehicleDetails() {
             </div>}
             <div className='flex flex-col justify-between lg:flex-row gap-16 lg:items-center md:p-5 border rounded-md border-[#c0c0c0] md:m-5 '>
                 {vehicle && <div className='flex flex-col gap-6 lg:w-2/4'>
-                    <div className='md:p-4'>  <img src={`${process.env.REACT_APP_BASE_URL}/${activeImg}`} alt="" className='w-auto  md:w-full h-auto md:h-96 aspect-square object-contain rounded-xl' /> </div>
+                    <div className='md:p-4 relative'>  <img src={`${process.env.REACT_APP_BASE_URL}/${activeImg}`} alt="" className='w-auto  md:w-full h-auto md:h-96 aspect-square object-contain rounded-xl' /> 
+                    <span className="absolute top-2 right-0 bg-red-500 text-white py-1 px-2 rounded-full text-xs font-bold">
+        {`Available in ${vehicle.hub.district} only`}
+      </span>
+      </div>
                     <div className='flex flex-row justify-center  h-24'>
                         {vehicle.image_url.map((image, index) => (
                             <div key={index} className='border border-black mx-3 object-cover'>  <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" className='w-24 h-24  cursor-pointer' onClick={() => setActiveImage(image)} /> </div>
@@ -55,6 +60,9 @@ function VehicleDetails() {
                         </p>
                         <p className='text-gray-700'>
                             Vehicle Modelname : {vehicle.modelname}
+                        </p>
+                        <p className='text-gray-700'>
+                            Vehicle ModelYear : {vehicle.modelyear}
                         </p>
                         <p className='text-gray-700'>
                             Vehicle Brand : {vehicle.brand}

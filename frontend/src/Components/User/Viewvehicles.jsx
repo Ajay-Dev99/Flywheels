@@ -51,73 +51,6 @@ function Viewvehicles() {
             value={key}
             onChange={(e) => setKey(e.target.value)}
           /></div>
-          {/* <div className='flex justify-end mt-3'>
-            <button
-              id="dropdownDefaultButton"
-              data-dropdown-toggle="dropdown"
-              className="text-black bg-[gainsboro] hover:bg-zinc-300 focus:ring-4 focus:outline-none focus:ring-[#c0c0c0]  font-light rounded-lg text-sm px-4 py-2 text-center inline-flex items-center "
-              type="button"
-            >
-              FILTER
-              <svg
-                className="w-4 h-4 ml-2"
-                aria-hidden="true"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-            <div
-              id="dropdown"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-            >
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownDefaultButton"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Earnings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div> */}
 
         </div>
 
@@ -131,6 +64,7 @@ function Viewvehicles() {
           <div key={vehicle._id} onClick={() => viewCar(vehicle._id)} className="max-w-sm w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-2/5 mb-4  border border-[#ffff]">
             <div className='border border-black'>
               <div className='flex justify-center mt-1'>   <img className=" sm:h-40 md:h-52" src={`${process.env.REACT_APP_BASE_URL}/${vehicle.image_url[0]}`} alt="" /> </div>
+              
               <div className='flex flex-col'>
                 <div className='flex justify-center'> <p className='font-bold uppercase'>{vehicle.modelname}</p> </div>
                 <div className='flex justify-center'><p>{vehicle.fueltype}</p></div>
@@ -176,7 +110,7 @@ function Viewvehicles() {
             </div>
           </div>
         ))}
-      </div> : <div className='flex justify-center items-center p-5 bg-[antiquewhite] mt-9 font-bold '>
+      </div> : <div className='flex justify-center items-center p-5 bg-[antiquewhite] mt-9 font-bold my-60'>
         NOTHING FOUND</div>}
 
 

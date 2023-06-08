@@ -42,3 +42,7 @@ export const Transmissionfilterapi = (key,page,limit)=>{
     }})
 }
 
+export const HublistingAPI = ()=>{
+    return userInstance.get("/gethubs")
+}
+

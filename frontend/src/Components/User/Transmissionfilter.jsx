@@ -38,7 +38,7 @@ function Transmissionfilter() {
         })
     }
   return (
-    <div className='mt-5 '>
+    <div className='my-5 '>
         <div className='flex justify-center flex-col mb-3'>
        <div className='flex justify-center'> <p className='text-md'>What Kind of Car You Want</p></div>
         <div className='flex justify-center'><p className='text-2xl'>Great Rental Offers for You</p></div>

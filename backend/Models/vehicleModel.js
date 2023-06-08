@@ -18,6 +18,10 @@ const vehicleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  modelyear:{
+    type: String,
+    required: true,
+  },
   drivenKM: {
     type: String,
     required: true,
@@ -55,6 +59,11 @@ const vehicleSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  hub:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "hub",
+    required: true,
+  }
 });
 
 module.exports = new mongoose.model("vehicle", vehicleSchema);

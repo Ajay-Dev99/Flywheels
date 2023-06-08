@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 import AdminSidebar from './AdminSidebar'
-import { adminEditCar, adminGetCategoryList, adminviewVehicleDetails } from '../../Services/AdminApi'
+import { adminEditCar, adminGetCategoryList, adminviewVehicleDetails,adminHubListingApi } from '../../Services/AdminApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import {FaArrowCircleLeft} from 'react-icons/fa'
 
@@ -14,6 +14,8 @@ function AdminEditVehicle() {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
     const [vehicleActiveStatus,setVehicleActiveStatus] = useState(false)
+    const [hubs,setHubs] = useState()
+
     const initialValues = {
         modelname: "",
         brand: "",
@@ -25,6 +27,8 @@ function AdminEditVehicle() {
         rentupto10days: "",
         vehiclenumber: "",
         category: "",
+        modelyear:"",
+        hub:""
     }
     const { id } = useParams()
     useEffect(() => {
@@ -43,6 +47,8 @@ function AdminEditVehicle() {
                     rentupto10days: car.rentupto10days,
                     vehiclenumber: car.vehiclenumber,
                     category: car.categoryId._id,
+                    modelyear:car.modelyear,
+                    hub:car.hub._id
                 })
                 setVehicleImage(car.image_url)
                 if(car.activeStatus){
@@ -60,6 +66,12 @@ function AdminEditVehicle() {
                 toast.error(response.data.message, {
                     position: "top-center"
                 })
+            }
+        })
+        adminHubListingApi().then((response)=>{
+            console.log(response.data);
+            if(response.data.status){
+                setHubs(response.data.hubs)
             }
         })
 
@@ -99,6 +111,7 @@ function AdminEditVehicle() {
             .trim('Name must not contain white space')
             .test('no-whitespace', 'Name must not contain white space', (value) => !/\s/.test(value)),
         // category: Yup.string().required(),
+        // modelyear
     })
 
 
@@ -210,6 +223,12 @@ function AdminEditVehicle() {
 
                         </div>
                         <div className="mb-6">
+                            <label htmlFor="">Model Year</label>
+                            <input type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.modelyear} name='modelyear' className="block py-2 px-0 w-full text-sm text-gray-900 bg-transparent border" required />
+                            {formik.touched.modelyear && formik.errors.modelyear ? <p className="text-sm text-red-600">{formik.errors.modelyear}</p> : null}
+
+                        </div>
+                        <div className="mb-6">
                             <label htmlFor="">Category</label>
                             {categories &&
                                 <select onChange={formik.handleChange}  onBlur={formik.handleBlur}  value={formik.values.category}  name='category' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.category}`} required>
@@ -222,6 +241,21 @@ function AdminEditVehicle() {
                                 </select>
                             }
                             {formik.touched.category && formik.errors.category ? <p className="text-sm text-red-600">{formik.errors.category}</p> : null}
+
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="">Available On</label>
+                            {hubs &&
+                                <select onChange={formik.handleChange}  onBlur={formik.handleBlur}  value={formik.values.hub}  name='hub' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.hub}`} required>
+
+                                    {hubs.map((hub) => (
+
+                                        <option key={hub._id} value={hub._id}>{hub.district}</option>
+                                    ))}
+
+                                </select>
+                            }
+                            {formik.touched.hub && formik.errors.hub ? <p className="text-sm text-red-600">{formik.errors.hub}</p> : null}
 
                         </div>
                         {vehicleImage && <div className="mb-6">

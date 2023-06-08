@@ -7,6 +7,7 @@ const serviceID = process.env.TWILIO_VERIFY_SID;
 const client = require('twilio')(accountSid, authToken);
 const bcrypt = require('bcrypt');
 const vehicleModel = require('../Models/vehicleModel');
+const hubModel = require('../Models/HubModel')
 let newUser;
 
 const createToken = (id) => {
@@ -128,7 +129,7 @@ module.exports.Listvehicles = async(req,res,next) =>{
           ],
         }
       : {}; 
-    const vehicle = await vehicleModel.find(searchData).populate("categoryId");
+    const vehicle = await vehicleModel.find(searchData).populate("categoryId")
 
     res.json({ status: true, vehicle });
     }else {
@@ -151,7 +152,8 @@ module.exports.Listvehicles = async(req,res,next) =>{
 module.exports.viewVehicle = async(req,res,next)=>{
   try {
     const vehicleId = req.params.id
-    const vehicle = await vehicleModel.findOne({_id:vehicleId}).populate("categoryId")
+    const vehicle = await vehicleModel.findOne({_id:vehicleId}).populate("categoryId").populate("hub");
+    console.log(vehicle,"defuatk");
     if(vehicle){
       res.json({status:true,vehicle})
     }else{
@@ -159,6 +161,7 @@ module.exports.viewVehicle = async(req,res,next)=>{
     }
   } catch (error) {
     res.json({status:false,message:error.message})
+    console.log(error);
   }
 }
 
@@ -180,6 +183,20 @@ try {
   console.log(error);
   res.status({status:false})
 }
+}
+
+
+module.exports.getHubs = async (req, res, next) => {
+  try {
+      const hubs = await hubModel.find({})
+      if (hubs) {
+          res.json({ status: true, hubs })
+      } else {
+          res.json({ status: false, message: "No Hubs found" })
+      }
+  } catch (error) {
+      console.log(error);
+  }
 }
 
 // module.exports.bookACar = (req,res,next)=>{

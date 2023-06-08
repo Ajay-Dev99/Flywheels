@@ -2,26 +2,38 @@ import React, { useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { adminAddCar, adminGetCategoryList } from '../../Services/AdminApi'
+import { adminAddCar, adminGetCategoryList, adminHubListingApi } from '../../Services/AdminApi'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 function AdminAddCar() {
     const [categories, setCategories] = useState()
+    const [hubs,setHubs] = useState()
     const [images, setImages] = useState()
     const navigate = useNavigate()
 
     useEffect(() => {
 
-        adminGetCategoryList().then((response) => {
-            if (response.data.status) {
-                setCategories(response.data.categories)
-            } else {
-                toast.error(response.data.message, {
-                    position: "top-center"
-                })
-            }
-        })
+        try {
+            adminGetCategoryList().then((response) => {
+                if (response.data.status) {
+                    setCategories(response.data.categories)
+                } else {
+                    toast.error(response.data.message, {
+                        position: "top-center"
+                    })
+                }
+            })
+
+            adminHubListingApi().then((response)=>{
+                console.log(response.data);
+                if(response.data.status){
+                    setHubs(response.data.hubs)
+                }
+            })
+        } catch (error) {
+
+        }
 
     }, [])
 
@@ -36,6 +48,8 @@ function AdminAddCar() {
         rentupto10days: "",
         vehiclenumber: "",
         category: "",
+        modelyear:"",
+        hub:""
 
     }
     const onSubmit = async (values) => {
@@ -51,8 +65,8 @@ function AdminAddCar() {
 
         adminAddCar(formdata).then((response) => {
             if (response.data.status) {
-                toast.success(response.data.message,{
-                    position:'top-center'
+                toast.success(response.data.message, {
+                    position: 'top-center'
                 })
                 setImages(null)
                 navigate("/admin/viewcars")
@@ -62,7 +76,7 @@ function AdminAddCar() {
                 })
             }
         })
-        
+
     }
 
     const validationSchema = Yup.object().shape({
@@ -86,7 +100,11 @@ function AdminAddCar() {
             .strict(true)
             .trim('Name must not contain white space')
             .test('no-whitespace', 'Name must not contain white space', (value) => !/\s/.test(value)),
+            modelyear:  Yup.number()
+            .typeError('Please enter a valid number')
+            .required('This field is required'),
         category: Yup.string().required(),
+        hub:Yup.string().required()
     })
 
     const formik = useFormik({
@@ -170,6 +188,12 @@ function AdminAddCar() {
 
                         </div>
                         <div className="mb-6">
+                            <label htmlFor="">Model Year</label>
+                            <input type="text" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.modelyear} name='modelyear' className="block py-2 px-0 w-full text-sm text-gray-900 bg-transparent border" required />
+                            {formik.touched.modelyear && formik.errors.modelyear ? <p className="text-sm text-red-600">{formik.errors.modelyear}</p> : null}
+
+                        </div>
+                        <div className="mb-6">
                             <label htmlFor="">Category</label>
                             {categories &&
                                 <select onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.category} name='category' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" required>
@@ -182,6 +206,21 @@ function AdminAddCar() {
                                 </select>
                             }
                             {formik.touched.category && formik.errors.category ? <p className="text-sm text-red-600">{formik.errors.category}</p> : null}
+
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="">Available on</label>
+                            {hubs &&
+                                <select onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.hub} name='hub' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" required>
+                                    <option value="">Select a hub</option>
+                                    {hubs.map((hub) => (
+
+                                        <option key={hub._id} value={hub._id}>{hub.district}</option>
+                                    ))}
+
+                                </select>
+                            }
+                            {formik.touched.hub && formik.errors.hub ? <p className="text-sm text-red-600">{formik.errors.hub}</p> : null}
 
                         </div>
                         <div className="mb-6">

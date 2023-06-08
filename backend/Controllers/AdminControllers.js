@@ -68,6 +68,7 @@ module.exports.addcar = async (req, res, next) => {
             const newVehicle = new vehicleModel({
                 vehiclenumber: req.body.vehiclenumber,
                 modelname: req.body.modelname,
+                modelyear:req.body.modelyear,
                 brand: req.body.brand,
                 fueltype: req.body.fueltype,
                 drivenKM: req.body.TotalKm,
@@ -76,6 +77,7 @@ module.exports.addcar = async (req, res, next) => {
                 rentfor10_20days: req.body.rent10to20days,
                 rentupto10days: req.body.rentupto10days,
                 categoryId: req.body.category,
+                hub:req.body.hub,
                 image_url: imageURLs,
 
             })
@@ -198,6 +200,8 @@ module.exports.editCar = async (req, res, next) => {
                     rentfor10_20days: req.body.rent10to20days,
                     rentupto10days: req.body.rentupto10days,
                     categoryId: req.body.category,
+                    hub:req.body.hub,
+                    modelyear:req.body.modelyear
                 }
             },
             { new: true }
@@ -265,7 +269,6 @@ module.exports.addHub = async (req, res, next) => {
 module.exports.blockUser = async (req, res, next) => {
     try {
         const userId = req.params.id
-        console.log(userId, "userId in block status");
         const user = await userModel.findOne({ _id: userId })
         if (!user) {
             res.json({ status: false, message: "User Not Found" })
@@ -310,11 +313,7 @@ module.exports.ViewHub = async (req, res, next) => {
 module.exports.EditHub = async (req, res, next) => {
     try {
         const hubId = req.params.id
-        console.log(hubId,"id");
-        console.log(req.body, "req.body");
-        console.log(req.files,"req.files");
         const hub = await hubModel.findOne({_id:hubId})
-        console.log(hub,"hub");
         await hubModel.findOneAndUpdate(
             { _id: hubId },
             {
@@ -328,14 +327,10 @@ module.exports.EditHub = async (req, res, next) => {
             }
         )
         if (req.files.image) {
-            console.log("Got it");
             const imagePath = req.files.image[0].path
             const modifiedImagePath = imagePath.replace(/^public[\\/]+/, '');
-            console.log(modifiedImagePath,'aghghfjkdhfjkdsh');
             const hub = await hubModel.findOne({ _id: hubId })
-            console.log(hub.imageURL,"image yrl");
             const deleteImagePath = `public/${hub.imageURL}`
-            console.log(deleteImagePath,"deleter");
             fs.unlink(deleteImagePath, (error) => {
                 if (error) {
                     console.error('Error deleting image:', error);

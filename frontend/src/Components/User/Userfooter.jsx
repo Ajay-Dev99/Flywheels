@@ -2,7 +2,7 @@ import React from 'react'
 
 function Userfooter() {
   return (
-    <div className='flex flex-col sm:flex-row justify-center items-center bg-[#E8E8E8] text-gray-600 p-5 mt-5'>
+    <div className='flex flex-col sm:flex-row justify-center items-center bg-[#E8E8E8] text-gray-600 p-5 '>
     <div className="flex flex-col justify-center  w-full sm:w-1/3  mx-3 my-3">
       <h1>OUR HIGHLIGHTS</h1>
       <div className="text-sm sm:text-base">
