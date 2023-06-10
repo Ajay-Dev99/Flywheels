@@ -9,6 +9,7 @@ import AboutPage from '../Pages/User/AboutPage'
 import VehicleDetailsPage from '../Pages/User/VehicleDetailsPage'
 import BookingPage from '../Pages/User/BookingPage'
 import OurHubsPages from '../Pages/User/OurHubsPages'
+import PaymentPage from '../Pages/User/PaymentPage'
 
 function UserRouter() {
   return (
@@ -22,6 +23,7 @@ function UserRouter() {
         <Route path='/singlepage/:id' element={<VehicleDetailsPage/>} />
         <Route path='/bookacar/:id' element={<BookingPage/>}/>
         <Route path='/ourhubs' element={<OurHubsPages/>}/>
+        <Route path='/payment' element = {<PaymentPage/>}/>
         
     </Routes>
   )

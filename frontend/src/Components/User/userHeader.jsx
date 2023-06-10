@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import { userHeader } from '../../Services/UserApi';
+import { logoutAPI, userHeader } from '../../Services/UserApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setUserDetails } from '../../features/setUser';
@@ -17,10 +17,15 @@ function Header() {
 
 
   const UserLogOut = () => {
+  try {
     localStorage.removeItem("jwt")
     dispatch(setUserDetails(null))
+    logoutAPI()
     setToggle(false)
     navigate("/")
+  } catch (error) {
+    
+  }
   }
 
   const userLogin = () => {

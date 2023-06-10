@@ -6,8 +6,9 @@ const app = express();
 const cookieParser = require("cookie-parser")
 const userRoutes = require("../backend/Routes/UserRoutes")
 const AdminRoutes = require("../backend/Routes/AdminRoutes")
-const cookieSession = require("cookie-session")
 const path = require('path');
+const session = require('express-session');
+
 
 app.listen(process.env.PORT,()=>{
     console.log("Server Started on PORT ",process.env.PORT);
@@ -23,18 +24,20 @@ mongoose.connect("mongodb://0.0.0.0:27017/flywheels",{
 })
 
 
+app.use(session({
+    secret: process.env.SESSION_SECRET_KEY, // Add a secret key for session encryption
+    resave: false,
+    saveUninitialized: true
+  }));
+  
+
 app.use(cors({
     origin:process.env.SERVER_URL,
     methods:["GET","POST"],
     credentials:true
 }));
 
-app.use(cookieSession({
-    name: 'session',
-    keys: process.env.SESSION_SECRET_KEY,
-    // Cookie Options
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }))
+
 
 
 // Middleware to parse form data

@@ -31,7 +31,7 @@ export const viewVehicle = (id)=>{
 
 export const bookaCarAPi = (values,id)=>{
     console.log(values,id);
-    return userInstance.post(`/bookacar/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"}})
+    return userInstance.post(`/bookacar/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"},withCredentials: true})
 }
 
 export const Transmissionfilterapi = (key,page,limit)=>{
@@ -46,3 +46,26 @@ export const HublistingAPI = ()=>{
     return userInstance.get("/gethubs")
 }
 
+export const PaymentDetailsApi = ()=>{
+    return userInstance.get("/paymentDetails",{withCredentials:true})
+}
+
+export const logoutAPI = ()=>{
+    return userInstance.get("/logout")
+}
+
+export const orderApi = (amount)=>{
+    console.log(amount,"calledd");
+    return userInstance.post("/orders",{...amount})
+}
+
+export const verifyPayment = (response,data,vehicleid)=>{
+    console.log(response,"response in verifypayment");
+    console.log(data,"bookingdetails");
+    const payload = {
+        ...response,
+        ...data,
+        vehicleid
+      };
+    return userInstance.post("/verifypayment",payload)
+}
