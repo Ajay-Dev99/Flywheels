@@ -69,7 +69,6 @@ function AdminEditVehicle() {
             }
         })
         adminHubListingApi().then((response)=>{
-            console.log(response.data);
             if(response.data.status){
                 setHubs(response.data.hubs)
             }

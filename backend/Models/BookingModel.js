@@ -34,20 +34,32 @@ const bookingSchema = new mongoose.Schema({
         }
     }],
     fromDate:{
-        type:String
+        type:String,
+        required:true
     },
     toDate:{
-        type:String
+        type:String,
+        required:true
     },
     deliveryTime:{
-        type:String
+        type:String,
+        required:true
     },
     Hub:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "hub"
     },
     payment_id:{
-        type:String
+        type:String,
+        required:true
+    },
+    amount:{
+        type:Number,
+        required:true
+    },
+    userDocumentImageURL:{
+        type:String,
+        required:true
     }
 })
 

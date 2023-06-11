@@ -59,13 +59,14 @@ export const orderApi = (amount)=>{
     return userInstance.post("/orders",{...amount})
 }
 
-export const verifyPayment = (response,data,vehicleid)=>{
-    console.log(response,"response in verifypayment");
-    console.log(data,"bookingdetails");
+export const verifyPayment = (response,data,vehicleid,totalAmountamount)=>{
+    const amount = totalAmountamount/100;
+
     const payload = {
         ...response,
         ...data,
-        vehicleid
+        vehicleid,
+        amount
       };
     return userInstance.post("/verifypayment",payload)
 }

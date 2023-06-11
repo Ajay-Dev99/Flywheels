@@ -10,7 +10,6 @@ const [userId,setUserId] = useState("")
 
   useEffect(()=>{
     adminsideUserList().then((response)=>{
-      console.log(response.data);
       if(response.data.status){
         setUsers(response.data.users)
       }else{

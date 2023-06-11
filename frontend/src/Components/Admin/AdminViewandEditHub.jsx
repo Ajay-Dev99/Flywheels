@@ -17,7 +17,6 @@ function AdminViewandEditHub() {
         try {
 
             getHubDetails(id).then((response) => {
-                console.log(response.data);
                 if (response.data.status) {
                     const hub = response.data.hub
                     formik.setValues({
@@ -46,7 +45,6 @@ function AdminViewandEditHub() {
     }
 
     const onSubmit = (values) => {
-        console.log("submited");
         editHub(values,id).then((response)=>{
             if(response.data.status){
                 toast.success(response.data.message)

@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {register,verifyOtp, login, home, Listvehicles, viewVehicle, bookACar, filterCar, getHubs, paymentPage, orders, verify} = require("../Controllers/UserControllers")
+const {register,verifyOtp, login, home, Listvehicles, viewVehicle, bookACar, filterCar, getHubs, paymentPage, orders, verify, userLogout} = require("../Controllers/UserControllers")
 const userAuth = require("../Middlewares/userAuth")
 const { uploadImage } = require("../Middlewares/multer");
 
@@ -14,7 +14,7 @@ router.post("/bookacar/:id",userAuth,uploadImage("./public/images/userdocuments"
 router.get("/filtercar",filterCar)
 router.get("/gethubs",getHubs)
 router.get("/paymentDetails",userAuth,paymentPage)
-router.get("/logout",)
+router.get("/logout",userAuth,userLogout)
 router.post("/orders",userAuth,orders)
 router.post("/verifypayment",userAuth,verify)
 

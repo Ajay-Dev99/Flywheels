@@ -17,7 +17,6 @@ function Payment() {
     useEffect(() => {
         try {
             PaymentDetailsApi().then((response) => {
-                console.log(response.data);
                 if (response.data.status) {
                     setBookingDetails(response.data.bookingDeatails)
                     setVehicle(response.data.vehicle)
@@ -36,16 +35,16 @@ function Payment() {
     const initPayment =async(data) =>{
         const bookingData = bookingDetails
         const vehicleId = vehicle._id
+        const amount = data.amount
         const options = {
             key:"rzp_test_iUyzrosq267XwE",
             amount:data.amount,
             currency:data.currency            ,
             order_id:data.id,
             handler:async(response)=>{
-                console.log("get in Handeler");
 
                 try {
-                    const {data} =await verifyPayment(response,bookingData,vehicleId)
+                    const {data} =await verifyPayment(response,bookingData,vehicleId,amount)
                     toast(data.message)
                 } catch (error) {
                     console.log(error);
@@ -63,7 +62,6 @@ function Payment() {
     const handlePayment = async() =>{
         try {
             const {data} = await orderApi({amount:totalAmount})
-            console.log(data,"data in order");
             initPayment(data.order)
         } catch (error) {
             

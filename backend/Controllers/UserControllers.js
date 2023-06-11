@@ -13,6 +13,7 @@ const razorPay = require('razorpay')
 const crypto = require('crypto');
 const { error } = require('console');
 let newUser;
+let userDocument;
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRETE_KEY, {
@@ -204,7 +205,6 @@ module.exports.getHubs = async (req, res, next) => {
 
 module.exports.bookACar = async (req, res, next) => {
   try {
-    console.log(req.body, "req.body");
     const fromDate = new Date(req.body.fromDate)
     const toDate = new Date(req.body.toDate)
     const currentDate = new Date()
@@ -234,9 +234,8 @@ module.exports.bookACar = async (req, res, next) => {
     } else if (fromDate.getTime() === toDate.getTime()) {
       res.json({ status: false, message: "The booking should be for at least one day" });
     } else {
-      console.log("else called");
       req.session.bookingDetails = req.body;
-      req.session.userDocument = req.files;
+      req.session.userDocument = req.files.image[0].path;
       req.session.vehicleId = req.params.id;
       res.json({ status: true });
     }
@@ -247,6 +246,7 @@ module.exports.bookACar = async (req, res, next) => {
 }
 
 module.exports.paymentPage = async (req, res, next) => {
+  userDocument=req.session.userDocument;
   let hubDetails =false
   try {
     const bookingDeatails = req.session.bookingDetails;
@@ -254,16 +254,13 @@ module.exports.paymentPage = async (req, res, next) => {
       const hubId = bookingDeatails.hub
        hubDetails = await hubModel.findOne({_id:hubId})
     }
-    console.log(bookingDeatails, "bookingdetails");
     const fromDate = new Date(bookingDeatails.fromDate);
     const toDate = new Date(bookingDeatails.toDate);
     const timeDiff = Math.abs(toDate.getTime() - fromDate.getTime());
     const numberOfDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     const vehicleId = req.session.vehicleId;
     const vehicle = await vehicleModel.findOne({ _id: vehicleId });
-    console.log(vehicle,"vehicle");
     let totalAmount;
-    console.log(numberOfDays, "days");
     if (vehicle) {
       if(numberOfDays>0 && numberOfDays<=10){
         totalAmount = numberOfDays * vehicle.rentupto10days
@@ -281,18 +278,9 @@ module.exports.paymentPage = async (req, res, next) => {
   }
 }
 
-module.exports.userLogout = async (req, res, next) => {
-  try {
-    req.session.bookingDeatails = null;
-    req.session.vehicleId = null;
-    req.session.userDocument = null;
-  } catch (error) {
-
-  }
-}
 
 module.exports.orders = async (req, res, next) => {
-  console.log(req.body,"in Orders");
+
   try {
     const instance = new razorPay({
       key_id: process.env.RAZORPAY_KEY_ID,
@@ -303,7 +291,7 @@ module.exports.orders = async (req, res, next) => {
       amount: req.body.amount * 100,
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
-    }; // Corrected comma to closing parenthesis here
+    };
 
     instance.orders.create(options, (error, order) => {
       if (error) {
@@ -311,7 +299,6 @@ module.exports.orders = async (req, res, next) => {
         return res.json({ status: false, message: "Something went wrong" });
       }
       // Handle successful order creation
-      console.log(order);
       return res.json({ status: true, order });
     });
   } catch (error) {
@@ -321,9 +308,10 @@ module.exports.orders = async (req, res, next) => {
 };
 
 module.exports.verify = async(req,res,next)=>{
+  const amount = (req.body.amount)/100
+
+
   const date = new Date()
-  console.log(req.body,"req.body in verify");
-  console.log(req.user,"req.user in verify");
   try {
     const {
       razorpay_order_id,
@@ -337,13 +325,13 @@ module.exports.verify = async(req,res,next)=>{
     .digest("hex")
 
     if(razorpay_signature === expectedSign){
-      console.log("Verifeid");
       let hub;
       if(req.body.deliverytype === 'pickup'){
         hub = req.body.hub
       }else{
         hub = null
       }
+      let userDocumentImagePath = userDocument.replace(/^public[\\/]+/, '');
       const newOrder = new bookingModel({
         user_id:req.user._id,
         vehicle_id:req.body.vehicleid,
@@ -357,14 +345,16 @@ module.exports.verify = async(req,res,next)=>{
         }],
         fromDate:req.body.fromDate,
         toDate:req.body.toDate,
-        deliveryTime:req.body.deliverytime,
+        deliveryTime:req.body.deliveryTime,
         Hub:hub,
         payment_id:req.body.razorpay_payment_id,
+        amount:req.body.amount,
+        userDocumentImageURL:userDocumentImagePath
       })
-      const order = newOrder.save()
+      const order =await newOrder.save()
+      userDocument = null;
       res.json({status:true,message:"Payment verified successfully"}) 
     }else{
-      console.log("not verified");
       res.json({status:false,message:"Invalid signature sent!"})
     }
 
@@ -374,3 +364,13 @@ module.exports.verify = async(req,res,next)=>{
   }
 }
 
+
+module.exports.userLogout = async (req, res, next) => {
+  try {
+    req.session.bookingDeatails = null;
+    req.session.vehicleId = null;
+    userDocument = null;
+  } catch (error) {
+
+  }
+}

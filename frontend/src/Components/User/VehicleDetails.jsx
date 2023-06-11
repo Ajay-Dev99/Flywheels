@@ -15,7 +15,6 @@ function VehicleDetails() {
 
         viewVehicle(id).then((response) => {
             if (response.data.status) {
-                console.log(response.data);
                 setVehicle(response.data.vehicle)
                 setActiveImage(response.data.vehicle.image_url[0])
             } else {
