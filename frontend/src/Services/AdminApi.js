@@ -60,3 +60,11 @@ export const editHub = (values,id)=>{
     console.log(values,"values on apoi");
     return adminInstance.post(`EditHub/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"}})
 }
+
+export const getbookingAPI = ()=>{
+    return adminInstance.get("/getbookings");
+}
+
+export const getOrderDetailsAPI = (orderId)=>{
+    return adminInstance.get(`/getorderdetails/${orderId}`)
+}

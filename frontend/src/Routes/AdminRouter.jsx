@@ -12,6 +12,7 @@ import AdminVehicleEditpage from '../Pages/Admin/AdminVehicleEditpage'
 import AdminHubsPage from '../Pages/Admin/AdminHubsPage'
 import AdminAddHubPage from '../Pages/Admin/AdminAddHubPage'
 import AdminViewandEditHubpage from '../Pages/Admin/AdminViewandEditHubpage'
+import BookingDetailsPage from '../Pages/Admin/BookingDetailsPage'
 function AdminRouter() {
   return (
     <Routes>
@@ -27,6 +28,7 @@ function AdminRouter() {
         <Route path='/hubs' element={<AdminHubsPage/>}/>
         <Route path='/addhubs' element={<AdminAddHubPage/>}/>
         <Route path='/editandviewhub/:id' element={<AdminViewandEditHubpage/>}/>
+        <Route path='/bookingDetails/:id' element={<BookingDetailsPage/>}/>
     </Routes>
   )
 }

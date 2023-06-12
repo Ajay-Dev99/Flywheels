@@ -10,6 +10,8 @@ import VehicleDetailsPage from '../Pages/User/VehicleDetailsPage'
 import BookingPage from '../Pages/User/BookingPage'
 import OurHubsPages from '../Pages/User/OurHubsPages'
 import PaymentPage from '../Pages/User/PaymentPage'
+import OrderSuccessPage from '../Pages/User/OrderSuccessPage'
+import UserProfilePage from '../Pages/User/UserProfilePage'
 
 function UserRouter() {
   return (
@@ -24,6 +26,8 @@ function UserRouter() {
         <Route path='/bookacar/:id' element={<BookingPage/>}/>
         <Route path='/ourhubs' element={<OurHubsPages/>}/>
         <Route path='/payment' element = {<PaymentPage/>}/>
+        <Route path='/ordersuccess' element={<OrderSuccessPage/>}/>
+        <Route path ="/profile" element={<UserProfilePage/>}/>
         
     </Routes>
   )

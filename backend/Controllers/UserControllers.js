@@ -274,7 +274,7 @@ module.exports.paymentPage = async (req, res, next) => {
       res.json({ status: false })
     }
   } catch (error) {
-
+console.log(error);
   }
 }
 
@@ -353,7 +353,7 @@ module.exports.verify = async(req,res,next)=>{
       })
       const order =await newOrder.save()
       userDocument = null;
-      res.json({status:true,message:"Payment verified successfully"}) 
+      res.json({status:true,message:"Payment successfull"}) 
     }else{
       res.json({status:false,message:"Invalid signature sent!"})
     }

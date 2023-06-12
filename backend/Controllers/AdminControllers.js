@@ -2,6 +2,7 @@ const AdminModel = require('../Models/AdminModel')
 const userModel = require('../Models/userModel')
 const vehicleModel = require('../Models/vehicleModel')
 const categoryModel = require('../Models/CategoryModel')
+const orderModel = require('../Models/BookingModel')
 const hubModel = require('../Models/HubModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -346,5 +347,34 @@ module.exports.EditHub = async (req, res, next) => {
         res.json({status:true,message:"Hub edited successfully"})
     } catch (error) {
         console.log(error);
+    }
+}
+
+module.exports.listBookings = async(req,res,next)=>{
+    try {
+        const bookings = await orderModel.find({}).populate("user_id").populate("vehicle_id").populate("Hub")
+        if(bookings){
+            res.json({status:true,bookings})
+        }else{
+            res.json({status:false,message:"Something went wrong"})
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.getOrderDetails = async(req,res,next) =>{
+    try {
+        const orderId = req.params.id
+        const order = await orderModel.findOne({_id:orderId}).populate("user_id").populate("vehicle_id").populate("Hub")
+        console.log(order,"order");
+        if(order){
+            res.json({status:true,order})
+        }else{
+            res.json({status:false,message:"Something went wrong"})
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({status:false,message:"Internal server Error"})
     }
 }

@@ -11,9 +11,9 @@ function Payment() {
     const { id } = useParams()
     const [bookingDetails, setBookingDetails] = useState()
     const [vehicle, setVehicle] = useState()
-    const [totalAmount,setTOtalAmount] = useState()
-    const [numberOfDays,setNumberOfDays] = useState()
-    const [hubDetails,setHubDetails] = useState()
+    const [totalAmount, setTOtalAmount] = useState()
+    const [numberOfDays, setNumberOfDays] = useState()
+    const [hubDetails, setHubDetails] = useState()
     useEffect(() => {
         try {
             PaymentDetailsApi().then((response) => {
@@ -32,26 +32,27 @@ function Payment() {
         }
     }, [])
 
-    const initPayment =async(data) =>{
+    const initPayment = async (data) => {
         const bookingData = bookingDetails
         const vehicleId = vehicle._id
         const amount = data.amount
         const options = {
-            key:"rzp_test_iUyzrosq267XwE",
-            amount:data.amount,
-            currency:data.currency            ,
-            order_id:data.id,
-            handler:async(response)=>{
+            key: process.env.REACT_APP_RAZORPAY_KEY,
+            amount: data.amount,
+            currency: data.currency,
+            order_id: data.id,
+            handler: async (response) => {
 
                 try {
-                    const {data} =await verifyPayment(response,bookingData,vehicleId,amount)
+                    const { data } = await verifyPayment(response, bookingData, vehicleId, amount)
                     toast(data.message)
+                    navigate("/ordersuccess")
                 } catch (error) {
                     console.log(error);
                 }
             },
-            theme:{
-                color:'#368E88'
+            theme: {
+                color: '#368E88'
             }
         };
         const rzp1 = new Razorpay(options);
@@ -59,12 +60,12 @@ function Payment() {
     }
 
 
-    const handlePayment = async() =>{
+    const handlePayment = async () => {
         try {
-            const {data} = await orderApi({amount:totalAmount})
+            const { data } = await orderApi({ amount: totalAmount })
             initPayment(data.order)
         } catch (error) {
-            
+
         }
     }
 
@@ -94,20 +95,20 @@ function Payment() {
                     <p className="mt-8 text-lg font-medium">Delivery Methods</p>
 
 
-                 {  bookingDetails &&  <div className="relative">
+                    {bookingDetails && <div className="relative">
                         <span className=" absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
                         <label className=" peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" htmlFor="radio_2">
 
                             <div className="ml-5">
                                 <span className="mt-2 font-semibold">{bookingDetails.deliverytype}</span>
-                             {  hubDetails && <div className='flex'>
-                                <span className="mt-2 font-semibold">{hubDetails.hubName},</span>
-                                <span className="mt-2 font-semibold">{hubDetails.buildingName},</span>
-                                <span className="mt-2 font-semibold">{hubDetails.district},</span>
-                                <span className="mt-2 font-semibold">{hubDetails.street},</span>
-                                <span className="mt-2 font-semibold">{hubDetails.pincode}</span>
+                                {hubDetails && <div className='flex'>
+                                    <span className="mt-2 font-semibold">{hubDetails.hubName},</span>
+                                    <span className="mt-2 font-semibold">{hubDetails.buildingName},</span>
+                                    <span className="mt-2 font-semibold">{hubDetails.district},</span>
+                                    <span className="mt-2 font-semibold">{hubDetails.street},</span>
+                                    <span className="mt-2 font-semibold">{hubDetails.pincode}</span>
 
-                                </div> }
+                                </div>}
                             </div>
                         </label>
                     </div>}
@@ -152,7 +153,7 @@ function Payment() {
                             </div>
                         </div>
                         <label htmlFor="" className="mt-4 mb-2 block text-sm font-medium">Number Of Days</label>
-                      { numberOfDays &&  <div className="relative">
+                        {numberOfDays && <div className="relative">
                             <input type="text" id="email" name="email" className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500 placeholder-black font-bold" placeholder={`${numberOfDays}`} disabled />
                             <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
 
@@ -163,7 +164,7 @@ function Payment() {
 
 
 
-                        { totalAmount && <div className="mt-6 flex items-center justify-between">
+                        {totalAmount && <div className="mt-6 flex items-center justify-between">
                             <p className="text-sm font-medium text-gray-900">Total</p>
                             <p className="text-2xl font-semibold text-gray-900">₹{totalAmount}</p>
                         </div>}

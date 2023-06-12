@@ -34,6 +34,7 @@ function AdminEditVehicle() {
     useEffect(() => {
 
         adminviewVehicleDetails(id).then((response) => {
+            console.log(response.data);
             if (response.data.status) {
                 const car = response.data.vehicle
                 formik.setValues({
