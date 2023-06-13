@@ -150,7 +150,7 @@ module.exports.ListCategories = async (req, res, next) => {
 module.exports.viewVehicleDetails = async (req, res, next) => {
     try {
         const vehicleId = req.params.id;
-        const vehicle = await vehicleModel.findOne({ _id: vehicleId }).populate("categoryId")
+        const vehicle = await vehicleModel.findOne({ _id: vehicleId }).populate("categoryId").populate("hub")
         if (vehicle) {
             res.json({ status: true, vehicle })
         } else {
@@ -211,7 +211,7 @@ module.exports.editCar = async (req, res, next) => {
         res.json({ status: true, message: "Vehicle Details updated Succesfully" })
 
     } catch (error) {
-        res.json({ status: false, message: error.message })
+        console.log(error);
     }
 }
 
@@ -367,7 +367,7 @@ module.exports.getOrderDetails = async(req,res,next) =>{
     try {
         const orderId = req.params.id
         const order = await orderModel.findOne({_id:orderId}).populate("user_id").populate("vehicle_id").populate("Hub")
-        console.log(order,"order");
+      
         if(order){
             res.json({status:true,order})
         }else{
@@ -376,5 +376,24 @@ module.exports.getOrderDetails = async(req,res,next) =>{
     } catch (error) {
         console.log(error);
         res.json({status:false,message:"Internal server Error"})
+    }
+}
+module.exports.changeOrderStatus = async(req,res,next)=>{
+    try {
+        const orderId = req.params.id
+
+        if(req.body.idx === 2){
+            const idx = 2;
+            await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:"pickedup"}})
+            res.json({status:true,idx})
+        }
+        if(req.body.idx === 3){
+            const idx = 3;
+            await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:"dropedoff"}})
+            res.json({status:true,idx})
+        }
+
+    } catch (error) {
+        console.log(error);
     }
 }

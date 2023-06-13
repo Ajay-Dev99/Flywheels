@@ -34,7 +34,7 @@ function AdminEditVehicle() {
     useEffect(() => {
 
         adminviewVehicleDetails(id).then((response) => {
-            console.log(response.data);
+            console.log(response.data,"Data");
             if (response.data.status) {
                 const car = response.data.vehicle
                 formik.setValues({
@@ -116,7 +116,6 @@ function AdminEditVehicle() {
 
 
     const onSubmit = async (values) => {
-        // values.category=values.category._id
         const formData = new FormData()
         Object.keys(values).forEach((key) => {
             formData.append(key, values[key]);
@@ -246,10 +245,9 @@ function AdminEditVehicle() {
                         <div className="mb-6">
                             <label htmlFor="">Available On</label>
                             {hubs &&
-                                <select onChange={formik.handleChange}  onBlur={formik.handleBlur}  value={formik.values.hub}  name='hub' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.hub}`} required>
+                                <select onChange={formik.handleChange}  onBlur={formik.handleBlur}  value={formik.values.hub}  name='hub' id="" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.hub}`} required>
 
                                     {hubs.map((hub) => (
-
                                         <option key={hub._id} value={hub._id}>{hub.district}</option>
                                     ))}
 

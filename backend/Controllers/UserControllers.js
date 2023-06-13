@@ -215,29 +215,29 @@ module.exports.bookACar = async (req, res, next) => {
 
     if (req.body.deliverytype === 'delivery') {
       if (district !== req.body.district) {
-        res.json({ status: false, message: `Door delivery service only available in ${district}` })
+      return  res.json({ status: false, message: `Door delivery service only available in ${district}` })
       }
     }
     if (req.body.deliverytype === "pickup") {
       const hubId = req.body.hub
       const hub = await hubModel.findOne({ _id: hubId })
       if (district !== hub.district) {
-        res.json({ status: false, message: `This vehicle only available in ${district} hub` })
+       return res.json({ status: false, message: `This vehicle only available in ${district} hub` })
       }else{
         req.session.hub = hub
       }
     }
     if (fromDate <= currentDate) {
-      res.json({ status: false, message: "Please select a future date for the start of the booking" });
+     return res.json({ status: false, message: "Please select a future date for the start of the booking" });
     } else if (toDate <= currentDate) {
-      res.json({ status: false, message: "Please select a future date for the end of the booking" });
+    return  res.json({ status: false, message: "Please select a future date for the end of the booking" });
     } else if (fromDate.getTime() === toDate.getTime()) {
-      res.json({ status: false, message: "The booking should be for at least one day" });
+     return res.json({ status: false, message: "The booking should be for at least one day" });
     } else {
       req.session.bookingDetails = req.body;
       req.session.userDocument = req.files.image[0].path;
       req.session.vehicleId = req.params.id;
-      res.json({ status: true });
+    return  res.json({ status: true });
     }
 
   } catch (error) {
@@ -249,7 +249,7 @@ module.exports.paymentPage = async (req, res, next) => {
   userDocument=req.session.userDocument;
   let hubDetails =false
   try {
-    const bookingDeatails = req.session.bookingDetails;
+    const bookingDeatails =await req.session.bookingDetails;
     if(bookingDeatails.deliverytype === 'pickup'){
       const hubId = bookingDeatails.hub
        hubDetails = await hubModel.findOne({_id:hubId})

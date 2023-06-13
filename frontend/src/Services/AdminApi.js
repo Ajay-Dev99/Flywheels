@@ -68,3 +68,9 @@ export const getbookingAPI = ()=>{
 export const getOrderDetailsAPI = (orderId)=>{
     return adminInstance.get(`/getorderdetails/${orderId}`)
 }
+
+export const OrderStatusChangeAPI = (value,id,btn)=>{
+    console.log(value,"Value on api");
+    console.log(id,"Value on api");
+    return adminInstance.post(`/changeOrderStatus/${id}`,{idx:value,from:btn})
+}

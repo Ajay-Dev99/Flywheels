@@ -4,8 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { PaymentDetailsApi, orderApi, verifyPayment } from '../../Services/UserApi'
 import useRazorpay from "react-razorpay";
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function Payment() {
+    const user = useSelector((state)=>state.user.value)
     const Razorpay = useRazorpay();
     const navigate = useNavigate()
     const { id } = useParams()
@@ -39,6 +41,7 @@ function Payment() {
         const options = {
             key: process.env.REACT_APP_RAZORPAY_KEY,
             amount: data.amount,
+            name:`${vehicle.brand},${vehicle.modelname}`,
             currency: data.currency,
             order_id: data.id,
             handler: async (response) => {

@@ -60,6 +60,10 @@ const bookingSchema = new mongoose.Schema({
     userDocumentImageURL:{
         type:String,
         required:true
+    },
+    status:{
+        type:String,
+        default:"orderPlaced"
     }
 })
 

@@ -63,12 +63,11 @@ function Bookings() {
                 <td className="px-6 py-4">{order.user_id.name}</td>
                 <td className="px-6 py-4">{order.fromDate}</td>
                 <td className="px-6 py-4">{order.toDate}</td>
-                <td className="px-6 py-4"><button onClick={()=>navigate(`/admin/bookingDetails/${order._id}`)} className='px-2 py-1 bg-[#358E88] text-white font-semibold'> VIEW</button></td>
+                <td className="px-6 py-4"><button onClick={()=>navigate(`/admin/bookingDetails/${order._id}`)} className='px-2 py-1 bg-[#358E88] text-white rounded-md text-sm font-semibold'> VIEW</button></td>
               </tr>))}
             </tbody>
           </table>
         </div>}
-
       </div>
       
     </div>

@@ -12,6 +12,7 @@ import OurHubsPages from '../Pages/User/OurHubsPages'
 import PaymentPage from '../Pages/User/PaymentPage'
 import OrderSuccessPage from '../Pages/User/OrderSuccessPage'
 import UserProfilePage from '../Pages/User/UserProfilePage'
+import UserBookingsPage from '../Pages/User/UserBookingsPage'
 
 function UserRouter() {
   return (
@@ -28,6 +29,7 @@ function UserRouter() {
         <Route path='/payment' element = {<PaymentPage/>}/>
         <Route path='/ordersuccess' element={<OrderSuccessPage/>}/>
         <Route path ="/profile" element={<UserProfilePage/>}/>
+        <Route path='/Bookings' element={<UserBookingsPage/>}/>
         
     </Routes>
   )
