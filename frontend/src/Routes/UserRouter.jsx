@@ -27,7 +27,7 @@ function UserRouter() {
         <Route path='/bookacar/:id' element={<BookingPage/>}/>
         <Route path='/ourhubs' element={<OurHubsPages/>}/>
         <Route path='/payment' element = {<PaymentPage/>}/>
-        <Route path='/ordersuccess' element={<OrderSuccessPage/>}/>
+        <Route path='/ordersuccess/:id' element={<OrderSuccessPage/>}/>
         <Route path ="/profile" element={<UserProfilePage/>}/>
         <Route path='/Bookings' element={<UserBookingsPage/>}/>
         

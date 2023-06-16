@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './userHeader'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { HublistingAPI, bookaCarAPi } from '../../Services/UserApi'
+import { bookaCarAPi, bookingPage } from '../../Services/UserApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -13,21 +13,32 @@ const timeSlots = [
     '2:00 PM - 3:00 PM',
     '3:00 PM - 4:00 PM',
     '4:00 PM - 5:00 PM',
-  ];
+];
 
 function Bookacar() {
     const navigate = useNavigate()
-    const [hubs,setHubs] = useState()
+    const [hub, setHub] = useState(false)
     const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
     const { id } = useParams()
 
-    useEffect(()=>{
-        HublistingAPI().then((response) => {
+    useEffect(() => {
+        bookingPage(id).then((response) => {
+            console.log(response.data);
             if (response.data.status) {
-              setHubs(response.data.hubs)
+                setHub(response.data.vehicle.hub.district)
+                formik.setValues({
+                    hub: response.data.vehicle.hub._id
+                })
             }
-          })
-    },[])
+            else if (response.data.Blocked) {
+                navigate("/login")
+                toast.error(response.data.message)
+            } else {
+                navigate("/login")
+                toast.warning(response.data.message)
+            }
+        })
+    }, [id])
 
     const initialValues = {
         username: "",
@@ -48,12 +59,12 @@ function Bookacar() {
 
     const onSubmit = async (values) => {
         const updatedValues = { ...values, deliveryTime: selectedTimeSlot };
-        bookaCarAPi(updatedValues, id).then((response)=>{
-            if(response.data.status){
+        bookaCarAPi(updatedValues, id).then((response) => {
+            if (response.data.status) {
                 navigate(`/payment`)
-            }else{
-                toast.error(response.data.message,{
-                    position:'top-center'
+            } else {
+                toast.error(response.data.message, {
+                    position: 'top-center'
                 })
             }
         })
@@ -228,13 +239,8 @@ function Bookacar() {
                             <div className='my-4 px-5 py-4 border rounded-md border-gray-500'>
                                 {formik.values.deliverytype === 'pickup' && (
                                     <div className="mb-6">
-                                        <label
-                                            htmlFor="hub"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                            HUB
-                                        </label>
-                                    { hubs &&   <select
+
+                                        {/* {hubs && <select
                                             name="hub"
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleBlur}
@@ -243,16 +249,22 @@ function Bookacar() {
                                             required
                                         >
                                             <option value="">Select a hub</option>
-                                           
-                                           { hubs.map((hub)=>(
-                                             <option key={hub._id} value={hub._id}>{hub.district}</option>
-                                           ))}
-                                            
+
+                                            {hubs.map((hub) => (
+                                                <option key={hub._id} value={hub._id}>{hub.district}</option>
+                                            ))}
+
                                         </select>
-                                        }
-                                        {formik.touched.hub && formik.errors.hub ? (
-                                            <p className="text-sm text-red-600">{formik.errors.hub}</p>
-                                        ) : null}
+                                        } */}
+                                        {hub &&
+
+                                            <div className='flex justify-center items-center'>
+                                               <p>  HUB:{hub}</p>
+                                                  
+                                               
+                                                {/* <input type="text" placeholder={hub} name='hub'  className="shadow-sm bg-gray-50 border border-gray-300 text-black placeholder-black placeholder:text-lg text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   " disabled/> */}
+                                            </div>}
+
                                     </div>
                                 )}
                                 <div className="mb-6">
@@ -316,36 +328,33 @@ function Bookacar() {
                                     ) : null}
                                 </div> */}
                                 <div className="mb-6">
-  <label htmlFor="deliveryTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-    Delivery Time
-  </label>
-  <select
-    name="deliveryTime"
-    onChange={(e) => {
-        setSelectedTimeSlot(e.target.value)
-        formik.handleChange(e)
-    }}
-    onBlur={formik.handleBlur}
-    value={formik.values.deliveryTime}
-    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-    required=""
-  >
-    <option value="">Select a time slot</option>
-    {timeSlots.map(slot => (
-      <option key={slot} value={slot}>{slot}</option>
-    ))}
-  </select>
-  {formik.touched.deliveryTime && formik.errors.deliveryTime ? (
-    <p className="text-sm text-red-600">{formik.errors.deliveryTime}</p>
-  ) : null}
-</div>
+                                    <label htmlFor="deliveryTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Delivery Time
+                                    </label>
+                                    <select
+                                        name="deliveryTime"
+                                        onChange={(e) => {
+                                            setSelectedTimeSlot(e.target.value)
+                                            formik.handleChange(e)
+                                        }}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.deliveryTime}
+                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                        required=""
+                                    >
+                                        <option value="">Select a time slot</option>
+                                        {timeSlots.map(slot => (
+                                            <option key={slot} value={slot}>{slot}</option>
+                                        ))}
+                                    </select>
+                                    {formik.touched.deliveryTime && formik.errors.deliveryTime ? (
+                                        <p className="text-sm text-red-600">{formik.errors.deliveryTime}</p>
+                                    ) : null}
+                                </div>
 
 
                             </div>
                         )}
-
-
-
                         <div className='flex justify-end'>
                             <button
                                 type="submit"
@@ -358,7 +367,7 @@ function Bookacar() {
 
                 </div>
             </div>
-            
+
         </div>
     )
 }

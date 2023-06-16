@@ -4,11 +4,10 @@ import { useParams } from 'react-router-dom'
 import { OrderStatusChangeAPI, getOrderDetailsAPI } from '../../Services/AdminApi'
 import { toast } from 'react-toastify'
 import { TiTick } from 'react-icons/ti'
-import './BookingDetails.css'
 function BookingDetails() {
   const { id } = useParams()
   const [order, setOrder] = useState([])
-  const [modal,setModal] = useState(false)
+  const [modal, setModal] = useState(false)
   const steps = ["Order Placed", "Picked Up", "Dropped Off"];
   const [currentStep, setCurrentStep] = useState();
   const [complete, setComplete] = useState(false);
@@ -19,16 +18,16 @@ function BookingDetails() {
           setOrder(response.data.order)
           const order = response.data.order
           let idx;
-          if(order.status === "orderPlaced"){
+          if (order.status === "orderPlaced") {
             idx = 1;
-          }else if(order.status === "pickedup"){
+          } else if (order.status === "pickedup") {
             idx = 2;
-          }else{
+          } else {
             idx = 3;
             setComplete(true)
 
           }
-          setCurrentStep(idx+1)
+          setCurrentStep(idx + 1)
         } else {
           toast(response.data.message)
         }
@@ -40,7 +39,7 @@ function BookingDetails() {
   return (
     <div className=''>
       <AdminSidebar />
-      <div className='p-4  sm:ml-64'>
+      <div className='p-4  sm:ml-64 relative'>
         {order &&
 
           <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
@@ -240,13 +239,13 @@ function BookingDetails() {
                       </p>
                     </div>
                     <div className='flex justify-center flex-col text-gray-800 dark:text-white md:justify-start items-center space-x-4 py-4 border-b border-gray-200 w-full'>
-                    <h3 className="text-xl dark:text-white font-semibold leading-5 mb-4 text-gray-800">
-                  Customer Document
-                </h3>
-                   { order.userDocumentImageURL && <img className='w-96'  src={`${process.env.REACT_APP_BASE_URL}/${order.userDocumentImageURL}`} alt="" />}
-                   <div className='hidden md:block'>
-                    <button className='underline text-blue-500' onClick={()=>setModal(!modal)}>view</button>
-                   </div>
+                      <h3 className="text-xl dark:text-white font-semibold leading-5 mb-4 text-gray-800">
+                        Customer Document
+                      </h3>
+                      {order.userDocumentImageURL && <img className='w-96' src={`${process.env.REACT_APP_BASE_URL}/${order.userDocumentImageURL}`} alt="" />}
+                      <div className='hidden md:block'>
+                        <button className='underline text-blue-500' onClick={() => setModal(!modal)}>view</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -256,94 +255,94 @@ function BookingDetails() {
 
 
 
-  
-
-{ modal && <div 
-    id="defaultModal"
-    tabIndex={-1}
-    aria-hidden="true"
-    className="fixed flex justify-center items-center   z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-  >
-    <div className="relative w-full max-w-2xl max-h-full">
-      <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-           User Document
-          </h3>
-          <button onClick={()=>setModal(!modal)}
-            type="button"
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="defaultModal"
-          >
-            <svg
-              aria-hidden="true"
-              className="w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="sr-only">Close modal</span>
-          </button>
-        </div>
-        <div className="p-6 space-y-6">
-        { order.userDocumentImageURL && <img className=''  src={`${process.env.REACT_APP_BASE_URL}/${order.userDocumentImageURL}`} alt="" />}
-        </div>
-        
-      </div>
-    </div>
-  </div>}
 
 
-
-
-
-
-
-{ currentStep &&
-        <div className='flex justify-center flex-col items-center '>
-          <div className="flex justify-between">
-            {steps?.map((step, i) => (
-              <div
-                key={i}
-                className={`step-item ${currentStep === i + 1 && "active"} ${(i + 1 < currentStep || complete) && "complete"
-                  } `}
-              >
-                <div className="step" onClick={()=>{
-                }}>
-                  {i + 1 < currentStep || complete ? <TiTick size={24} /> : i + 1}
-                </div>
-                <p className="text-gray-500">{step}</p>
+        {modal && <div
+          id="defaultModal"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="fixed flex justify-center items-center   z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        >
+          <div className="relative w-full max-w-2xl max-h-full">
+            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  User Document
+                </h3>
+                <button onClick={() => setModal(!modal)}
+                  type="button"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="defaultModal"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
               </div>
-            ))}
+              <div className="p-6 space-y-6">
+                {order.userDocumentImageURL && <img className='' src={`${process.env.REACT_APP_BASE_URL}/${order.userDocumentImageURL}`} alt="" />}
+              </div>
+
+            </div>
           </div>
-     <div className='flex '>
-     <div className='m-5'>
-            {!complete && (
-              <button
-                className="py-1 px-5 w-32 rounded-md  bg-[#368e88] text-white"
-                onClick={() => {
-                  console.log(currentStep,"currentStep");
-                  console.log(steps.length,"ttt");
-                  currentStep === steps.length ? setComplete(true) : setCurrentStep((prev) => prev + 1);
-                  OrderStatusChangeAPI(currentStep,id,"next").then((response)=>{
-                    console.log(response.data);
-                    if(response.data.status){
-                      setCurrentStep(response.data.idx+1)
-                    }
-                  })
-                }}
-              >
-                {currentStep === steps.length ? "Finish" : "Next"}
-              </button>
-            )}
-          </div>
-          {/* <div className='m-5'>
+        </div>}
+
+
+
+
+
+
+{ order.cancelStatus ? <div className="flex justify-center items-center text-red-700 font-bold text-xl bg-red-200 absolute top-3  w-full h-9 left-0 right-0 bottom-0 ">Booking Cancelled</div>:<div>
+        {currentStep &&
+          <div className='flex justify-center flex-col items-center '>
+            <div className="flex justify-between">
+              {steps?.map((step, i) => (
+                <div
+                  key={i}
+                  className={`step-item ${currentStep === i + 1 && "active"} ${(i + 1 < currentStep || complete) && "complete"
+                    } `}
+                >
+                  <div className="step" onClick={() => {
+                  }}>
+                    {i + 1 < currentStep || complete ? <TiTick size={24} /> : i + 1}
+                  </div>
+                  <p className="text-gray-500">{step}</p>
+                </div>
+              ))}
+            </div>
+            <div className='flex '>
+              <div className='m-5'>
+                {!complete && (
+                  <button
+                    className="py-1 px-5 w-32 rounded-md  bg-[#368e88] text-white"
+                    onClick={() => {
+                      console.log(currentStep, "currentStep");
+                      console.log(steps.length, "ttt");
+                      currentStep === steps.length ? setComplete(true) : setCurrentStep((prev) => prev + 1);
+                      OrderStatusChangeAPI(currentStep, id, "next").then((response) => {
+                        console.log(response.data);
+                        if (response.data.status) {
+                          setCurrentStep(response.data.idx + 1)
+                        }
+                      })
+                    }}
+                  >
+                    {currentStep === steps.length ? "Finish" : "Next"}
+                  </button>
+                )}
+              </div>
+              {/* <div className='m-5'>
             { currentStep > 2 && (
               <button
                 className="py-1 px-5 rounded-md w-32  bg-[#368e88] text-white"
@@ -358,8 +357,10 @@ function BookingDetails() {
               </button>
             )}
           </div> */}
-     </div>
-        </div>}
+            </div>
+          </div>}
+
+          </div>}
 
 
       </div>

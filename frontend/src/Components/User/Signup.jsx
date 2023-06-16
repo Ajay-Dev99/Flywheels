@@ -1,11 +1,11 @@
-import axios from "axios"
+
 import { useState } from "react"
 import { FaEye, FaEyeSlash } from "react-icons/fa"
 import { Link, useNavigate } from "react-router-dom"
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import {userSignup} from '../../Services/UserApi'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Signup() {

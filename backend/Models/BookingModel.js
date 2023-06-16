@@ -64,6 +64,10 @@ const bookingSchema = new mongoose.Schema({
     status:{
         type:String,
         default:"orderPlaced"
+    },
+    cancelStatus:{
+        type:Boolean,
+        default:false
     }
 })
 

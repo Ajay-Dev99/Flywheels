@@ -28,7 +28,10 @@ export const listVehicle = (key,page,limit)=>{
 export const viewVehicle = (id)=>{
     return userInstance.get(`/viewvehicle/${id}`)
 }
-
+export const bookingPage = (id)=>{
+    console.log("called");
+    return userInstance.get(`/bookingPage/${id}`)
+}
 export const bookaCarAPi = (values,id)=>{
     console.log(values,id);
     return userInstance.post(`/bookacar/${id}`,{...values},{headers:{"Content-Type":"multipart/form-data"},withCredentials: true})
@@ -69,4 +72,13 @@ export const verifyPayment = (response,data,vehicleid,totalAmountamount)=>{
         amount
       };
     return userInstance.post("/verifypayment",payload)
+}
+
+
+export const bookingDetailsApi = ()=>{
+    return userInstance.get("/bookingdetails")
+}
+
+export const cancelOrder = (id)=>{
+    return userInstance.post(`/cancelorder/${id}`)
 }

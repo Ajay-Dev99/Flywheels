@@ -68,7 +68,7 @@ function Cars() {
           </div>
         </div>
 
-        <div className="flex items-center md:justify-between justify-center py-4 bg-white dark:bg-gray-800">
+        {/* <div className="flex items-center md:justify-between justify-center py-4 bg-white dark:bg-gray-800">
           <div>
 
           </div>
@@ -81,7 +81,7 @@ function Cars() {
             </div>
             <input type="text" id="table-search-users" className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for users" />
           </div>
-        </div>
+        </div> */}
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
 
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

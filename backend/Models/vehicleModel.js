@@ -63,6 +63,10 @@ const vehicleSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "hub",
     required: true,
+  },
+  bookedStatus:{
+    type:Boolean,
+    default:false
   }
 });
 

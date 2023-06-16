@@ -88,9 +88,12 @@ function VehicleDetails() {
                             Rent upto 10 Days : {vehicle.rentupto10days}
                         </p>
                     </div>
-                    <div className='flex flex-row items-center gap-12 '>
+              {   vehicle.bookedStatus ? <div className='flex flex-row items-center '>
+                        <button  className='bg-red-300 text-red-700 font-bold py-3 px-[7rem] h-full'>THIS VEHICLE IS CURRENTLY NOT AVAILABLE.TRY AGAIN LATER</button>
+                    </div> :  <div className='flex flex-row items-center gap-12 '>
                         <button onClick={() => navigate(`/bookacar/${vehicle._id}`)} className='bg-[#358E88] text-white font-semibold py-3 px-[7rem] h-full '>Book Now</button>
-                    </div>
+                    </div> 
+                    }
                 </div>
                 }
             </div>

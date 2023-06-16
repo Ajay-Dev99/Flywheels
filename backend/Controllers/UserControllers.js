@@ -22,13 +22,17 @@ const createToken = (id) => {
 }
 
 const handleErrors = (err) => {
-  let errors = { name: "", email: "", password: "" }
+  let errors = { name: "", email: "", password: "", block: "" }
 
   if (err.message === "Incorrect Email") {
     errors.email = "Email is not registerd"
   }
   if (err.message === "Incorrect password") {
     errors.password = "Incorrect Password"
+  }
+
+  if (err.message === "Currently, your account is suspended") {
+    errors.block = "Currently, your account is suspended"
   }
 
   if (err.code === 11000) {
@@ -102,9 +106,13 @@ module.exports.login = async (req, res, next) => {
     if (customer) {
       const auth = await bcrypt.compare(password, customer.password);
       if (auth) {
-        const token = createToken(customer._id)
+        if (customer.blockStatus) {
+          throw Error("Currently, your account is suspended")
 
-        res.status(200).json({ user: customer, created: true, token })
+        } else {
+          const token = createToken(customer._id)
+          res.status(200).json({ user: customer, created: true, token })
+        }
       } else {
         throw Error("Incorrect password")
       }
@@ -117,7 +125,7 @@ module.exports.login = async (req, res, next) => {
   }
 }
 
-module.exports.home = (req, res, next) => {
+module.exports.userHeader= (req, res, next) => {
   const userdetails = req.user
   res.json({ status: true, user: userdetails })
 }
@@ -203,41 +211,61 @@ module.exports.getHubs = async (req, res, next) => {
   }
 }
 
+module.exports.bookingPage = async (req, res, next) => {
+  try {
+    const vehicleId = req.params.id
+    const vehicle = await vehicleModel.findById( vehicleId ).populate("hub")
+
+    if (vehicle) {
+      res.json({ status: true, vehicle })
+    } else {
+      res.json({ status: false, message: "Something Went Wrong" })
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports.bookACar = async (req, res, next) => {
   try {
     const fromDate = new Date(req.body.fromDate)
     const toDate = new Date(req.body.toDate)
     const currentDate = new Date()
-
+    const timeDiff = Math.abs(fromDate.getTime() - currentDate.getTime());
+    const dayFromCurrent = Math.ceil(timeDiff / (1000 * 3600 * 24));
     const vehicleId = req.params.id
     const vehicle = await vehicleModel.findOne({ _id: vehicleId }).populate('hub')
     const district = vehicle.hub.district
 
     if (req.body.deliverytype === 'delivery') {
       if (district !== req.body.district) {
-      return  res.json({ status: false, message: `Door delivery service only available in ${district}` })
+        return res.json({ status: false, message: `Door delivery service only available in ${district}` })
       }
     }
     if (req.body.deliverytype === "pickup") {
       const hubId = req.body.hub
       const hub = await hubModel.findOne({ _id: hubId })
       if (district !== hub.district) {
-       return res.json({ status: false, message: `This vehicle only available in ${district} hub` })
-      }else{
+        return res.json({ status: false, message: `This vehicle only available in ${district} hub` })
+      } else {
         req.session.hub = hub
       }
     }
     if (fromDate <= currentDate) {
-     return res.json({ status: false, message: "Please select a future date for the start of the booking" });
-    } else if (toDate <= currentDate) {
-    return  res.json({ status: false, message: "Please select a future date for the end of the booking" });
+      return res.json({ status: false, message: "Please select a future date for the start of the booking" });
+    }else if(dayFromCurrent>3){
+      return res.json({status:false,message:"You can only book the car before 3 days"})
+    }  else if (toDate <= currentDate || toDate < fromDate) {
+      return res.json({ status: false, message: "Please select a future date for the end of the booking" });
     } else if (fromDate.getTime() === toDate.getTime()) {
-     return res.json({ status: false, message: "The booking should be for at least one day" });
-    } else {
+      return res.json({ status: false, message: "The booking should be for at least one day" });
+    
+    }
+    else {
       req.session.bookingDetails = req.body;
       req.session.userDocument = req.files.image[0].path;
       req.session.vehicleId = req.params.id;
-    return  res.json({ status: true });
+      return res.json({ status: true });
     }
 
   } catch (error) {
@@ -246,13 +274,13 @@ module.exports.bookACar = async (req, res, next) => {
 }
 
 module.exports.paymentPage = async (req, res, next) => {
-  userDocument=req.session.userDocument;
-  let hubDetails =false
+  userDocument = req.session.userDocument;
+  let hubDetails = false
   try {
-    const bookingDeatails =await req.session.bookingDetails;
-    if(bookingDeatails.deliverytype === 'pickup'){
+    const bookingDeatails = await req.session.bookingDetails;
+    if (bookingDeatails.deliverytype === 'pickup') {
       const hubId = bookingDeatails.hub
-       hubDetails = await hubModel.findOne({_id:hubId})
+      hubDetails = await hubModel.findOne({ _id: hubId })
     }
     const fromDate = new Date(bookingDeatails.fromDate);
     const toDate = new Date(bookingDeatails.toDate);
@@ -262,19 +290,19 @@ module.exports.paymentPage = async (req, res, next) => {
     const vehicle = await vehicleModel.findOne({ _id: vehicleId });
     let totalAmount;
     if (vehicle) {
-      if(numberOfDays>0 && numberOfDays<=10){
+      if (numberOfDays > 0 && numberOfDays <= 10) {
         totalAmount = numberOfDays * vehicle.rentupto10days
-      }else if(numberOfDays>10 && numberOfDays<=20){
+      } else if (numberOfDays > 10 && numberOfDays <= 20) {
         totalAmount = numberOfDays * vehicle.rentfor10_20days
-      }else if(numberOfDays>20 && numberOfDays<=60){
+      } else if (numberOfDays > 20 && numberOfDays <= 60) {
         totalAmount = numberOfDays * vehicle.rentfor30days
       }
-      res.json({ status: true, bookingDeatails, vehicle,totalAmount,numberOfDays,hubDetails });
+      res.json({ status: true, bookingDeatails, vehicle, totalAmount, numberOfDays, hubDetails });
     } else {
       res.json({ status: false })
     }
   } catch (error) {
-console.log(error);
+    console.log(error);
   }
 }
 
@@ -307,9 +335,9 @@ module.exports.orders = async (req, res, next) => {
   }
 };
 
-module.exports.verify = async(req,res,next)=>{
-  const amount = (req.body.amount)/100
-
+module.exports.verify = async (req, res, next) => {
+  const amount = (req.body.amount) / 100
+  const vehicleId= req.body.vehicleid
 
   const date = new Date()
   try {
@@ -320,50 +348,83 @@ module.exports.verify = async(req,res,next)=>{
     } = req.body
     const sign = razorpay_order_id + "|" + razorpay_payment_id
     const expectedSign = crypto
-    .createHmac("sha256",process.env.RAZORPAY_SECRETE_KEY_ID)
-    .update(sign.toString())
-    .digest("hex")
+      .createHmac("sha256", process.env.RAZORPAY_SECRETE_KEY_ID)
+      .update(sign.toString())
+      .digest("hex")
 
-    if(razorpay_signature === expectedSign){
+    if (razorpay_signature === expectedSign) {
       let hub;
-      if(req.body.deliverytype === 'pickup'){
+      if (req.body.deliverytype === 'pickup') {
         hub = req.body.hub
-      }else{
+      } else {
         hub = null
       }
-      let userDocumentImagePath = userDocument.replace(/^public[\\/]+/, '');
+      let userDocumentImagePath = await userDocument.replace(/^public[\\/]+/, '');
       const newOrder = new bookingModel({
-        user_id:req.user._id,
-        vehicle_id:req.body.vehicleid,
-        booked_At:date,
-        deliveryType:req.body.deliverytype,
-        deliveryDetails:[{
-          address:req.body.address,
-          district:req.body.district,
-          homeTown:req.body.hometown,
-          pincode:req.body.pincode
+        user_id: req.user._id,
+        vehicle_id: req.body.vehicleid,
+        booked_At: date,
+        deliveryType: req.body.deliverytype,
+        deliveryDetails: [{
+          address: req.body.address,
+          district: req.body.district,
+          homeTown: req.body.hometown,
+          pincode: req.body.pincode
         }],
-        fromDate:req.body.fromDate,
-        toDate:req.body.toDate,
-        deliveryTime:req.body.deliveryTime,
-        Hub:hub,
-        payment_id:req.body.razorpay_payment_id,
-        amount:req.body.amount,
-        userDocumentImageURL:userDocumentImagePath
+        fromDate: req.body.fromDate,
+        toDate: req.body.toDate,
+        deliveryTime: req.body.deliveryTime,
+        Hub: hub,
+        payment_id: req.body.razorpay_payment_id,
+        amount: req.body.amount,
+        userDocumentImageURL: userDocumentImagePath
       })
-      const order =await newOrder.save()
+      
+      const order = await newOrder.save()
+      const orderId = order._id
+      await vehicleModel.findOneAndUpdate({_id:vehicleId},{$set:{bookedStatus:true}})
+      req.session.bookingDeatails = null;
+      req.session.vehicleId = null;
       userDocument = null;
-      res.json({status:true,message:"Payment successfull"}) 
-    }else{
-      res.json({status:false,message:"Invalid signature sent!"})
+      res.json({ status: true, message: "Payment successfull", orderId })
+    } else {
+      res.json({ status: false, message: "Invalid signature sent!" })
     }
 
   } catch (error) {
     console.log(error);
-    res.json({status:false,message:"Internal Server Error!"});
+    res.json({ status: false, message: "Internal Server Error!" });
   }
 }
 
+module.exports.getBookingDetails = async (req, res, next) => {
+  try {
+
+    const id = req.user._id;
+    const bookings = await bookingModel.find({ user_id: id }).populate("vehicle_id").populate("Hub").sort({ _id: -1 });
+    if (bookings) {
+      res.json({ status: true, bookings })
+    } else {
+      res.json({ status: false, message: "Something Went Wrong" })
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ status: false, message: "Internal Server Error" })
+  }
+}
+
+
+module.exports.cancelOrder = async(req,res,next)=>{
+  try {
+    const bookingId = req.params.id
+   const cancelledBooking =  await bookingModel.findOneAndUpdate({_id:bookingId},{$set:{cancelStatus:true}}).populate("vehicle_id")
+   const vehicle_id = cancelledBooking.vehicle_id._id
+   await vehicleModel.findOneAndUpdate({_id:vehicle_id},{$set:{bookedStatus:false}})
+    res.json({status:true,message:"Booking Cancelled!!",cancelledBooking})
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports.userLogout = async (req, res, next) => {
   try {
@@ -371,6 +432,6 @@ module.exports.userLogout = async (req, res, next) => {
     req.session.vehicleId = null;
     userDocument = null;
   } catch (error) {
-
+    console.log(error);
   }
 }

@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const maxAge = 3 * 24 * 60 * 60;
 const fs = require('fs')
+const BookingModel = require('../Models/BookingModel')
 
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRETE_KEY, {
@@ -69,7 +70,7 @@ module.exports.addcar = async (req, res, next) => {
             const newVehicle = new vehicleModel({
                 vehiclenumber: req.body.vehiclenumber,
                 modelname: req.body.modelname,
-                modelyear:req.body.modelyear,
+                modelyear: req.body.modelyear,
                 brand: req.body.brand,
                 fueltype: req.body.fueltype,
                 drivenKM: req.body.TotalKm,
@@ -78,7 +79,7 @@ module.exports.addcar = async (req, res, next) => {
                 rentfor10_20days: req.body.rent10to20days,
                 rentupto10days: req.body.rentupto10days,
                 categoryId: req.body.category,
-                hub:req.body.hub,
+                hub: req.body.hub,
                 image_url: imageURLs,
 
             })
@@ -93,7 +94,7 @@ module.exports.addcar = async (req, res, next) => {
 
 module.exports.listUsers = async (req, res, next) => {
     try {
-        const users = await userModel.find({})
+        const users = await userModel.find({}).sort({ _id: -1 });
         if (users) {
             res.json({ status: true, users })
         } else {
@@ -136,7 +137,7 @@ module.exports.addCategory = async (req, res, next) => {
 
 module.exports.ListCategories = async (req, res, next) => {
     try {
-        const categories = await categoryModel.find({})
+        const categories = await categoryModel.find({}).sort({ _id: -1 });
         if (categories) {
             res.json({ status: true, categories })
         } else {
@@ -201,8 +202,8 @@ module.exports.editCar = async (req, res, next) => {
                     rentfor10_20days: req.body.rent10to20days,
                     rentupto10days: req.body.rentupto10days,
                     categoryId: req.body.category,
-                    hub:req.body.hub,
-                    modelyear:req.body.modelyear
+                    hub: req.body.hub,
+                    modelyear: req.body.modelyear
                 }
             },
             { new: true }
@@ -314,7 +315,7 @@ module.exports.ViewHub = async (req, res, next) => {
 module.exports.EditHub = async (req, res, next) => {
     try {
         const hubId = req.params.id
-        const hub = await hubModel.findOne({_id:hubId})
+        const hub = await hubModel.findOne({ _id: hubId })
         await hubModel.findOneAndUpdate(
             { _id: hubId },
             {
@@ -339,58 +340,61 @@ module.exports.EditHub = async (req, res, next) => {
                     console.log('Image deleted successfully');
                 }
             });
-            
+
             await hubModel.findOneAndUpdate(
                 { _id: hubId },
                 { $set: { imageURL: modifiedImagePath } })
         }
-        res.json({status:true,message:"Hub edited successfully"})
+        res.json({ status: true, message: "Hub edited successfully" })
     } catch (error) {
         console.log(error);
     }
 }
 
-module.exports.listBookings = async(req,res,next)=>{
+module.exports.listBookings = async (req, res, next) => {
     try {
-        const bookings = await orderModel.find({}).populate("user_id").populate("vehicle_id").populate("Hub")
-        if(bookings){
-            res.json({status:true,bookings})
-        }else{
-            res.json({status:false,message:"Something went wrong"})
+        const bookings = await orderModel.find({}).populate("user_id").populate("vehicle_id").populate("Hub").sort({ _id: -1 });
+        if (bookings) {
+            res.json({ status: true, bookings })
+        } else {
+            res.json({ status: false, message: "Something went wrong" })
         }
     } catch (error) {
         console.log(error);
     }
 }
 
-module.exports.getOrderDetails = async(req,res,next) =>{
+module.exports.getOrderDetails = async (req, res, next) => {
     try {
         const orderId = req.params.id
-        const order = await orderModel.findOne({_id:orderId}).populate("user_id").populate("vehicle_id").populate("Hub")
-      
-        if(order){
-            res.json({status:true,order})
-        }else{
-            res.json({status:false,message:"Something went wrong"})
+        const order = await orderModel.findOne({ _id: orderId }).populate("user_id").populate("vehicle_id").populate("Hub")
+
+        if (order) {
+            res.json({ status: true, order })
+        } else {
+            res.json({ status: false, message: "Something went wrong" })
         }
     } catch (error) {
         console.log(error);
-        res.json({status:false,message:"Internal server Error"})
+        res.json({ status: false, message: "Internal server Error" })
     }
 }
-module.exports.changeOrderStatus = async(req,res,next)=>{
+module.exports.changeOrderStatus = async (req, res, next) => {
     try {
         const orderId = req.params.id
-
-        if(req.body.idx === 2){
+        const order = await BookingModel.findOne({_id:orderId})
+        const vehicle_id = order.vehicle_id._id
+   
+        if (req.body.idx === 2) {
             const idx = 2;
-            await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:"pickedup"}})
-            res.json({status:true,idx})
+            await orderModel.findOneAndUpdate({ _id: orderId }, { $set: { status: "pickedup" } })
+            res.json({ status: true, idx })
         }
-        if(req.body.idx === 3){
+        if (req.body.idx === 3) {
             const idx = 3;
-            await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:"dropedoff"}})
-            res.json({status:true,idx})
+            await orderModel.findOneAndUpdate({ _id: orderId }, { $set: { status: "dropedoff" } })
+            await vehicleModel.findOneAndUpdate({_id:vehicle_id},{$set:{bookedStatus:false}})
+            res.json({ status: true, idx })
         }
 
     } catch (error) {

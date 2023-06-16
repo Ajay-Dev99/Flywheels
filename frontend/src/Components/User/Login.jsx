@@ -8,6 +8,7 @@ import { login } from '../../Services/UserApi'
 import { toast } from 'react-toastify'
 import { setUserDetails } from '../../features/setUser'
 import { useDispatch } from 'react-redux'
+import Header from './userHeader'
 
 
 
@@ -29,9 +30,10 @@ function Login() {
       const { data } = await login(values)
       if (data) {
         if (data.errors) {
-          const { email, password } = data.errors;
+          const { email, password,block } = data.errors;
           if (email) generateError(email);
           else if (password) generateError(password);
+          else if(block) generateError(block)
         } else {
           localStorage.setItem("jwt", data.token)
           dispatch(setUserDetails(data.user))
@@ -57,6 +59,9 @@ function Login() {
 
   return (
     <div >
+      <div>
+        <Header/>
+      </div>
       <div className='flex flex-col justify-center items-center bg-[#358E88] h-screen '>
         <div className='border flex flex-col bg-white justify-center items-center p-5 rounded-lg'>
           <img src="/images/login.png" className=' w-60 xl:w-96  md:w-80 h-auto' alt="" />

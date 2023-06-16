@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
 function Payment() {
-    const user = useSelector((state)=>state.user.value)
+    const user = useSelector((state) => state.user.value)
     const Razorpay = useRazorpay();
     const navigate = useNavigate()
     const { id } = useParams()
@@ -41,15 +41,25 @@ function Payment() {
         const options = {
             key: process.env.REACT_APP_RAZORPAY_KEY,
             amount: data.amount,
-            name:`${vehicle.brand},${vehicle.modelname}`,
+            name: `${vehicle.brand},${vehicle.modelname}`,
             currency: data.currency,
             order_id: data.id,
             handler: async (response) => {
 
                 try {
                     const { data } = await verifyPayment(response, bookingData, vehicleId, amount)
-                    toast(data.message)
-                    navigate("/ordersuccess")
+                    const orderId = data.orderId
+                    toast.success('Order successfully placed', {
+                        autoClose: 3000, // Toast display duration in milliseconds
+                        position: toast.POSITION.TOP_LEFT, // Set the position to full width
+                        className: 'toast-message', // Custom CSS class for styling the toast
+                    });
+                    setBookingDetails(null)
+                    setVehicle(null)
+                    setTOtalAmount(null);
+                    setNumberOfDays(null);
+                    setHubDetails(null)
+                    navigate(`/ordersuccess/${orderId}`)
                 } catch (error) {
                     console.log(error);
                 }
@@ -79,7 +89,7 @@ function Payment() {
                 <a href="#" className="text-2xl font-bold text-gray-800">Flywheels</a>
 
             </div>
-            <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+            {bookingDetails && <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
                 <div className="px-4 pt-8">
                     <p className="text-xl font-medium">Order Summary</p>
                     <p className="text-gray-400">Check your items.</p>
@@ -174,7 +184,7 @@ function Payment() {
                     </div>}
                     <button onClick={handlePayment} className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
                 </div>
-            </div>
+            </div>}
 
         </div>
     )
