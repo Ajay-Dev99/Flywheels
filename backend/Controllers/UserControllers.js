@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const user = require('../Models/userModel')
 const jwt = require('jsonwebtoken')
 const maxAge = 3 * 24 * 60 * 60;
@@ -11,7 +12,6 @@ const hubModel = require('../Models/HubModel')
 const bookingModel = require('../Models/BookingModel')
 const razorPay = require('razorpay')
 const crypto = require('crypto');
-const { error } = require('console');
 let newUser;
 let userDocument;
 
@@ -339,7 +339,8 @@ module.exports.verify = async (req, res, next) => {
   const amount = (req.body.amount) / 100
   const vehicleId= req.body.vehicleid
 
-  const date = new Date()
+  
+   const date =  new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
   try {
     const {
       razorpay_order_id,
@@ -431,6 +432,30 @@ module.exports.userLogout = async (req, res, next) => {
     req.session.bookingDeatails = null;
     req.session.vehicleId = null;
     userDocument = null;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports.filterCars = async(req,res,next)=>{
+ 
+  try {
+    
+    let vehicles;
+    if(req.body.key === 'category'){
+      const categoryID =new mongoose.Types.ObjectId(req.body.value)
+      vehicles = await vehicleModel.find({categoryId:categoryID})
+    }else if(req.body.key === "Transmission"){
+      const type = req.body.value
+      vehicles = await vehicleModel.find({transmissiontype:type})    
+    }else if(req.body.key === 'fuel'){
+      const type = req.body.value
+      vehicles = await vehicleModel.find({fueltype:type})
+    }else if(req.body.key === 'hub'){
+      const value = new mongoose.Types.ObjectId(req.body.value)
+       vehicles = await vehicleModel.find({hub:value})
+    }
+    res.json({vehicles})
   } catch (error) {
     console.log(error);
   }

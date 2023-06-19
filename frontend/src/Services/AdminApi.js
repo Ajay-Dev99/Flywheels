@@ -74,3 +74,7 @@ export const OrderStatusChangeAPI = (value,id,btn)=>{
     console.log(id,"Value on api");
     return adminInstance.post(`/changeOrderStatus/${id}`,{idx:value,from:btn})
 }
+
+export const AdminDashboard = ()=>{
+    return adminInstance.get("/admindashboard")
+}

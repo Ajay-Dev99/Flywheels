@@ -1,4 +1,4 @@
-const { AdminLogin, adminHome, addcar, listUsers, addCategory, ListCategories, viewVehicleDetails, editCar, deleteVehicle, addHub, blockUser, getHubs, ViewHub, EditHub, listBookings, getOrderDetails, changeOrderStatus } = require("../Controllers/AdminControllers");
+const { AdminLogin, adminHome, addcar, listUsers, addCategory, ListCategories, viewVehicleDetails, editCar, deleteVehicle, addHub, blockUser, getHubs, ViewHub, EditHub, listBookings, getOrderDetails, changeOrderStatus, AdminDashBoard } = require("../Controllers/AdminControllers");
 const adminAuth = require("../Middlewares/adminAuth");
 const upload = require("../Middlewares/imageupload");
 const { uploadImage } = require("../Middlewares/multer");
@@ -24,5 +24,6 @@ router.post("/EditHub/:id",adminAuth,uploadImage("./public/images/HubImages"),Ed
 router.get("/getbookings",adminAuth,listBookings)
 router.get("/getorderdetails/:id",adminAuth,getOrderDetails)
 router.post("/changeOrderStatus/:id",adminAuth,changeOrderStatus)
+router.get("/admindashboard",adminAuth,AdminDashBoard)
 module.exports = router;
 

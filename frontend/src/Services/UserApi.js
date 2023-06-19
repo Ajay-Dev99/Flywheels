@@ -58,7 +58,6 @@ export const logoutAPI = ()=>{
 }
 
 export const orderApi = (amount)=>{
-    console.log(amount,"calledd");
     return userInstance.post("/orders",{...amount})
 }
 
@@ -81,4 +80,8 @@ export const bookingDetailsApi = ()=>{
 
 export const cancelOrder = (id)=>{
     return userInstance.post(`/cancelorder/${id}`)
+}
+
+export const filtercar = (key,value)=>{
+    return userInstance.post('/filtercar',{key,value})
 }

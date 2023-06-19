@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {register,verifyOtp, login,  Listvehicles, viewVehicle, bookACar, filterCar, getHubs, paymentPage, orders, verify, userLogout, getBookingDetails, userHeader, bookingPage, cancelOrder} = require("../Controllers/UserControllers")
+const {register,verifyOtp, login,  Listvehicles, viewVehicle, bookACar, filterCar, getHubs, paymentPage, orders, verify, userLogout, getBookingDetails, userHeader, bookingPage, cancelOrder, filterCars} = require("../Controllers/UserControllers")
 const userAuth = require("../Middlewares/userAuth")
 const { uploadImage } = require("../Middlewares/multer");
 
@@ -20,6 +20,7 @@ router.post("/orders",userAuth,orders)
 router.post("/verifypayment",userAuth,verify)
 router.get("/bookingdetails",userAuth,getBookingDetails)
 router.post("/cancelorder/:id",userAuth,cancelOrder)
+router.post("/filtercar",filterCars)
 
 
 module.exports = router;

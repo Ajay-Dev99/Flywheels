@@ -382,9 +382,9 @@ module.exports.getOrderDetails = async (req, res, next) => {
 module.exports.changeOrderStatus = async (req, res, next) => {
     try {
         const orderId = req.params.id
-        const order = await BookingModel.findOne({_id:orderId})
+        const order = await BookingModel.findOne({ _id: orderId })
         const vehicle_id = order.vehicle_id._id
-   
+
         if (req.body.idx === 2) {
             const idx = 2;
             await orderModel.findOneAndUpdate({ _id: orderId }, { $set: { status: "pickedup" } })
@@ -393,11 +393,46 @@ module.exports.changeOrderStatus = async (req, res, next) => {
         if (req.body.idx === 3) {
             const idx = 3;
             await orderModel.findOneAndUpdate({ _id: orderId }, { $set: { status: "dropedoff" } })
-            await vehicleModel.findOneAndUpdate({_id:vehicle_id},{$set:{bookedStatus:false}})
+            await vehicleModel.findOneAndUpdate({ _id: vehicle_id }, { $set: { bookedStatus: false } })
             res.json({ status: true, idx })
         }
 
     } catch (error) {
         console.log(error);
+    }
+}
+
+module.exports.AdminDashBoard = async (req, res, next) => {
+    try {
+        const bookingCountPerDay = await BookingModel.aggregate([
+            {
+                $addFields: {
+                    bookedAtDate: { $toDate: "$booked_At" },
+                },
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$bookedAtDate" } },
+                    count: { $sum: 1 },
+                },
+            },
+        ]);
+
+        // bookingCountPerDay.reverse()
+        bookingCountPerDay.sort((a, b) => new Date(a._id) - new Date(b._id));
+        const totalUser = await userModel.countDocuments({})
+        const totalVehicle = await vehicleModel.countDocuments({})
+        const totalOrders = await BookingModel.countDocuments({})
+        if (bookingCountPerDay) {
+            res.json({ status: true, bookingCountPerDay ,totalUser,totalVehicle,totalOrders})
+        } else {
+            res.json({ status: false, message: "Something went wrong" })
+        }
+
+
+    } catch (error) {
+        console.log(error);
+        res.json({ status: false, message: "Internal Server Error" })
+
     }
 }

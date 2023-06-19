@@ -1,59 +1,142 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from './userHeader'
+import { useSelector } from 'react-redux'
+import { FiEdit,FiSettings } from 'react-icons/fi'
 
 function UserProfile() {
+    const user = useSelector((state) => state.user.value)
+    const [edit, setEdit] = useState(false)
     return (
         <div>
             <div>
                 <Header />
             </div>
-            <div className='flex justify-between px-12 py-4 me-1'>
-                <div className='px-7 bg-[#358e88] py-2 w-full rounded-md text-center text-white'>
-                    Profile
-                </div>
-                <div className='bg-[#358e88] px-7 ms-1 py-2 rounded-md text-white w-full text-center'>
-                    Settings
-                </div>
+            <div className=' bg-[#577590] py-2 w-full mt-2 text-center text-white font-bold text-xl'>
+                Profile
             </div>
 
-            <div className='flex flex-col  md:px-96 px-7 '>
-                <div className=' py-2  px-7 bg-gray-100 border border-gray-300'>
-                    <div className='rounded my-3 flex justify-center items-center'><img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg" className='rounded-full w-40 h-40 ' alt="" /></div>
-                    {/* <div className='flex flex-col justify-center items-center mb-4'>
-                        <div className='my-2' ><input type="text" placeholder='Ajay Dev' className='w-60 placeholder-black text-center' /></div>
-                        <div className='my-2'><input type="text" placeholder='ajaydev@gmail.com' className='w-60 placeholder-black text-center' /></div>
-                    </div> */}
-                </div>
-                <div className='bg-gray-100 p-4 border border-gray-300'>
 
-                    <div className=" w-full">
-                        <div className="py-4 ">
-                            <label htmlFor="name" className="text-sm text-gray-600">
-                                Name
-                            </label>
-                            <input
-                                className="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
-                                type="text"
-                                value=""
-                                name="name"
-                            />
-                        </div>
-                        <hr className="border-gray-200" />
-                        <div className="py-8 ">
-                            <label htmlFor="email" className="text-sm text-gray-600">
-                                Email Address
-                            </label>
-                            <input
-                                className="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
-                                type="email"
-                                name="email"
-                                value=""
-                            />
-                        </div>
-                        <hr className="border-gray-200" />
-
+            <div className='flex justify-center items-center p-4 '>
+                {user && <div className="max-w-md p-10  mt-2 sm:flex sm:space-x-6 dark:bg-gray-900 dark:text-gray-100 border rounded-md">
+                    <div className="flex-shrink-0 w-full mb-6 h-44 sm:h-32 sm:w-32 sm:mb-0 ">
+                        <img src="/images/avatar-user.jpg" alt="" className="object-cover object-center w-full h-full rounded " />
                     </div>
-                </div>
+                    <div className="flex flex-col space-y-10">
+                        <div className='flex justify-between'>
+                            <h2 className="text-2xl font-semibold">{user.name}</h2>
+                            <div onClick={() => setEdit(!edit)}><FiEdit /></div>
+                        </div>
+                        <div className="space-y-1">
+                            <span className="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="Email address" className="w-4 h-4">
+                                    <path fill="currentColor" d="M274.6,25.623a32.006,32.006,0,0,0-37.2,0L16,183.766V496H496V183.766ZM464,402.693,339.97,322.96,464,226.492ZM256,51.662,454.429,193.4,311.434,304.615,256,268.979l-55.434,35.636L57.571,193.4ZM48,226.492,172.03,322.96,48,402.693ZM464,464H48V440.735L256,307.021,464,440.735Z"></path>
+                                </svg>
+                                <span className="dark:text-gray-400">{user.email}</span>
+                            </span>
+                            <span className="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="Phonenumber" className="w-4 h-4">
+                                    <path fill="currentColor" d="M449.366,89.648l-.685-.428L362.088,46.559,268.625,171.176l43,57.337a88.529,88.529,0,0,1-83.115,83.114l-57.336-43L46.558,362.088l42.306,85.869.356.725.429.684a25.085,25.085,0,0,0,21.393,11.857h22.344A327.836,327.836,0,0,0,461.222,133.386V111.041A25.084,25.084,0,0,0,449.366,89.648Zm-20.144,43.738c0,163.125-132.712,295.837-295.836,295.837h-18.08L87,371.76l84.18-63.135,46.867,35.149h5.333a120.535,120.535,0,0,0,120.4-120.4v-5.333l-35.149-46.866L371.759,87l57.463,28.311Z"></path>
+                                </svg>
+                                <span className="dark:text-gray-400">+91 {user.phone_number}</span>
+                            </span>
+                        </div>
+                        <div className='text-right text-blue-600 underline relative'>
+                        <span >ChangePassword</span>
+                        <div className='absolute top-1 left-24 right-0 bottom-0'><FiSettings/></div>
+                    </div>
+                    </div>
+                  
+                </div>}
+
+
+             
+
+
+                {edit && <div id="popup-modal" className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+
+                    <div className="relative w-full max-w-md max-h-full">
+                        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <button onClick={() => setEdit(!edit)} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="popup-modal">
+                                <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                </svg>
+                                <span className="sr-only">Close modal</span>
+                            </button>
+                            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <button onClick={() => setEdit(!edit)}
+                                type="button"
+                                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                data-modal-hide="authentication-modal"
+                            >
+                                <svg
+                                    aria-hidden="true"
+                                    className="w-5 h-5"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                                <span className="sr-only">Close modal</span>
+                            </button>
+                            <div className="px-6 py-6 lg:px-8">
+                                <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+                                    Edit Your Details
+                                </h3>
+                                <form className="space-y-6" action="#">
+                                    <div>
+                                        <label
+                                            htmlFor="password"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            placeholder=""
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                            required=""
+                                        />
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="email"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            Your email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                            placeholder=""
+                                            required=""
+                                        />
+                                    </div>
+
+                                    <div className="flex justify-between">
+
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    >
+                                        Edit
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>}
+
+
             </div>
         </div>
 
