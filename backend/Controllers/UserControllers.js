@@ -12,6 +12,9 @@ const hubModel = require('../Models/HubModel')
 const bookingModel = require('../Models/BookingModel')
 const razorPay = require('razorpay')
 const crypto = require('crypto');
+const userModel = require("../Models/userModel");
+const orderModel = require('../Models/BookingModel')
+
 let newUser;
 let userDocument;
 
@@ -458,5 +461,70 @@ module.exports.filterCars = async(req,res,next)=>{
     res.json({vehicles})
   } catch (error) {
     console.log(error);
+  }
+}
+
+module.exports.getDetails =async(req,res,next) =>{
+  try {
+   const user  = req.user
+   res.json ({status:true,user}) 
+  } catch (error) {
+    
+  }
+}
+
+module.exports.updateUserDetails = async(req,res,next)=>{
+  try {
+    const user = req.user
+    const {username,email} = req.body
+    const userfound = await userModel.findOne({_id:user._id})
+   const newUser =  await userModel.findOneAndUpdate({_id:user._id},{$set:{
+      name:username,
+      email:email
+    }},{ new: true })
+  res.json({status:true,message:"Updated",newUser})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports.changePassword = async (req,res,next)=>{
+
+  try {
+    const user = req.user
+    const {currentPassword,newPassword,confirmPassword} = req.body
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+   const customer = await userModel.findOne({_id:user._id})
+    if(passwordMatch){
+      if(newPassword === confirmPassword){
+        customer.password = newPassword
+       const updatedUser = customer.save()
+        const token =await createToken(updatedUser._id)
+        console.log(token,"token");
+        res.json({status:true,message:"Password changed successfully",token })
+      }else{
+        res.json({status:false,message: "New password and confirm password do not match"})
+      }
+    }else{
+      res.json({status:false,message:"Current password is incorrect"})
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports.getOrderDetails = async (req, res, next) => {
+  try {
+      const orderId = req.params.id
+      const order = await orderModel.findOne({ _id: orderId }).populate("user_id").populate("vehicle_id").populate("Hub")
+
+      if (order) {
+          res.json({ status: true, order })
+      } else {
+          res.json({ status: false, message: "Something went wrong" })
+      }
+  } catch (error) {
+      console.log(error);
+      res.json({ status: false, message: "Internal server Error" })
   }
 }

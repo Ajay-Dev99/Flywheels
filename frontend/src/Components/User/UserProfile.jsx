@@ -1,11 +1,115 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './userHeader'
-import { useSelector } from 'react-redux'
-import { FiEdit,FiSettings } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
+import { FiEdit, FiSettings } from 'react-icons/fi'
+import { changePasswordAPI, editUserDetails, userDetails } from '../../Services/UserApi'
+import { toast } from 'react-toastify'
+import { setUserDetails } from '../../features/setUser';
+import { useNavigate } from 'react-router-dom'
+
+
+
 
 function UserProfile() {
+    const navigate = useNavigate()
     const user = useSelector((state) => state.user.value)
+    const dispatch = useDispatch()
+
+    const [ChangePassword, setChangePassword] = useState(false)
+
+    const [passwords,setsPassword] = useState({
+        currentPassword:"",
+        newPassword:"",
+        confirmPassword:""
+    })
+    const [values, setValues] = useState({
+        username: "",
+        email: ""
+    })
     const [edit, setEdit] = useState(false)
+
+    useEffect(() => {
+        const token = localStorage.getItem("jwt")
+        if(!token){
+            navigate("/login")
+        }
+
+        userDetails().then((response) => {
+            console.log(response.data);
+            setValues({ username: response.data.user.name, email: response.data.user.email })
+        })
+    }, [])
+    const generateError = (err) => {
+        toast.error(err, {
+            position: "top-center"
+        })
+    }
+
+    const handleSubmission = (e) => {
+        e.preventDefault()
+        const errors = {};
+        if (!values.username) {
+            errors.username = 'Name is required';
+            generateError(errors.username);
+        } else if (/\s/.test(values.username)) {
+            errors.username = 'Name cannot contain white spaces';
+            generateError(errors.username)
+        } else if (/[^a-zA-Z0-9]/.test(values.username)) {
+            errors.username = 'Name cannot contain special characters';
+            generateError(errors.username)
+        } else if (values.username.length < 3) {
+            errors.username = 'Name must be at least 3 characters long';
+            generateError(errors.username)
+        }
+
+        if (!values.email) {
+            errors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+            errors.email = 'Email is invalid';
+            generateError(errors.email);
+
+        }
+
+        if (Object.keys(errors).length > 0) {
+
+            generateError(errors);
+        } else {
+            try {
+                console.log("else");
+                editUserDetails(values).then((response) => {
+                    console.log(response.data);
+                    if (response.data.status) {
+                        toast.success(response.data.message)
+                        setEdit(false)
+                        const updatedUser = response.data.newUser
+                        dispatch(setUserDetails(updatedUser))
+
+                    }
+                })
+
+                console.log(values);
+
+            } catch (error) {
+                generateError(error)
+            }
+        }
+    }
+
+ const passwordChange = (e)=>{
+    e.preventDefault()
+    changePasswordAPI(passwords).then((response)=>{
+        if(response.data.status){
+            toast.success(response.data.message)
+            setChangePassword(false)
+            setsPassword(null)
+            
+        }else{
+            toast.error(response.data.message)
+        }
+    })
+   console.log(passwords);
+ }
+
     return (
         <div>
             <div>
@@ -16,7 +120,7 @@ function UserProfile() {
             </div>
 
 
-            <div className='flex justify-center items-center p-4 '>
+            {<div className='flex justify-center items-center p-4 '>
                 {user && <div className="max-w-md p-10  mt-2 sm:flex sm:space-x-6 dark:bg-gray-900 dark:text-gray-100 border rounded-md">
                     <div className="flex-shrink-0 w-full mb-6 h-44 sm:h-32 sm:w-32 sm:mb-0 ">
                         <img src="/images/avatar-user.jpg" alt="" className="object-cover object-center w-full h-full rounded " />
@@ -40,16 +144,16 @@ function UserProfile() {
                                 <span className="dark:text-gray-400">+91 {user.phone_number}</span>
                             </span>
                         </div>
-                        <div className='text-right text-blue-600 underline relative'>
-                        <span >ChangePassword</span>
-                        <div className='absolute top-1 left-24 right-0 bottom-0'><FiSettings/></div>
+                        <div  onClick={()=>setChangePassword(true)} className='text-right text-blue-600 underline relative cursor-pointer'>
+                            <span >ChangePassword</span>
+                            <div className='absolute top-1 left-24 right-0 bottom-0'><FiSettings /></div>
+                        </div>
                     </div>
-                    </div>
-                  
+
                 </div>}
 
 
-             
+
 
 
                 {edit && <div id="popup-modal" className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
@@ -63,81 +167,185 @@ function UserProfile() {
                                 <span className="sr-only">Close modal</span>
                             </button>
                             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                            <button onClick={() => setEdit(!edit)}
-                                type="button"
-                                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                data-modal-hide="authentication-modal"
-                            >
-                                <svg
-                                    aria-hidden="true"
-                                    className="w-5 h-5"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
+                                <button onClick={() => setEdit(!edit)}
+                                    type="button"
+                                    className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                    data-modal-hide="authentication-modal"
                                 >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                                <span className="sr-only">Close modal</span>
-                            </button>
-                            <div className="px-6 py-6 lg:px-8">
-                                <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                                    Edit Your Details
-                                </h3>
-                                <form className="space-y-6" action="#">
-                                    <div>
-                                        <label
-                                            htmlFor="password"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            placeholder=""
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                            required=""
-                                        />
-                                    </div>
-                                    <div>
-                                        <label
-                                            htmlFor="email"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                            Your email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            id="email"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                            placeholder=""
-                                            required=""
-                                        />
-                                    </div>
-
-                                    <div className="flex justify-between">
-
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    <svg
+                                        aria-hidden="true"
+                                        className="w-5 h-5"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg"
                                     >
-                                        Edit
-                                    </button>
-                                </form>
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                    <span className="sr-only">Close modal</span>
+                                </button>
+                                <div className="px-6 py-6 lg:px-8">
+                                    <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+                                        Edit Your Details
+                                    </h3>
+                                    <form className="space-y-6" onSubmit={(e) => handleSubmission(e)} >
+                                        <div>
+                                            <label
+                                                htmlFor="password"
+                                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            >
+                                                Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="username"
+                                                placeholder=""
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+                                                value={values.username}
+                                            />
+
+                                        </div>
+                                        <div>
+                                            <label
+                                                htmlFor="email"
+                                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            >
+                                                Your email
+                                            </label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                id="email"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                placeholder=""
+                                                onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+                                                value={values.email}
+                                            />
+
+                                        </div>
+
+                                        <div className="flex justify-between">
+
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        >
+                                            Edit
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>}
 
 
-            </div>
+            {  ChangePassword &&  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+
+                    <div className="relative w-full max-w-md max-h-full">
+                        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                       
+                            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <button onClick={() => setChangePassword(!ChangePassword)}
+                                    type="button"
+                                    className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                    data-modal-hide="authentication-modal"
+                                >
+                                    <svg
+                                        aria-hidden="true"
+                                        className="w-5 h-5"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                    <span className="sr-only">Close modal</span>
+                                </button>
+                                <div className="px-6 py-6 lg:px-8">
+                                    <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+                                      Change Password
+                                    </h3>
+                                    <form className="space-y-6" onSubmit={(e)=>passwordChange(e)} >
+                                        <div>
+                                            <label
+                                                htmlFor="password"
+                                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            >
+                                                Current Password
+                                            </label>
+                                            <input
+                                                type="password"
+                                                name="currentPassword"
+                                                placeholder=""
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                onChange={(e) => setsPassword({ ...passwords, [e.target.name]: e.target.value })}
+                                                value={passwords ? passwords.currentPassword:null}
+                                            />
+
+                                        </div>
+                                        <div>
+                                            <label
+                                                htmlFor="email"
+                                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            >
+                                              New Password
+                                            </label>
+                                            <input
+                                                type="password"
+                                                name="newPassword"
+                                                id="email"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                placeholder=""
+                                                onChange={(e) => setsPassword({ ...passwords, [e.target.name]: e.target.value })}
+                                                value={passwords && passwords.newPassword}
+                                            />
+
+                                        </div>
+                                        <div>
+                                            <label
+                                                htmlFor="email"
+                                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            >
+                                              Confirm Password
+                                            </label>
+                                            <input
+                                                type="password"
+                                                name="confirmPassword"
+                                                id="email"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                placeholder=""
+                                                onChange={(e) => setsPassword({ ...passwords, [e.target.name]: e.target.value })}
+                                                value={passwords&& passwords.confirmPassword}
+                                            />
+
+                                        </div>
+
+                                        <div className="flex justify-between">
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        >
+                                            Edit
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+
+            </div>}
         </div>
 
 

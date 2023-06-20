@@ -4,7 +4,7 @@ import { HublistingAPI, filtercar, listVehicle } from '../../Services/UserApi'
 import { useNavigate } from 'react-router-dom'
 import { adminGetCategoryList } from '../../Services/AdminApi'
 import { toast } from 'react-toastify'
-import {BiFilterAlt,BiSortDown} from 'react-icons/bi'
+import {BiSortDown} from 'react-icons/bi'
 
 function Viewvehicles() {
   const navigate = useNavigate()
@@ -46,7 +46,6 @@ function Viewvehicles() {
   const getCategory = async () => {
     try {
       adminGetCategoryList().then((response) => {
-        console.log(response.data);
         setCategories(response.data.categories)
       })
     } catch (error) {
@@ -56,7 +55,6 @@ function Viewvehicles() {
   const getHubs = async()=>{
     try {
       HublistingAPI().then((response)=>{
-        console.log(response.data);
         setHubs(response.data.hubs)
       })
     } catch (error) {
@@ -65,9 +63,7 @@ function Viewvehicles() {
   }
 
   const filterCars = (key, value) => {
-    console.log("called in function", key, value);
     filtercar(key, value).then((response)=>{
-      console.log(response.data.vehicles);
       setvehicles(response.data.vehicles)
       setTotalPages(false)
       setFilter(false)
@@ -86,21 +82,23 @@ function Viewvehicles() {
       </div>
 
 
-      <div className="flex flex-col md:flex-row justify-center items-center">
+      <div className="flex flex-col md:flex-row">
  
-        <div className="flex-grow px-5 md:px-20 lg:px-40 mt-5">
+        <div className="flex-grow px-5 mt-5">
           <div> <input type="text"
-            className="w-full p-2 rounded-md outline-none"
+            className="w-full p-2   rounded-md outline-none"
             placeholder="search..."
             value={key}
             onChange={(e) => setKey(e.target.value)}
           /></div>
         </div>
 
-        <div className='relative px-5 mt-5 me-8'>
-          <button onClick={() => setFilter(!filter)} className=" bg-[#C0C0C0] focus:ring-4 focus:outline-black  font-medium rounded-lg  px-7 py-2.5 text-center inline-flex items-center text-gray-700 text-lg" type="button"> Filter Cars <BiSortDown className="w-4 h-4 ml-2 mt-1 font-bold text-gray-700" /></button>
 
-          {filter && <div className="z-50 bg-white divide-y divide-gray-100 py-5  rounded-lg shadow w-44 absolute top-full left-0 mt-1 transform translate-x-0 md:translate-x-0  md:w-full md:mt-0 md:z-0">
+      </div>
+        <div className='relative px-5 mt-5  flex justify-end'>
+          <button onClick={() => setFilter(!filter)} className=" bg-[#C0C0C0] focus:ring-4 focus:outline-black  font-medium rounded-lg  px-7 py-1.5 text-center inline-flex items-center text-gray-700 text-md" type="button"> Filter  <BiSortDown className="w-4 h-4 ml-2 mt-1 font-bold text-gray-700" /></button>
+
+          {filter && <div className="z-50 bg-white divide-y divide-gray-100 py-5 px-6  rounded-lg shadow w-44 absolute top-full right-5 mt-1 transform translate-x-0 md:translate-x-0  md:w-auto md:mt-0 md:z-0">
             <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 space-y-2" aria-labelledby="dropdownDefaultButton">
 
               <li>
@@ -143,8 +141,6 @@ function Viewvehicles() {
             </ul>
           </div>}
         </div>
-
-      </div>
 
 
       {vehicles && vehicles.length > 0 ? <div className='p-5 flex flex-wrap justify-center'>

@@ -10,10 +10,8 @@ function OrderSuccessful() {
     const { id } = useParams()
     const [order, setOrder] = useState(false)
     useEffect(() => {
-        console.log(id, "iddd");
         try {
             getOrderDetailsAPI(id).then((response) => {
-                console.log(response.data);
                 setOrder(response.data.order)
             })
         } catch (error) {

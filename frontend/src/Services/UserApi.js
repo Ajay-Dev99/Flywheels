@@ -85,3 +85,17 @@ export const cancelOrder = (id)=>{
 export const filtercar = (key,value)=>{
     return userInstance.post('/filtercar',{key,value})
 }
+export const userDetails = ()=>{
+    return userInstance.get('/getuserDetails')
+}
+
+export const editUserDetails = (values)=>{
+    return userInstance.post('/edituserDetails',values)
+}
+
+export const changePasswordAPI = (values)=>{
+    return userInstance.post('/changepassword',values)
+}
+export const getOrderDetailsAPI = (orderId)=>{
+    return userInstance.get(`/getorderdetails/${orderId}`)
+}

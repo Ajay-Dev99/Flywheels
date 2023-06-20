@@ -51,8 +51,8 @@ function Payment() {
                     const orderId = data.orderId
                     toast.success('Order successfully placed', {
                         autoClose: 3000, // Toast display duration in milliseconds
-                        position: toast.POSITION.TOP_LEFT, // Set the position to full width
-                        className: 'toast-message', // Custom CSS class for styling the toast
+                        position: toast.POSITION.TOP_CENTER, // Set the position to full width
+                       
                     });
                     setBookingDetails(null)
                     setVehicle(null)
