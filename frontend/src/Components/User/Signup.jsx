@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"
 import { Link, useNavigate } from "react-router-dom"
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import {userSignup} from '../../Services/UserApi'
+import { userSignup } from '../../Services/UserApi'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,19 +22,19 @@ function Signup() {
         password: "",
         confirmPassword: ""
     }
-    const onSubmit = async(values) => {
+    const onSubmit = async (values) => {
         try {
-            const {data} = await userSignup(values)
-            if(data.status){
+            const { data } = await userSignup(values)
+            if (data.status) {
                 navigate('/otp')
-            }else{
-                toast.error(data.message,{
-                    position:'top-center'
+            } else {
+                toast.error(data.message, {
+                    position: 'top-center'
                 })
             }
         } catch (error) {
-            toast.error(error.message,{
-                position:'top-center'
+            toast.error(error.message, {
+                position: 'top-center'
             })
         }
     }
@@ -109,7 +109,7 @@ function Signup() {
             </div>
         </div>
 
-        
+
     )
 }
 

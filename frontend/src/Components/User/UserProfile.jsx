@@ -8,8 +8,6 @@ import { setUserDetails } from '../../features/setUser';
 import { useNavigate } from 'react-router-dom'
 
 
-
-
 function UserProfile() {
     const navigate = useNavigate()
     const user = useSelector((state) => state.user.value)
@@ -17,10 +15,10 @@ function UserProfile() {
 
     const [ChangePassword, setChangePassword] = useState(false)
 
-    const [passwords,setsPassword] = useState({
-        currentPassword:"",
-        newPassword:"",
-        confirmPassword:""
+    const [passwords, setsPassword] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
     })
     const [values, setValues] = useState({
         username: "",
@@ -30,12 +28,11 @@ function UserProfile() {
 
     useEffect(() => {
         const token = localStorage.getItem("jwt")
-        if(!token){
+        if (!token) {
             navigate("/login")
         }
 
         userDetails().then((response) => {
-            console.log(response.data);
             setValues({ username: response.data.user.name, email: response.data.user.email })
         })
     }, [])
@@ -75,9 +72,7 @@ function UserProfile() {
             generateError(errors);
         } else {
             try {
-                console.log("else");
                 editUserDetails(values).then((response) => {
-                    console.log(response.data);
                     if (response.data.status) {
                         toast.success(response.data.message)
                         setEdit(false)
@@ -87,28 +82,25 @@ function UserProfile() {
                     }
                 })
 
-                console.log(values);
-
             } catch (error) {
                 generateError(error)
             }
         }
     }
 
- const passwordChange = (e)=>{
-    e.preventDefault()
-    changePasswordAPI(passwords).then((response)=>{
-        if(response.data.status){
-            toast.success(response.data.message)
-            setChangePassword(false)
-            setsPassword(null)
-            
-        }else{
-            toast.error(response.data.message)
-        }
-    })
-   console.log(passwords);
- }
+    const passwordChange = (e) => {
+        e.preventDefault()
+        changePasswordAPI(passwords).then((response) => {
+            if (response.data.status) {
+                toast.success(response.data.message)
+                setChangePassword(false)
+                setsPassword(null)
+
+            } else {
+                toast.error(response.data.message)
+            }
+        })
+    }
 
     return (
         <div>
@@ -118,7 +110,6 @@ function UserProfile() {
             <div className=' bg-[#577590] py-2 w-full mt-2 text-center text-white font-bold text-xl'>
                 Profile
             </div>
-
 
             {<div className='flex justify-center items-center p-4 '>
                 {user && <div className="max-w-md p-10  mt-2 sm:flex sm:space-x-6 dark:bg-gray-900 dark:text-gray-100 border rounded-md">
@@ -144,17 +135,13 @@ function UserProfile() {
                                 <span className="dark:text-gray-400">+91 {user.phone_number}</span>
                             </span>
                         </div>
-                        <div  onClick={()=>setChangePassword(true)} className='text-right text-blue-600 underline relative cursor-pointer'>
+                        <div onClick={() => setChangePassword(true)} className='text-right text-blue-600 underline relative cursor-pointer'>
                             <span >ChangePassword</span>
                             <div className='absolute top-1 left-24 right-0 bottom-0'><FiSettings /></div>
                         </div>
                     </div>
 
                 </div>}
-
-
-
-
 
                 {edit && <div id="popup-modal" className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
 
@@ -245,11 +232,11 @@ function UserProfile() {
                 </div>}
 
 
-            {  ChangePassword &&  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                {ChangePassword && <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
 
                     <div className="relative w-full max-w-md max-h-full">
                         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                       
+
                             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <button onClick={() => setChangePassword(!ChangePassword)}
                                     type="button"
@@ -273,9 +260,9 @@ function UserProfile() {
                                 </button>
                                 <div className="px-6 py-6 lg:px-8">
                                     <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                                      Change Password
+                                        Change Password
                                     </h3>
-                                    <form className="space-y-6" onSubmit={(e)=>passwordChange(e)} >
+                                    <form className="space-y-6" onSubmit={(e) => passwordChange(e)} >
                                         <div>
                                             <label
                                                 htmlFor="password"
@@ -289,7 +276,7 @@ function UserProfile() {
                                                 placeholder=""
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                                 onChange={(e) => setsPassword({ ...passwords, [e.target.name]: e.target.value })}
-                                                value={passwords ? passwords.currentPassword:null}
+                                                value={passwords ? passwords.currentPassword : null}
                                             />
 
                                         </div>
@@ -298,7 +285,7 @@ function UserProfile() {
                                                 htmlFor="email"
                                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                             >
-                                              New Password
+                                                New Password
                                             </label>
                                             <input
                                                 type="password"
@@ -316,7 +303,7 @@ function UserProfile() {
                                                 htmlFor="email"
                                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                             >
-                                              Confirm Password
+                                                Confirm Password
                                             </label>
                                             <input
                                                 type="password"
@@ -325,7 +312,7 @@ function UserProfile() {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                                 placeholder=""
                                                 onChange={(e) => setsPassword({ ...passwords, [e.target.name]: e.target.value })}
-                                                value={passwords&& passwords.confirmPassword}
+                                                value={passwords && passwords.confirmPassword}
                                             />
 
                                         </div>

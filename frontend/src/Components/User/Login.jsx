@@ -30,10 +30,10 @@ function Login() {
       const { data } = await login(values)
       if (data) {
         if (data.errors) {
-          const { email, password,block } = data.errors;
+          const { email, password, block } = data.errors;
           if (email) generateError(email);
           else if (password) generateError(password);
-          else if(block) generateError(block)
+          else if (block) generateError(block)
         } else {
           localStorage.setItem("jwt", data.token)
           dispatch(setUserDetails(data.user))
@@ -60,7 +60,7 @@ function Login() {
   return (
     <div >
       <div>
-        <Header/>
+        <Header />
       </div>
       <div className='flex flex-col justify-center items-center bg-[#358E88] h-screen '>
         <div className='border flex flex-col bg-white justify-center items-center p-5 rounded-lg'>

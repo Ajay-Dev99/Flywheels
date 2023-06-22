@@ -1,39 +1,39 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const userSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
     },
-    phone_number:{
-        type:Number,
-        required:true,
-        index:{unique:true}
+    phone_number: {
+        type: Number,
+        required: true,
+        index: { unique: true }
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
-    verified:{
-        type:Boolean,
-        default:false
+    verified: {
+        type: Boolean,
+        default: false
     },
-    blockStatus:{
-        type:Boolean,
-        default:false
+    blockStatus: {
+        type: Boolean,
+        default: false
     }
 })
 
-userSchema.pre('save',async function (next){
+userSchema.pre('save', async function (next) {
     const user = this;
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
-    const salt=await bcrypt.genSalt()
-    this.password = await bcrypt.hash(this.password,salt)
+    const salt = await bcrypt.genSalt()
+    this.password = await bcrypt.hash(this.password, salt)
     next()
 })
-module.exports = new mongoose.model("user",userSchema)
+module.exports = new mongoose.model("user", userSchema)

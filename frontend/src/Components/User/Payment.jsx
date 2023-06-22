@@ -52,7 +52,7 @@ function Payment() {
                     toast.success('Order successfully placed', {
                         autoClose: 3000, // Toast display duration in milliseconds
                         position: toast.POSITION.TOP_CENTER, // Set the position to full width
-                       
+
                     });
                     setBookingDetails(null)
                     setVehicle(null)

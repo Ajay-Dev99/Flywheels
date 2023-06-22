@@ -3,9 +3,9 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 import AdminSidebar from './AdminSidebar'
-import { adminEditCar, adminGetCategoryList, adminviewVehicleDetails,adminHubListingApi } from '../../Services/AdminApi'
+import { adminEditCar, adminGetCategoryList, adminviewVehicleDetails, adminHubListingApi } from '../../Services/AdminApi'
 import { useNavigate, useParams } from 'react-router-dom'
-import {FaArrowCircleLeft} from 'react-icons/fa'
+import { FaArrowCircleLeft } from 'react-icons/fa'
 
 function AdminEditVehicle() {
     const navigate = useNavigate()
@@ -13,8 +13,8 @@ function AdminEditVehicle() {
     const [vehicleImage, setVehicleImage] = useState()
     const [imagePreviews, setImagePreviews] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
-    const [vehicleActiveStatus,setVehicleActiveStatus] = useState(false)
-    const [hubs,setHubs] = useState()
+    const [vehicleActiveStatus, setVehicleActiveStatus] = useState(false)
+    const [hubs, setHubs] = useState()
 
     const initialValues = {
         modelname: "",
@@ -27,14 +27,13 @@ function AdminEditVehicle() {
         rentupto10days: "",
         vehiclenumber: "",
         category: "",
-        modelyear:"",
-        hub:""
+        modelyear: "",
+        hub: ""
     }
     const { id } = useParams()
     useEffect(() => {
 
         adminviewVehicleDetails(id).then((response) => {
-            console.log(response.data,"Data");
             if (response.data.status) {
                 const car = response.data.vehicle
                 formik.setValues({
@@ -48,11 +47,11 @@ function AdminEditVehicle() {
                     rentupto10days: car.rentupto10days,
                     vehiclenumber: car.vehiclenumber,
                     category: car.categoryId._id,
-                    modelyear:car.modelyear,
-                    hub:car.hub._id
+                    modelyear: car.modelyear,
+                    hub: car.hub._id
                 })
                 setVehicleImage(car.image_url)
-                if(car.activeStatus){
+                if (car.activeStatus) {
                     setVehicleActiveStatus(true)
                 }
             }
@@ -69,8 +68,8 @@ function AdminEditVehicle() {
                 })
             }
         })
-        adminHubListingApi().then((response)=>{
-            if(response.data.status){
+        adminHubListingApi().then((response) => {
+            if (response.data.status) {
                 setHubs(response.data.hubs)
             }
         })
@@ -79,15 +78,15 @@ function AdminEditVehicle() {
 
     const handleImagePreview = (event, index) => {
         const file = event.target.files[0];
-      
+
         const previews = [...imagePreviews];
         previews[index] = URL.createObjectURL(file);
         setImagePreviews(previews);
-      
+
         const selected = [...selectedImages];
         selected[index] = file;
         setSelectedImages(selected);
-      };
+    };
 
     const validationSchema = Yup.object().shape({
         modelname: Yup.string().required(),
@@ -119,25 +118,25 @@ function AdminEditVehicle() {
         const formData = new FormData()
         Object.keys(values).forEach((key) => {
             formData.append(key, values[key]);
-          });
-        
-          selectedImages.forEach((image, index) => {
-            
-            formData.append('image', image,`image${index}.jpg`);
-          });
-        
-          adminEditCar(formData,id).then((response)=>{
-                if(response.data.status){
-                    toast(response.data.message)
-                    navigate("/admin/viewcars")
-                }else{
-                    toast.error(response.data.message,{
-                        position:'top-center'
-                    })
-                }
-          })
+        });
 
-        
+        selectedImages.forEach((image, index) => {
+
+            formData.append('image', image, `image${index}.jpg`);
+        });
+
+        adminEditCar(formData, id).then((response) => {
+            if (response.data.status) {
+                toast(response.data.message)
+                navigate("/admin/viewcars")
+            } else {
+                toast.error(response.data.message, {
+                    position: 'top-center'
+                })
+            }
+        })
+
+
     }
 
     const formik = useFormik({
@@ -151,7 +150,7 @@ function AdminEditVehicle() {
         <div>
             <AdminSidebar />
             <div className='p-4 sm:ml-64 flex flex-col'>
-                <div className='flex justify-between px-5'><div className='font-bold'>EDIT CAR</div><div onClick={()=> navigate("/admin/viewcars")} className='font-bold cursor-pointer'><FaArrowCircleLeft/></div></div>
+                <div className='flex justify-between px-5'><div className='font-bold'>EDIT CAR</div><div onClick={() => navigate("/admin/viewcars")} className='font-bold cursor-pointer'><FaArrowCircleLeft /></div></div>
                 {initialValues && <div className='border border-[#c0bebc] rounded-md shadow-md mt-3 p-4'>
                     <form action="" onSubmit={formik.handleSubmit} method="post" >
                         <div className="grid md:grid-cols-2 md:gap-6">
@@ -230,7 +229,7 @@ function AdminEditVehicle() {
                         <div className="mb-6">
                             <label htmlFor="">Category</label>
                             {categories &&
-                                <select onChange={formik.handleChange}  onBlur={formik.handleBlur}  value={formik.values.category}  name='category' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.category}`} required>
+                                <select onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.category} name='category' id="category" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.category}`} required>
 
                                     {categories.map((category) => (
 
@@ -245,7 +244,7 @@ function AdminEditVehicle() {
                         <div className="mb-6">
                             <label htmlFor="">Available On</label>
                             {hubs &&
-                                <select onChange={formik.handleChange}  onBlur={formik.handleBlur}  value={formik.values.hub}  name='hub' id="" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.hub}`} required>
+                                <select onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.hub} name='hub' id="" className="block py-2 px-1 w-full text-sm text-gray-900 bg-transparent border" placeholder={`${formik.values.hub}`} required>
 
                                     {hubs.map((hub) => (
                                         <option key={hub._id} value={hub._id}>{hub.district}</option>
@@ -264,14 +263,14 @@ function AdminEditVehicle() {
                                     <div className='border border-black my-1'>
                                         {imagePreviews[index] ? <img src={imagePreviews[index]} alt="" className='max-h-60 w-full object-contain' /> : <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} alt="" className='max-h-60 w-full object-contain' />}
                                     </div>
-                                  { vehicleActiveStatus && <input type="file" name={`image[${index}]`} className="block my-1 px-0 w-full text-sm text-gray-900 bg-transparent border border-black" onChange={(event) => handleImagePreview(event, index)}  /> }
-                            
+                                    {vehicleActiveStatus && <input type="file" name={`image[${index}]`} className="block my-1 px-0 w-full text-sm text-gray-900 bg-transparent border border-black" onChange={(event) => handleImagePreview(event, index)} />}
+
                                 </div>))
                             }
 
                         </div>
                         }
-                      {  vehicleActiveStatus && <div className='flex justify-end'>
+                        {vehicleActiveStatus && <div className='flex justify-end'>
                             <button type='submit' className='bg-[#368E88] text-white p-2 rounded-md'>Submit</button>
                         </div>}
                     </form>

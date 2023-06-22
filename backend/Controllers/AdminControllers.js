@@ -417,18 +417,16 @@ module.exports.AdminDashBoard = async (req, res, next) => {
                 },
             },
         ]);
-
-        // bookingCountPerDay.reverse()
         bookingCountPerDay.sort((a, b) => new Date(a._id) - new Date(b._id));
         const totalUser = await userModel.countDocuments({})
         const totalVehicle = await vehicleModel.countDocuments({})
         const totalOrders = await BookingModel.countDocuments({})
         if (bookingCountPerDay) {
-            const cancelledCount = await BookingModel.find({cancelStatus:true}).countDocuments()
-            const pickedupCount = await BookingModel.find({status:"pickedup"}).countDocuments()
-            const dropedoffCount = await BookingModel.find({status:"dropedoff"}).countDocuments()
-            const count = [cancelledCount,pickedupCount,dropedoffCount]
-            res.json({ status: true, bookingCountPerDay ,totalUser,totalVehicle,totalOrders,count})
+            const cancelledCount = await BookingModel.find({ cancelStatus: true }).countDocuments()
+            const pickedupCount = await BookingModel.find({ status: "pickedup" }).countDocuments()
+            const dropedoffCount = await BookingModel.find({ status: "dropedoff" }).countDocuments()
+            const count = [cancelledCount, pickedupCount, dropedoffCount]
+            res.json({ status: true, bookingCountPerDay, totalUser, totalVehicle, totalOrders, count })
         } else {
             res.json({ status: false, message: "Something went wrong" })
         }

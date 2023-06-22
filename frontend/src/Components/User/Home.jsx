@@ -6,25 +6,14 @@ import Transmissionfilter from './Transmissionfilter'
 import Userfooter from './Userfooter'
 
 function UserHome() {
-  // useEffect(()=>{
-  //   Home().then((response)=>{
-     
-  //       if(response.data.loginfail){
-  //         localStorage.removeItem("jwt")
-  //       }
-  //     }).catch((error)=>{
-  //       toast(error.message)
-  //     })
-  // },[])
-
-
+ 
   return (
     <div>
-      <Header/>
-     <Banner/>
-     <Aboutus/>
-     <Transmissionfilter/>
-     <Userfooter/>
+      <Header />
+      <Banner />
+      <Aboutus />
+      <Transmissionfilter />
+      <Userfooter />
     </div>
   )
 }

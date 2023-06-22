@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
 import { useNavigate } from 'react-router-dom'
 import { adminHubListingApi } from '../../Services/AdminApi'
-import {BiBlock} from "react-icons/bi"
+import { BiBlock } from "react-icons/bi"
 
 function Hubs() {
   const navigate = useNavigate()
@@ -77,11 +77,11 @@ function Hubs() {
                       <td className="px-6 py-4">
                         {hub.pincode}
                       </td>
-                      <td onClick={()=>{navigate(`/admin/editandviewhub/${hub._id}`)}} className="px-6 py-4 cursor-pointer text-blue-600 font-medium">
+                      <td onClick={() => { navigate(`/admin/editandviewhub/${hub._id}`) }} className="px-6 py-4 cursor-pointer text-blue-600 font-medium">
                         View&Edit
                       </td>
                       <td className="px-6 py-4 text-center text-red-600 font-xl text-xl">
-                        <BiBlock/>
+                        <BiBlock />
                       </td>
                     </tr>
                   )

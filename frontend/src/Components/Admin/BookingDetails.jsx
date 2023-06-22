@@ -303,46 +303,43 @@ function BookingDetails() {
 
 
 
-{ order.cancelStatus ? <div className="flex justify-center items-center text-red-700 font-bold text-xl bg-red-200 absolute top-3  w-full h-9 left-0 right-0 bottom-0 ">Booking Cancelled</div>:<div>
-        {currentStep &&
-          <div className='flex justify-center flex-col items-center '>
-            <div className="flex justify-between">
-              {steps?.map((step, i) => (
-                <div
-                  key={i}
-                  className={`step-item ${currentStep === i + 1 && "active"} ${(i + 1 < currentStep || complete) && "complete"
-                    } `}
-                >
-                  <div className="step" onClick={() => {
-                  }}>
-                    {i + 1 < currentStep || complete ? <TiTick size={24} /> : i + 1}
-                  </div>
-                  <p className="text-gray-500">{step}</p>
-                </div>
-              ))}
-            </div>
-            <div className='flex '>
-              <div className='m-5'>
-                {!complete && (
-                  <button
-                    className="py-1 px-5 w-32 rounded-md  bg-[#368e88] text-white"
-                    onClick={() => {
-                      console.log(currentStep, "currentStep");
-                      console.log(steps.length, "ttt");
-                      currentStep === steps.length ? setComplete(true) : setCurrentStep((prev) => prev + 1);
-                      OrderStatusChangeAPI(currentStep, id, "next").then((response) => {
-                        console.log(response.data);
-                        if (response.data.status) {
-                          setCurrentStep(response.data.idx + 1)
-                        }
-                      })
-                    }}
+        {order.cancelStatus ? <div className="flex justify-center items-center text-red-700 font-bold text-xl bg-red-200 absolute top-3  w-full h-9 left-0 right-0 bottom-0 ">Booking Cancelled</div> : <div>
+          {currentStep &&
+            <div className='flex justify-center flex-col items-center '>
+              <div className="flex justify-between">
+                {steps?.map((step, i) => (
+                  <div
+                    key={i}
+                    className={`step-item ${currentStep === i + 1 && "active"} ${(i + 1 < currentStep || complete) && "complete"
+                      } `}
                   >
-                    {currentStep === steps.length ? "Finish" : "Next"}
-                  </button>
-                )}
+                    <div className="step" onClick={() => {
+                    }}>
+                      {i + 1 < currentStep || complete ? <TiTick size={24} /> : i + 1}
+                    </div>
+                    <p className="text-gray-500">{step}</p>
+                  </div>
+                ))}
               </div>
-              {/* <div className='m-5'>
+              <div className='flex '>
+                <div className='m-5'>
+                  {!complete && (
+                    <button
+                      className="py-1 px-5 w-32 rounded-md  bg-[#368e88] text-white"
+                      onClick={() => {
+                        currentStep === steps.length ? setComplete(true) : setCurrentStep((prev) => prev + 1);
+                        OrderStatusChangeAPI(currentStep, id, "next").then((response) => {
+                          if (response.data.status) {
+                            setCurrentStep(response.data.idx + 1)
+                          }
+                        })
+                      }}
+                    >
+                      {currentStep === steps.length ? "Finish" : "Next"}
+                    </button>
+                  )}
+                </div>
+                {/* <div className='m-5'>
             { currentStep > 2 && (
               <button
                 className="py-1 px-5 rounded-md w-32  bg-[#368e88] text-white"
@@ -357,10 +354,10 @@ function BookingDetails() {
               </button>
             )}
           </div> */}
-            </div>
-          </div>}
+              </div>
+            </div>}
 
-          </div>}
+        </div>}
 
 
       </div>

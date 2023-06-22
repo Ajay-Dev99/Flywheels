@@ -7,7 +7,7 @@ import { editHub, getHubDetails } from '../../Services/AdminApi'
 import { toast } from 'react-toastify'
 
 function AdminViewandEditHub() {
-    const [previewImage,setPreviewImage] = useState()
+    const [previewImage, setPreviewImage] = useState()
     const navigate = useNavigate()
 
     const { id } = useParams()
@@ -45,8 +45,8 @@ function AdminViewandEditHub() {
     }
 
     const onSubmit = (values) => {
-        editHub(values,id).then((response)=>{
-            if(response.data.status){
+        editHub(values, id).then((response) => {
+            if (response.data.status) {
                 toast.success(response.data.message)
                 navigate("/admin/hubs")
             }
@@ -157,9 +157,9 @@ function AdminViewandEditHub() {
                             />
                             {formik.touched.pincode && formik.errors.pincode ? <p className="text-sm text-red-600">{formik.errors.pincode}</p> : null}
                         </div>
-                       { previewImage ? <div >
-                        <img src={previewImage} className='max-h-60 w-full object-left object-contain'/>
-                       </div>: <div>
+                        {previewImage ? <div >
+                            <img src={previewImage} className='max-h-60 w-full object-left object-contain' />
+                        </div> : <div>
                             <img src={`${process.env.REACT_APP_BASE_URL}/${formik.values.image}`} alt="" className='max-h-60 w-full object-left object-contain' />
                         </div>}
                         <div className='mb-6'>

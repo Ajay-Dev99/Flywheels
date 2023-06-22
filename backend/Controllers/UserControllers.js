@@ -128,7 +128,7 @@ module.exports.login = async (req, res, next) => {
   }
 }
 
-module.exports.userHeader= (req, res, next) => {
+module.exports.userHeader = (req, res, next) => {
   const userdetails = req.user
   res.json({ status: true, user: userdetails })
 }
@@ -217,7 +217,7 @@ module.exports.getHubs = async (req, res, next) => {
 module.exports.bookingPage = async (req, res, next) => {
   try {
     const vehicleId = req.params.id
-    const vehicle = await vehicleModel.findById( vehicleId ).populate("hub")
+    const vehicle = await vehicleModel.findById(vehicleId).populate("hub")
 
     if (vehicle) {
       res.json({ status: true, vehicle })
@@ -256,13 +256,13 @@ module.exports.bookACar = async (req, res, next) => {
     }
     if (fromDate <= currentDate) {
       return res.json({ status: false, message: "Please select a future date for the start of the booking" });
-    }else if(dayFromCurrent>3){
-      return res.json({status:false,message:"You can only book the car before 3 days"})
-    }  else if (toDate <= currentDate || toDate < fromDate) {
+    } else if (dayFromCurrent > 3) {
+      return res.json({ status: false, message: "You can only book the car before 3 days" })
+    } else if (toDate <= currentDate || toDate < fromDate) {
       return res.json({ status: false, message: "Please select a future date for the end of the booking" });
     } else if (fromDate.getTime() === toDate.getTime()) {
       return res.json({ status: false, message: "The booking should be for at least one day" });
-    
+
     }
     else {
       req.session.bookingDetails = req.body;
@@ -340,10 +340,10 @@ module.exports.orders = async (req, res, next) => {
 
 module.exports.verify = async (req, res, next) => {
   const amount = (req.body.amount) / 100
-  const vehicleId= req.body.vehicleid
+  const vehicleId = req.body.vehicleid
 
-  
-   const date =  new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
+  const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
   try {
     const {
       razorpay_order_id,
@@ -383,10 +383,10 @@ module.exports.verify = async (req, res, next) => {
         amount: req.body.amount,
         userDocumentImageURL: userDocumentImagePath
       })
-      
+
       const order = await newOrder.save()
       const orderId = order._id
-      await vehicleModel.findOneAndUpdate({_id:vehicleId},{$set:{bookedStatus:true}})
+      await vehicleModel.findOneAndUpdate({ _id: vehicleId }, { $set: { bookedStatus: true } })
       req.session.bookingDeatails = null;
       req.session.vehicleId = null;
       userDocument = null;
@@ -418,13 +418,13 @@ module.exports.getBookingDetails = async (req, res, next) => {
 }
 
 
-module.exports.cancelOrder = async(req,res,next)=>{
+module.exports.cancelOrder = async (req, res, next) => {
   try {
     const bookingId = req.params.id
-   const cancelledBooking =  await bookingModel.findOneAndUpdate({_id:bookingId},{$set:{cancelStatus:true}}).populate("vehicle_id")
-   const vehicle_id = cancelledBooking.vehicle_id._id
-   await vehicleModel.findOneAndUpdate({_id:vehicle_id},{$set:{bookedStatus:false}})
-    res.json({status:true,message:"Booking Cancelled!!",cancelledBooking})
+    const cancelledBooking = await bookingModel.findOneAndUpdate({ _id: bookingId }, { $set: { cancelStatus: true } }).populate("vehicle_id")
+    const vehicle_id = cancelledBooking.vehicle_id._id
+    await vehicleModel.findOneAndUpdate({ _id: vehicle_id }, { $set: { bookedStatus: false } })
+    res.json({ status: true, message: "Booking Cancelled!!", cancelledBooking })
   } catch (error) {
     console.log(error);
   }
@@ -440,73 +440,74 @@ module.exports.userLogout = async (req, res, next) => {
   }
 }
 
-module.exports.filterCars = async(req,res,next)=>{
- 
+module.exports.filterCars = async (req, res, next) => {
+
   try {
-    
+
     let vehicles;
-    if(req.body.key === 'category'){
-      const categoryID =new mongoose.Types.ObjectId(req.body.value)
-      vehicles = await vehicleModel.find({categoryId:categoryID})
-    }else if(req.body.key === "Transmission"){
+    if (req.body.key === 'category') {
+      const categoryID = new mongoose.Types.ObjectId(req.body.value)
+      vehicles = await vehicleModel.find({ categoryId: categoryID })
+    } else if (req.body.key === "Transmission") {
       const type = req.body.value
-      vehicles = await vehicleModel.find({transmissiontype:type})    
-    }else if(req.body.key === 'fuel'){
+      vehicles = await vehicleModel.find({ transmissiontype: type })
+    } else if (req.body.key === 'fuel') {
       const type = req.body.value
-      vehicles = await vehicleModel.find({fueltype:type})
-    }else if(req.body.key === 'hub'){
+      vehicles = await vehicleModel.find({ fueltype: type })
+    } else if (req.body.key === 'hub') {
       const value = new mongoose.Types.ObjectId(req.body.value)
-       vehicles = await vehicleModel.find({hub:value})
+      vehicles = await vehicleModel.find({ hub: value })
     }
-    res.json({vehicles})
+    res.json({ vehicles })
   } catch (error) {
     console.log(error);
   }
 }
 
-module.exports.getDetails =async(req,res,next) =>{
+module.exports.getDetails = async (req, res, next) => {
   try {
-   const user  = req.user
-   res.json ({status:true,user}) 
+    const user = req.user
+    res.json({ status: true, user })
   } catch (error) {
-    
+
   }
 }
 
-module.exports.updateUserDetails = async(req,res,next)=>{
+module.exports.updateUserDetails = async (req, res, next) => {
   try {
     const user = req.user
-    const {username,email} = req.body
-    const userfound = await userModel.findOne({_id:user._id})
-   const newUser =  await userModel.findOneAndUpdate({_id:user._id},{$set:{
-      name:username,
-      email:email
-    }},{ new: true })
-  res.json({status:true,message:"Updated",newUser})
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-module.exports.changePassword = async (req,res,next)=>{
-
-  try {
-    const user = req.user
-    const {currentPassword,newPassword,confirmPassword} = req.body
-    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
-   const customer = await userModel.findOne({_id:user._id})
-    if(passwordMatch){
-      if(newPassword === confirmPassword){
-        customer.password = newPassword
-       const updatedUser = customer.save()
-        const token =await createToken(updatedUser._id)
-        console.log(token,"token");
-        res.json({status:true,message:"Password changed successfully",token })
-      }else{
-        res.json({status:false,message: "New password and confirm password do not match"})
+    const { username, email } = req.body
+    const userfound = await userModel.findOne({ _id: user._id })
+    const newUser = await userModel.findOneAndUpdate({ _id: user._id }, {
+      $set: {
+        name: username,
+        email: email
       }
-    }else{
-      res.json({status:false,message:"Current password is incorrect"})
+    }, { new: true })
+    res.json({ status: true, message: "Updated", newUser })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports.changePassword = async (req, res, next) => {
+
+  try {
+    const user = req.user
+    const { currentPassword, newPassword, confirmPassword } = req.body
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+    const customer = await userModel.findOne({ _id: user._id })
+    if (passwordMatch) {
+      if (newPassword === confirmPassword) {
+        customer.password = newPassword
+        const updatedUser = customer.save()
+        const token = await createToken(updatedUser._id)
+        res.json({ status: true, message: "Password changed successfully", token })
+      } else {
+        res.json({ status: false, message: "New password and confirm password do not match" })
+      }
+    } else {
+      res.json({ status: false, message: "Current password is incorrect" })
     }
   } catch (error) {
     console.log(error);
@@ -515,16 +516,16 @@ module.exports.changePassword = async (req,res,next)=>{
 
 module.exports.getOrderDetails = async (req, res, next) => {
   try {
-      const orderId = req.params.id
-      const order = await orderModel.findOne({ _id: orderId }).populate("user_id").populate("vehicle_id").populate("Hub")
+    const orderId = req.params.id
+    const order = await orderModel.findOne({ _id: orderId }).populate("user_id").populate("vehicle_id").populate("Hub")
 
-      if (order) {
-          res.json({ status: true, order })
-      } else {
-          res.json({ status: false, message: "Something went wrong" })
-      }
+    if (order) {
+      res.json({ status: true, order })
+    } else {
+      res.json({ status: false, message: "Something went wrong" })
+    }
   } catch (error) {
-      console.log(error);
-      res.json({ status: false, message: "Internal server Error" })
+    console.log(error);
+    res.json({ status: false, message: "Internal server Error" })
   }
 }

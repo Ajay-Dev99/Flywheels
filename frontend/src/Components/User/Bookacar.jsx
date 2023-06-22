@@ -23,7 +23,6 @@ function Bookacar() {
 
     useEffect(() => {
         bookingPage(id).then((response) => {
-            console.log(response.data);
             if (response.data.status) {
                 setHub(response.data.vehicle.hub.district)
                 formik.setValues({
@@ -253,73 +252,73 @@ function Bookacar() {
                                         </div>
                                     </div>
 
-                                ):    <div className='px-7 border border-gray-200 mt-3 rounded-md'>
-                                <div className="mb-6">
-                                    <h1 className='font-bold my-5 text-center'>DELIVERY ADDRESS</h1>
-                                    <label
-                                        htmlFor="address"
-                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                    >
-                                        ADDRESS
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name='address'
-                                        onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.address}
-                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                        required=""
-                                    />
-                                    {formik.touched.address && formik.errors.address ? <p className="text-sm text-red-600">{formik.errors.address}</p> : null}
-                                </div>
-                                <div className="mb-6">
-                                    <label
-                                        htmlFor="district"
-                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                    >
-                                        DISTRICT
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name='district'
-                                        onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.district}
-                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                        required=""
-                                    />
-                                    {formik.touched.district && formik.errors.district ? <p className="text-sm text-red-600">{formik.errors.district}</p> : null}
-                                </div>
-                                <div className="mb-6">
-                                    <label
-                                        htmlFor="hometown"
-                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                    >
-                                        HOME TOWN
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name='hometown'
-                                        onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.hometown}
-                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                        required=""
-                                    />
-                                    {formik.touched.hometown && formik.errors.hometown ? <p className="text-sm text-red-600">{formik.errors.hometown}</p> : null}
-                                </div>
-                                <div className="mb-6">
-                                    <label
-                                        htmlFor="pincode"
-                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                    >
-                                        PINCODE
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name='pincode'
-                                        onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.pincode}
-                                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                                        required=""
-                                    />
-                                    {formik.touched.pincode && formik.errors.pincode ? <p className="text-sm text-red-600">{formik.errors.pincode}</p> : null}
-                                </div>
-                            </div>}
+                                ) : <div className='px-7 border border-gray-200 mt-3 rounded-md'>
+                                    <div className="mb-6">
+                                        <h1 className='font-bold my-5 text-center'>DELIVERY ADDRESS</h1>
+                                        <label
+                                            htmlFor="address"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            ADDRESS
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name='address'
+                                            onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.address}
+                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                            required=""
+                                        />
+                                        {formik.touched.address && formik.errors.address ? <p className="text-sm text-red-600">{formik.errors.address}</p> : null}
+                                    </div>
+                                    <div className="mb-6">
+                                        <label
+                                            htmlFor="district"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            DISTRICT
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name='district'
+                                            onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.district}
+                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                            required=""
+                                        />
+                                        {formik.touched.district && formik.errors.district ? <p className="text-sm text-red-600">{formik.errors.district}</p> : null}
+                                    </div>
+                                    <div className="mb-6">
+                                        <label
+                                            htmlFor="hometown"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            HOME TOWN
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name='hometown'
+                                            onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.hometown}
+                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                            required=""
+                                        />
+                                        {formik.touched.hometown && formik.errors.hometown ? <p className="text-sm text-red-600">{formik.errors.hometown}</p> : null}
+                                    </div>
+                                    <div className="mb-6">
+                                        <label
+                                            htmlFor="pincode"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            PINCODE
+                                        </label>
+                                        <input
+                                            type="number"
+                                            name='pincode'
+                                            onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.pincode}
+                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                                            required=""
+                                        />
+                                        {formik.touched.pincode && formik.errors.pincode ? <p className="text-sm text-red-600">{formik.errors.pincode}</p> : null}
+                                    </div>
+                                </div>}
                                 <div className="mb-6">
                                     <label
                                         htmlFor="fromDate"

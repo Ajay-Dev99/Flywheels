@@ -2,26 +2,26 @@ const jwt = require('jsonwebtoken')
 
 const userModel = require('../Models/userModel')
 
-module.exports = async(req,res,next)=>{
+module.exports = async (req, res, next) => {
     try {
-        const authHeader =req.headers.authorization
-       
+        const authHeader = req.headers.authorization
+
         const authToken = authHeader && authHeader.split(" ")[1];
         // if there is no tocken
-        // if(!authToken) return res.json({ loginfail: true, status: false, message: "no auth token" });
+        if(!authToken) return res.json({ loginfail: true, status: false, message: "no auth token" });
 
         //decording the token
-        const decoded = jwt.verify(authToken,process.env.JWT_SECRETE_KEY)
+        const decoded = jwt.verify(authToken, process.env.JWT_SECRETE_KEY)
         //checking whether the user is exist or not
-        const user = await userModel.findOne({_id:decoded.id})
-        if(!user) return res.json({loginfail:true,status:false,message:"User not Found"})
-        if(user.blockStatus){
-            return res.json({Blocked:true,status:false,message:"Currently, your account is suspended"})
+        const user = await userModel.findOne({ _id: decoded.id })
+        if (!user) return res.json({ loginfail: true, status: false, message: "User not Found" })
+        if (user.blockStatus) {
+            return res.json({ Blocked: true, status: false, message: "Currently, your account is suspended" })
         }
         req.user = user
-        
+
         next()
-    } catch (error) { 
-        return res.json({loginfail:true,status:false,message:"Please Login"})
+    } catch (error) {
+        return res.json({ loginfail: true, status: false, message: "Please Login" })
     }
 }

@@ -34,10 +34,10 @@ function OurHubs() {
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">We are delighted to inform you that we are located in {hub.district} and offer door delivery services across the entire district. Whether you're in <span className="font-bold text-yellow-400">{hub.district}</span> city or any other area within the district, you can enjoy the convenience of having your items delivered directly to your doorstep.
 
 
-               <div className='text-white text-center bg-[#f94144] my-4 p-2'>
-               {hub.hubName},{hub.buildingName
-                  },{hub.street},{hub.district},{hub.pincode}
-               </div>
+                  <div className='text-white text-center bg-[#f94144] my-4 p-2'>
+                    {hub.hubName},{hub.buildingName
+                    },{hub.street},{hub.district},{hub.pincode}
+                  </div>
                 </p>
               </div>
             </div>
@@ -47,7 +47,7 @@ function OurHubs() {
         </div>}
 
       </div>
-      <Userfooter/>
+      <Userfooter />
     </div>
   )
 }

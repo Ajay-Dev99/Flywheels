@@ -4,7 +4,7 @@ import { HublistingAPI, filtercar, listVehicle } from '../../Services/UserApi'
 import { useNavigate } from 'react-router-dom'
 import { adminGetCategoryList } from '../../Services/AdminApi'
 import { toast } from 'react-toastify'
-import {BiSortDown} from 'react-icons/bi'
+import { BiSortDown } from 'react-icons/bi'
 
 function Viewvehicles() {
   const navigate = useNavigate()
@@ -13,10 +13,10 @@ function Viewvehicles() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState(false)
-  const [transmissionType,setTransmissionType] = useState([])
-  const [fueltype,setFuelType] = useState([])
+  const [transmissionType, setTransmissionType] = useState([])
+  const [fueltype, setFuelType] = useState([])
   const [categories, setCategories] = useState(false)
-  const [hubs,setHubs] = useState(false)
+  const [hubs, setHubs] = useState(false)
   const limit = 3;
   function viewCar(vehicleId) {
     navigate(`/singlepage/${vehicleId}`)
@@ -52,18 +52,18 @@ function Viewvehicles() {
       toast(error.message)
     }
   }
-  const getHubs = async()=>{
+  const getHubs = async () => {
     try {
-      HublistingAPI().then((response)=>{
+      HublistingAPI().then((response) => {
         setHubs(response.data.hubs)
       })
     } catch (error) {
-      
+
     }
   }
 
   const filterCars = (key, value) => {
-    filtercar(key, value).then((response)=>{
+    filtercar(key, value).then((response) => {
       setvehicles(response.data.vehicles)
       setTotalPages(false)
       setFilter(false)
@@ -83,7 +83,7 @@ function Viewvehicles() {
 
 
       <div className="flex flex-col md:flex-row">
- 
+
         <div className="flex-grow px-5 mt-5">
           <div> <input type="text"
             className="w-full p-2   rounded-md outline-none"
@@ -95,52 +95,52 @@ function Viewvehicles() {
 
 
       </div>
-        <div className='relative px-5 mt-5  flex justify-end'>
-          <button onClick={() => setFilter(!filter)} className=" bg-[#C0C0C0] focus:ring-4 focus:outline-black  font-medium rounded-lg  px-7 py-1.5 text-center inline-flex items-center text-gray-700 text-md" type="button"> Filter  <BiSortDown className="w-4 h-4 ml-2 mt-1 font-bold text-gray-700" /></button>
+      <div className='relative px-5 mt-5  flex justify-end'>
+        <button onClick={() => setFilter(!filter)} className=" bg-[#C0C0C0] focus:ring-4 focus:outline-black  font-medium rounded-lg  px-7 py-1.5 text-center inline-flex items-center text-gray-700 text-md" type="button"> Filter  <BiSortDown className="w-4 h-4 ml-2 mt-1 font-bold text-gray-700" /></button>
 
-          {filter && <div className="z-50 bg-white divide-y divide-gray-100 py-5 px-6  rounded-lg shadow w-44 absolute top-full right-5 mt-1 transform translate-x-0 md:translate-x-0  md:w-auto md:mt-0 md:z-0">
-            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 space-y-2" aria-labelledby="dropdownDefaultButton">
+        {filter && <div className="z-50 bg-white divide-y divide-gray-100 py-5 px-6  rounded-lg shadow w-44 absolute top-full right-5 mt-1 transform translate-x-0 md:translate-x-0  md:w-auto md:mt-0 md:z-0">
+          <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 space-y-2" aria-labelledby="dropdownDefaultButton">
 
-              <li>
-                <button onClick={getCategory} className="w-full text-left py-2  bg-gray-50 text-black pl-2"> Category</button>
-                {categories && categories.map((category, index) => (
-                  <li key={index}>
-                    <span onClick={() => filterCars("category", category._id)} className="block px-4 py-2 hover:bg-gray-100 text-center">{category.categoryName}</span>
-                  </li>
+            <li>
+              <button onClick={getCategory} className="w-full text-left py-2  bg-gray-50 text-black pl-2"> Category</button>
+              {categories && categories.map((category, index) => (
+                <li key={index}>
+                  <span onClick={() => filterCars("category", category._id)} className="block px-4 py-2 hover:bg-gray-100 text-center">{category.categoryName}</span>
+                </li>
 
-                ))}
-              </li>
-              <li>
-                <button onClick={()=>setTransmissionType(["automatic","manual"])} className="w-full text-left py-2  bg-gray-50 text-black pl-2  "> Transmission Type</button>
-                {transmissionType && transmissionType.map((x, index) => (
-                  <li key={index}>
-                    <span onClick={() => filterCars("Transmission",x)} className="block px-4 py-2 hover:bg-gray-100 text-center">{x}</span>
-                  </li>
+              ))}
+            </li>
+            <li>
+              <button onClick={() => setTransmissionType(["automatic", "manual"])} className="w-full text-left py-2  bg-gray-50 text-black pl-2  "> Transmission Type</button>
+              {transmissionType && transmissionType.map((x, index) => (
+                <li key={index}>
+                  <span onClick={() => filterCars("Transmission", x)} className="block px-4 py-2 hover:bg-gray-100 text-center">{x}</span>
+                </li>
 
-                ))}
-              </li>
-              <li>
-                <button onClick={()=>setFuelType(["petrol","Diesel"])} className="w-full text-left py-2  bg-gray-50 text-black pl-2  "> Fuel Type</button>
-                {fueltype && fueltype.map((x, index) => (
-                  <li key={index}>
-                    <span onClick={() => filterCars("fuel",x)} className="block px-4 py-2 hover:bg-gray-100 text-center">{x}</span>
-                  </li>
+              ))}
+            </li>
+            <li>
+              <button onClick={() => setFuelType(["petrol", "Diesel"])} className="w-full text-left py-2  bg-gray-50 text-black pl-2  "> Fuel Type</button>
+              {fueltype && fueltype.map((x, index) => (
+                <li key={index}>
+                  <span onClick={() => filterCars("fuel", x)} className="block px-4 py-2 hover:bg-gray-100 text-center">{x}</span>
+                </li>
 
-                ))}
-              </li>
-              <li>
-                <button onClick={getHubs} className="w-full text-left py-2  bg-gray-50 text-black pl-2 focus-ring-4  "> Hubs</button>
-                {hubs && hubs.map((hub, index) => (
-                  <li key={index}>
-                    <span onClick={() => filterCars("hub", hub._id)} className="block px-4 py-2 hover:bg-gray-100 text-center">{hub.district}</span>
-                  </li>
+              ))}
+            </li>
+            <li>
+              <button onClick={getHubs} className="w-full text-left py-2  bg-gray-50 text-black pl-2 focus-ring-4  "> Hubs</button>
+              {hubs && hubs.map((hub, index) => (
+                <li key={index}>
+                  <span onClick={() => filterCars("hub", hub._id)} className="block px-4 py-2 hover:bg-gray-100 text-center">{hub.district}</span>
+                </li>
 
-                ))}
-              </li>
+              ))}
+            </li>
 
-            </ul>
-          </div>}
-        </div>
+          </ul>
+        </div>}
+      </div>
 
 
       {vehicles && vehicles.length > 0 ? <div className='p-5 flex flex-wrap justify-center'>

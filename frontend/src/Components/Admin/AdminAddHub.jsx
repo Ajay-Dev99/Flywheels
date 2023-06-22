@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 function AdminAddHub() {
 
-const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const initialValues = {
     hubname: "",
@@ -19,8 +19,8 @@ const navigate = useNavigate()
 
   }
   const onSubmit = async (values) => {
-    adminAddHubapi(values,).then((response)=>{
-      if(response.data.status){
+    adminAddHubapi(values,).then((response) => {
+      if (response.data.status) {
         toast.success(response.data.message)
         navigate("/admin/hubs")
       }
@@ -136,7 +136,7 @@ const navigate = useNavigate()
               <input type="file" name="image" onChange={(e) => {
                 const file = e.currentTarget.files[0];
                 formik.setFieldValue('image', file)
-              }} onBlur={formik.handleBlur}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+              }} onBlur={formik.handleBlur} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
             </div>
 
             <div className='flex justify-end'>

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 function AdminAddCar() {
     const [categories, setCategories] = useState()
-    const [hubs,setHubs] = useState()
+    const [hubs, setHubs] = useState()
     const [images, setImages] = useState()
     const navigate = useNavigate()
 
@@ -25,8 +25,8 @@ function AdminAddCar() {
                 }
             })
 
-            adminHubListingApi().then((response)=>{
-                if(response.data.status){
+            adminHubListingApi().then((response) => {
+                if (response.data.status) {
                     setHubs(response.data.hubs)
                 }
             })
@@ -47,8 +47,8 @@ function AdminAddCar() {
         rentupto10days: "",
         vehiclenumber: "",
         category: "",
-        modelyear:"",
-        hub:""
+        modelyear: "",
+        hub: ""
 
     }
     const onSubmit = async (values) => {
@@ -99,11 +99,11 @@ function AdminAddCar() {
             .strict(true)
             .trim('Name must not contain white space')
             .test('no-whitespace', 'Name must not contain white space', (value) => !/\s/.test(value)),
-            modelyear:  Yup.number()
+        modelyear: Yup.number()
             .typeError('Please enter a valid number')
             .required('This field is required'),
         category: Yup.string().required(),
-        hub:Yup.string().required()
+        hub: Yup.string().required()
     })
 
     const formik = useFormik({

@@ -18,7 +18,7 @@ const vehicleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  modelyear:{
+  modelyear: {
     type: String,
     required: true,
   },
@@ -59,14 +59,14 @@ const vehicleSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  hub:{
+  hub: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "hub",
     required: true,
   },
-  bookedStatus:{
-    type:Boolean,
-    default:false
+  bookedStatus: {
+    type: Boolean,
+    default: false
   }
 });
 

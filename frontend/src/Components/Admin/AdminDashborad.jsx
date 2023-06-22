@@ -90,7 +90,6 @@ function AdminDashborad() {
                 noofBookings.push(booking.count))
 
             })
-            console.log(label, noofBookings);
 
             setLabels(label)
             setCount(noofBookings)

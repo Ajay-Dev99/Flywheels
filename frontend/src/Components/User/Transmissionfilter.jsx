@@ -3,61 +3,61 @@ import { Transmissionfilterapi } from '../../Services/UserApi';
 import { useNavigate } from 'react-router-dom';
 
 function Transmissionfilter() {
-    const [vehicles,setVehicle] = useState("")
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const limit = 3;
-    const navigate = useNavigate()
+  const [vehicles, setVehicle] = useState("")
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 3;
+  const navigate = useNavigate()
 
-    useEffect(()=>{
-        getVehicle("automatic",currentPage, limit)
-        return (
-            setVehicle(null)
-          )
-    },[currentPage])
+  useEffect(() => {
+    getVehicle("automatic", currentPage, limit)
+    return (
+      setVehicle(null)
+    )
+  }, [currentPage])
 
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber < 1 || pageNumber > totalPages) {
-          return; // Invalid page number, do nothing
-        }
-    
-        setCurrentPage(pageNumber);
-      };
-
-    function viewCar(vehicleId) {
-        navigate(`/singlepage/${vehicleId}`)
-      }
-
-    const getVehicle = (key) =>{
-        
-        Transmissionfilterapi(key,currentPage,limit).then((response)=>{
-            if(response.data.status){
-                setVehicle(response.data.vehicles)
-                setTotalPages(response.data.totalPage)
-            }
-        })
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) {
+      return; // Invalid page number, do nothing
     }
+
+    setCurrentPage(pageNumber);
+  };
+
+  function viewCar(vehicleId) {
+    navigate(`/singlepage/${vehicleId}`)
+  }
+
+  const getVehicle = (key) => {
+
+    Transmissionfilterapi(key, currentPage, limit).then((response) => {
+      if (response.data.status) {
+        setVehicle(response.data.vehicles)
+        setTotalPages(response.data.totalPage)
+      }
+    })
+  }
   return (
     <div className='my-5 '>
-        <div className='flex justify-center flex-col mb-3'>
-       <div className='flex justify-center'> <p className='text-md'>What Kind of Car You Want</p></div>
+      <div className='flex justify-center flex-col mb-3'>
+        <div className='flex justify-center'> <p className='text-md'>What Kind of Car You Want</p></div>
         <div className='flex justify-center'><p className='text-2xl'>Great Rental Offers for You</p></div>
+      </div>
+      <div className='flex justify-center'>
+        <div className='flex-grow mx-3 md:ps-32'>
+          <button className='w-full bg-[#358E88] text-white md:px-10 py-2 px-2.5 focus:bg-[#A7A95A]' onClick={() => getVehicle("automatic")}>
+            AUTOMATIC
+          </button>
         </div>
-        <div className='flex justify-center'>
-  <div className='flex-grow mx-3 md:ps-32'>
-    <button className='w-full bg-[#358E88] text-white md:px-10 py-2 px-2.5 focus:bg-[#A7A95A]' onClick={() => getVehicle("automatic")}>
-      AUTOMATIC
-    </button>
-  </div>
-  <div className='flex-grow mx-3 md:pe-32'>
-    <button
-    
-    className='w-full bg-[#358E88] text-white md:px-12 py-2 px-3.5 focus:bg-[#A7A95A]' onClick={() => getVehicle("manual")}>
-      MANUAL
-    </button>
-  </div>
-</div>
-        {vehicles && vehicles.length > 0 && <div className='p-5 flex flex-wrap justify-center'>
+        <div className='flex-grow mx-3 md:pe-32'>
+          <button
+
+            className='w-full bg-[#358E88] text-white md:px-12 py-2 px-3.5 focus:bg-[#A7A95A]' onClick={() => getVehicle("manual")}>
+            MANUAL
+          </button>
+        </div>
+      </div>
+      {vehicles && vehicles.length > 0 && <div className='p-5 flex flex-wrap justify-center'>
         {vehicles.map((vehicle) => (
 
 
@@ -109,38 +109,38 @@ function Transmissionfilter() {
             </div>
           </div>
         ))}
-      </div> }
+      </div>}
 
-      { totalPages && totalPages >1 &&
+      {totalPages && totalPages > 1 &&
         <div className="flex justify-center mb-10 overflow-x-auto">
-        <button
-          className="border border-black mx-4 px-4 font-bold"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
           <button
-            className={`border border-black mx-1 md:mx-4 md:px-4 px-1 font-bold ${pageNumber === currentPage ? 'bg-gray-500 text-white' : ''}`}
-            key={pageNumber}
-            onClick={() => handlePageChange(pageNumber)}
+            className="border border-black mx-4 px-4 font-bold"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
           >
-            {pageNumber}
+            Previous
           </button>
-        ))}
 
-        <button
-          className="border border-black mx-4 px-4 font-bold"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+            <button
+              className={`border border-black mx-1 md:mx-4 md:px-4 px-1 font-bold ${pageNumber === currentPage ? 'bg-gray-500 text-white' : ''}`}
+              key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          ))}
+
+          <button
+            className="border border-black mx-4 px-4 font-bold"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       }
-      
+
     </div>
   )
 }
