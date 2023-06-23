@@ -111,7 +111,7 @@ function Transmissionfilter() {
         ))}
       </div>}
 
-      {totalPages && totalPages > 1 &&
+      {/* {totalPages && totalPages > 1 &&
         <div className="flex justify-center mb-10 overflow-x-auto">
           <button
             className="border border-black mx-4 px-4 font-bold"
@@ -139,7 +139,7 @@ function Transmissionfilter() {
             Next
           </button>
         </div>
-      }
+      } */}
 
     </div>
   )
