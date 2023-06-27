@@ -7,12 +7,13 @@ const cookieParser = require("cookie-parser")
 const userRoutes = require("../backend/Routes/UserRoutes")
 const AdminRoutes = require("../backend/Routes/AdminRoutes")
 const path = require('path');
+const morgan = require('morgan')
 const session = require('express-session');
 
 
-app.listen(process.env.PORT, () => {
-    console.log("Server Started on PORT ", process.env.PORT);
-});
+
+
+
 
 mongoose.connect("mongodb://0.0.0.0:27017/flywheels", {
     useNewUrlParser: true,
@@ -30,6 +31,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use(morgan('dev'))
 
 app.use(cors({
     origin: process.env.SERVER_URL,
@@ -37,6 +39,7 @@ app.use(cors({
     credentials: true
 }));
 
+// app.use(cors())
 
 
 
@@ -65,3 +68,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //     }
 //   });
+
+
+app.listen(process.env.PORT, () => {
+    console.log("Server Started on PORT ", process.env.PORT);
+});
