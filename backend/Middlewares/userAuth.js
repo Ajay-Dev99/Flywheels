@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
 
         const authToken = authHeader && authHeader.split(" ")[1];
         // if there is no tocken
-        if(!authToken) return res.json({ loginfail: true, status: false, message: "no auth token" });
+        if (!authToken) return res.json({ loginfail: true, status: false, message: "no auth token" });
 
         //decording the token
         const decoded = jwt.verify(authToken, process.env.JWT_SECRETE_KEY)

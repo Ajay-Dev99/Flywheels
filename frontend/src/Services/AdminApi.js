@@ -73,3 +73,8 @@ export const OrderStatusChangeAPI = (value, id, btn) => {
 export const AdminDashboard = () => {
     return adminInstance.get("/admindashboard")
 }
+
+
+export const OrderFilterAPI = (key) => {
+    return adminInstance.post("/filterorders", { key: key })
+}

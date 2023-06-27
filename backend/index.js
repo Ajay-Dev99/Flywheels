@@ -10,16 +10,16 @@ const path = require('path');
 const session = require('express-session');
 
 
-app.listen(process.env.PORT,()=>{
-    console.log("Server Started on PORT ",process.env.PORT);
+app.listen(process.env.PORT, () => {
+    console.log("Server Started on PORT ", process.env.PORT);
 });
 
-mongoose.connect("mongodb://0.0.0.0:27017/flywheels",{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-}).then(()=>{
+mongoose.connect("mongodb://0.0.0.0:27017/flywheels", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
     console.log("DB connection successfull");
-}).catch((err)=>{
+}).catch((err) => {
     console.log(err.message);
 })
 
@@ -28,13 +28,13 @@ app.use(session({
     secret: process.env.SESSION_SECRET_KEY, // Add a secret key for session encryption
     resave: false,
     saveUninitialized: true
-  }));
-  
+}));
+
 
 app.use(cors({
-    origin:process.env.SERVER_URL,
-    methods:["GET","POST"],
-    credentials:true
+    origin: process.env.SERVER_URL,
+    methods: ["GET", "POST"],
+    credentials: true
 }));
 
 
@@ -43,8 +43,8 @@ app.use(cors({
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/",userRoutes);
-app.use("/admin",AdminRoutes);
+app.use("/", userRoutes);
+app.use("/admin", AdminRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -65,4 +65,3 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //     }
 //   });
-  

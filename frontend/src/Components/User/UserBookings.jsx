@@ -18,6 +18,7 @@ function UserBookings() {
   const [cancel, setCancel] = useState({})
   const [showModal, setShowModal] = useState(false)
   const [orderId, setOrderId] = useState("")
+  const [cancelled, setCancelled] = useState(false)
   useEffect(() => {
     try {
       const token = localStorage.getItem("jwt")
@@ -44,6 +45,7 @@ function UserBookings() {
     try {
       cancelOrder(orderId).then((response) => {
         if (response.data.status) {
+          setCancelled(true)
           const updatedBookings = bookings.map((booking) => {
             if (booking._id === orderId) {
               booking = response.data.cancelledBooking
@@ -277,6 +279,26 @@ function UserBookings() {
                   Yes, I'm sure
                 </button>
                 <button data-modal-hide="popup-modal" type="button" onClick={() => setShowModal(false)} className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>}
+
+
+        {cancelled && <div id="popup-modal" className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+
+          <div className="relative w-full max-w-md max-h-full">
+            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+
+              <div className="p-6 text-center">
+                <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Your order was successfully cancelled.The money will be returned within 3 business days.To report a problem, dial 000000000.</h3>
+                <button onClick={() => setCancelled(false)} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-md inline-flex items-center px-5 py-2.5 text-center mr-2">
+                  OK
+                </button>
+
               </div>
             </div>
           </div>

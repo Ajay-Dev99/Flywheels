@@ -19,9 +19,11 @@ function Bookacar() {
     const navigate = useNavigate()
     const [hub, setHub] = useState(false)
     const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+    const [currentDate, setCurrentDate] = useState('');
     const { id } = useParams()
 
     useEffect(() => {
+        setCurrentDate(new Date().toISOString().split("T")[0]);
         bookingPage(id).then((response) => {
             if (response.data.status) {
                 setHub(response.data.vehicle.hub.district)
@@ -334,6 +336,7 @@ function Bookacar() {
                                         value={formik.values.fromDate}
                                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                                         required=""
+                                        min={currentDate} // Set the minimum date dynamically
                                     />
                                     {formik.touched.fromDate && formik.errors.fromDate ? (
                                         <p className="text-sm text-red-600">{formik.errors.fromDate}</p>
@@ -354,6 +357,7 @@ function Bookacar() {
                                         value={formik.values.toDate}
                                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                                         required=""
+                                        min={currentDate} // Set the minimum date dynamically
                                     />
                                     {formik.touched.toDate && formik.errors.toDate ? (
                                         <p className="text-sm text-red-600">{formik.errors.toDate}</p>

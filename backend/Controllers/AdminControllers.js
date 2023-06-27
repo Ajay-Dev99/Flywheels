@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const maxAge = 3 * 24 * 60 * 60;
 const fs = require('fs')
-const BookingModel = require('../Models/BookingModel')
 
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRETE_KEY, {
@@ -435,5 +434,22 @@ module.exports.AdminDashBoard = async (req, res, next) => {
         console.log(error);
         res.json({ status: false, message: "Internal Server Error" })
 
+    }
+}
+
+module.exports.FilterOrders = async (req, res, next) => {
+    try {
+        let bookings;
+        if (req.body.key === 'cancelled') {
+            bookings = await orderModel.find({ cancelStatus: true }).populate("user_id").populate("vehicle_id").populate("Hub")
+
+        } else {
+            bookings = await orderModel.find({ status: req.body.key, cancelStatus: false }).populate("user_id").populate("vehicle_id").populate("Hub")
+
+        }
+
+        res.json({ status: true, bookings })
+    } catch (error) {
+        res.json({ status: false, message: "something went wrong" })
     }
 }
