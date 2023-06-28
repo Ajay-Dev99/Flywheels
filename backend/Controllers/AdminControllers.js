@@ -381,7 +381,7 @@ module.exports.getOrderDetails = async (req, res, next) => {
 module.exports.changeOrderStatus = async (req, res, next) => {
     try {
         const orderId = req.params.id
-        const order = await BookingModel.findOne({ _id: orderId })
+        const order = await orderModel.findOne({ _id: orderId })
         const vehicle_id = order.vehicle_id._id
 
         if (req.body.idx === 2) {
@@ -403,7 +403,7 @@ module.exports.changeOrderStatus = async (req, res, next) => {
 
 module.exports.AdminDashBoard = async (req, res, next) => {
     try {
-        const bookingCountPerDay = await BookingModel.aggregate([
+        const bookingCountPerDay = await orderModel.aggregate([
             {
                 $addFields: {
                     bookedAtDate: { $toDate: "$booked_At" },
@@ -419,11 +419,11 @@ module.exports.AdminDashBoard = async (req, res, next) => {
         bookingCountPerDay.sort((a, b) => new Date(a._id) - new Date(b._id));
         const totalUser = await userModel.countDocuments({})
         const totalVehicle = await vehicleModel.countDocuments({})
-        const totalOrders = await BookingModel.countDocuments({})
+        const totalOrders = await orderModel.countDocuments({})
         if (bookingCountPerDay) {
-            const cancelledCount = await BookingModel.find({ cancelStatus: true }).countDocuments()
-            const pickedupCount = await BookingModel.find({ status: "pickedup" }).countDocuments()
-            const dropedoffCount = await BookingModel.find({ status: "dropedoff" }).countDocuments()
+            const cancelledCount = await orderModel.find({ cancelStatus: true }).countDocuments()
+            const pickedupCount = await orderModel.find({ status: "pickedup" }).countDocuments()
+            const dropedoffCount = await orderModel.find({ status: "dropedoff" }).countDocuments()
             const count = [cancelledCount, pickedupCount, dropedoffCount]
             res.json({ status: true, bookingCountPerDay, totalUser, totalVehicle, totalOrders, count })
         } else {

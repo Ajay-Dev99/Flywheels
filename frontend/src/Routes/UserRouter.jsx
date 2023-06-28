@@ -13,10 +13,12 @@ import PaymentPage from '../Pages/User/PaymentPage'
 import OrderSuccessPage from '../Pages/User/OrderSuccessPage'
 import UserProfilePage from '../Pages/User/UserProfilePage'
 import UserBookingsPage from '../Pages/User/UserBookingsPage'
+import PageNotFound from '../Components/PageNotFound'
 
 function UserRouter() {
   return (
     <Routes>
+      <Route path="/*" element={< PageNotFound/>} />
         <Route path='/' element={<UserHomePage/>}/>
         <Route path='/aboutus' element={<AboutPage/>}/>
         <Route path='/login' element={<UserloginPage/>}/>

@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function PageNotFound() {
+    const navigate = useNavigate()
     return (
         <div>
             <div>
@@ -19,6 +21,7 @@ function PageNotFound() {
                             </p>
                             <button
                                 className="inline-flex text-white bg-[#368E88] hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
+                                onClick={() => navigate("/")}
                             >
                                 Back to Homepage
                             </button>

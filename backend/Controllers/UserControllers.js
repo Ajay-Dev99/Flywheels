@@ -146,8 +146,12 @@ module.exports.Listvehicles = async (req, res, next) => {
         }
         : {};
       const vehicle = await vehicleModel.find(searchData).populate("categoryId")
-
-      res.json({ status: true, vehicle });
+      console.log(vehicle, "jsdhfjhds");
+      if (vehicle.length === 0) {
+        res.json({ status: false });
+      } else {
+        res.json({ status: true, vehicle });
+      }
     } else {
       const skip = (req.query.page - 1) * req.query.limit
       const limit = parseInt(req.query.limit)
@@ -406,8 +410,13 @@ module.exports.getBookingDetails = async (req, res, next) => {
 
     const id = req.user._id;
     const bookings = await bookingModel.find({ user_id: id }).populate("vehicle_id").populate("Hub").sort({ _id: -1 });
+
     if (bookings) {
-      res.json({ status: true, bookings })
+      if (bookings.length > 0) {
+        res.json({ status: true, bookings })
+      } else {
+        res.json({ status: false })
+      }
     } else {
       res.json({ status: false, message: "Something Went Wrong" })
     }

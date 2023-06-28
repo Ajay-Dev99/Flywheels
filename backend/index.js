@@ -39,6 +39,17 @@ app.use(cors({
     credentials: true
 }));
 
+// app.use(function (req, res, next) {
+//     // Enabling CORS
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+//     res.setHeader(
+//       "Access-Control-Allow-Headers",
+//       "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
+//     );
+//     next();
+//   });
+  
 // app.use(cors())
 
 

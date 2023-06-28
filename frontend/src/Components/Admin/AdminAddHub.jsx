@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AdminSidebar from './AdminSidebar'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom'
 function AdminAddHub() {
 
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
+
 
   const initialValues = {
     hubname: "",
@@ -19,12 +21,22 @@ function AdminAddHub() {
 
   }
   const onSubmit = async (values) => {
-    adminAddHubapi(values,).then((response) => {
-      if (response.data.status) {
-        toast.success(response.data.message)
-        navigate("/admin/hubs")
-      }
-    })
+    setIsLoading(true)
+    try {
+      adminAddHubapi(values).then((response) => {
+        if (response.data.status) {
+          toast.success(response.data.message)
+          navigate("/admin/hubs")
+        } else {
+          setIsLoading(false)
+          toast.error(response.data.message, {
+            position: "top-center"
+          })
+        }
+      })
+    } catch (error) {
+      setIsLoading(false)
+    }
   };
 
   const validationSchema = Yup.object({
@@ -51,7 +63,7 @@ function AdminAddHub() {
           <p className='font-bold'>ADD HUBS</p>
         </div>
         <div className='p-7 border border-gray-300 rounded-md'>
-          <form onSubmit={formik.handleSubmit}>
+          <form >
             <div className="mb-6 ">
               <label
                 htmlFor="hubname"
@@ -140,12 +152,30 @@ function AdminAddHub() {
             </div>
 
             <div className='flex justify-end'>
-              <button
-                type="submit"
-                className="text-white bg-[#368E88] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                SUBMIT
-              </button>
+              <button type='button' onClick={!isLoading ? formik.handleSubmit : undefined} className='bg-[#368E88] text-white p-2 rounded-md'>   {isLoading ? (
+                <div className='flex justify-center'>
+                  <svg
+                    className="animate-spin flex text-center h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-1.647zm10 3.647A7.962 7.962 0 0120 12h-4c0 3.042-1.135 5.824-3 7.938l-3-1.647z"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                'Submit'
+              )}</button>
             </div>
           </form>
 

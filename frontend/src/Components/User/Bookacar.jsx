@@ -21,7 +21,7 @@ function Bookacar() {
     const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const { id } = useParams()
-
+    const [isLoading, setIsLoading] = useState("")
     useEffect(() => {
         setCurrentDate(new Date().toISOString().split("T")[0]);
         bookingPage(id).then((response) => {
@@ -59,16 +59,22 @@ function Bookacar() {
 
 
     const onSubmit = async (values) => {
+        setIsLoading(true)
         const updatedValues = { ...values, deliveryTime: selectedTimeSlot };
-        bookaCarAPi(updatedValues, id).then((response) => {
-            if (response.data.status) {
-                navigate(`/payment`)
-            } else {
-                toast.error(response.data.message, {
-                    position: 'top-center'
-                })
-            }
-        })
+        try {
+            bookaCarAPi(updatedValues, id).then((response) => {
+                if (response.data.status) {
+                    navigate(`/payment`)
+                } else {
+                    toast.error(response.data.message, {
+                        position: 'top-center'
+                    })
+                    setIsLoading(false)
+                }
+            })
+        } catch (error) {
+            setIsLoading(false)
+        }
     };
 
     const validationSchema = Yup.object({
@@ -104,7 +110,7 @@ function Bookacar() {
             </div>
             <div className='xl:px-96  px-2 my-5'>
                 <div className='xl:px-12 px-3 py-7 border border-gray-300 rounded-md shadow-md shadow-black'>
-                    <form onSubmit={formik.handleSubmit}>
+                    <form>
                         <div className="mb-6 ">
                             <label
                                 htmlFor="username"
@@ -312,7 +318,7 @@ function Bookacar() {
                                             PINCODE
                                         </label>
                                         <input
-                                            type="number"
+                                            type="tel"
                                             name='pincode'
                                             onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.pincode}
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
@@ -392,11 +398,35 @@ function Bookacar() {
                             </div>
                         )}
                         <div className='flex justify-end'>
-                            <button
-                                type="submit"
-                                className="text-white bg-[#368E88] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                            <button onClick={!isLoading ? formik.handleSubmit : undefined}
+                                type="button"
+                                className={`bg-[#358E88] ${isLoading ? 'cursor-not-allowed opacity-50' : ''
+                                    }  text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center`}
                             >
-                                SUBMIT
+                                {isLoading ? (
+                                    <div className='flex justify-center'>
+                                        <svg
+                                            className="animate-spin flex text-center h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                            />
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-1.647zm10 3.647A7.962 7.962 0 0120 12h-4c0 3.042-1.135 5.824-3 7.938l-3-1.647z"
+                                            />
+                                        </svg>
+                                    </div>
+                                ) : (
+                                    'SUBMIT'
+                                )}
                             </button>
                         </div>
                     </form>
