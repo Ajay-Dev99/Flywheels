@@ -13,6 +13,7 @@ function Bookings() {
 
   const orderList = () => {
     getbookingAPI().then((response) => {
+      console.log(response.data);
       if (response.data.status) {
         setOrders(response.data.bookings)
       } else {

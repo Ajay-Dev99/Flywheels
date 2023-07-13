@@ -524,10 +524,10 @@ module.exports.changePassword = async (req, res, next) => {
 }
 
 module.exports.getOrderDetails = async (req, res, next) => {
+  
   try {
     const orderId = req.params.id
     const order = await orderModel.findOne({ _id: orderId }).populate("user_id").populate("vehicle_id").populate("Hub")
-
     if (order) {
       res.json({ status: true, order })
     } else {

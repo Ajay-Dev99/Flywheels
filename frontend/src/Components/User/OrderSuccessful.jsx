@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './userHeader'
 import Userfooter from './Userfooter'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getOrderDetailsAPI } from '../../Services/AdminApi'
+import { getOrderDetailsAPI } from '../../Services/UserApi'
 import { toast } from 'react-toastify'
 
 function OrderSuccessful() {
