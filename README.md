@@ -1,13 +1,11 @@
 # Flywheels
 
-Welcome to the Rent-a-Car project! This platform allows users to rent vehicles, make online payments, and manage bookings. The system includes features for both users and administrators.
+Welcome to the Flywheels project! This platform allows users to rent vehicles, make online payments, and manage bookings. The system includes features for both users and administrators.
 
 ## Table of Contents
 1. Introduction
 2. Features
 3. Technologies
-4. Installation
-5. Usage
 
 ## Introduction
 
