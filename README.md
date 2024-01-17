@@ -9,12 +9,12 @@ Welcome to the Flywheels project! This platform allows users to rent vehicles, m
 
 ## Introduction
 
-The Rent-a-Car project is a web-based platform that enables users to rent vehicles, make online payments, and manage bookings efficiently. Users can sign up with their mobile numbers, view available vehicles at different hubs, and book them according to their preferences. The project also includes an admin panel with various controls for managing users, vehicles, hubs, and bookings.
+The Flywheels project is a web-based platform that enables users to rent vehicles, make online payments, and manage bookings efficiently. Users can sign up with their mobile numbers, view available vehicles at different hubs, and book them according to their preferences. The project also includes an admin panel with various controls for managing users, vehicles, hubs, and bookings.
 
 ## Features
 
 - **User Authentication:**
-  - Users can sign up and log in using their mobile numbers.
+  - Users can sign up and log in using their mobile numbers with OTP validation.
   - JWT tokens are used for secure authentication on both the user and admin sides.
 
 - **Vehicle Management:**
@@ -35,6 +35,7 @@ The Rent-a-Car project is a web-based platform that enables users to rent vehicl
 
 - **Technologies:**
   - JWT tokens for user and admin authentication.
+  - TWILIO for OTP verification.
   - Razorpay for secure online payments.
   - Tailwind CSS framework for styling.
 
