@@ -3,9 +3,9 @@
 Welcome to the Flywheels project! This platform allows users to rent vehicles, make online payments, and manage bookings. The system includes features for both users and administrators.
 
 ## Table of Contents
-1. Introduction
-2. Features
-3. Technologies
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Technologies](#technologies)
 
 ## Introduction
 
