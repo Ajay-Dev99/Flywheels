@@ -54,6 +54,9 @@ The Flywheels project is a web-based platform that enables users to rent vehicle
 
 - **Authentication:**
   - JSON Web Tokens (JWT)
+  
+- **SMS(OTP):**
+  - TWILIO
 
 - **Payment Gateway:**
   - Razorpay
